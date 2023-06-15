@@ -43,8 +43,15 @@ const apiDeleteAlarmRule = params =>
     method: "get",
     params,
   });
-
+// 集装箱报警
+const apiGetAlarmsByContainerIdWithPage = params =>
+  axios.request({
+    url: "/energy/getAlarmsByContainerIdWithPage",
+    methods: "get",
+    params
+  });
 export {
+  apiGetAlarmsByContainerIdWithPage,
   apiGetActiveAlarm,
   apiGetHistoryAlarm,
   apiGetAlarmConfig,

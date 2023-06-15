@@ -1,5 +1,8 @@
 <template>
     <div class="plane-box">
+        <div class="tagHead">
+            <slot name="tagHead"></slot>
+        </div>
         <div class="title">
             <slot name="title"></slot>
         </div>
@@ -22,6 +25,7 @@ export default {
     min-height: 350px;
     margin: 20px 0;
     border-radius: 5px;
+
     .title {
         height: 40px;
         line-height: 40px;
@@ -30,6 +34,7 @@ export default {
         font-size: 15px;
         font-weight: bolder;
         position: relative;
+
         &::before {
             content: "";
             display: inline-block;
@@ -46,5 +51,9 @@ export default {
         height: calc(100% - 40px);
         position: relative;
     }
-}
-</style>
+
+    .tagHead {
+        width: 100%;
+        // height: 40px;
+    }
+}</style>

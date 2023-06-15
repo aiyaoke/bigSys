@@ -39,7 +39,7 @@
           :key="index"
           class="value"
         >
-          <span>{{ item.key }}</span>
+          <span>{{ item.key || item.value}}</span>
           <span class="num">{{ item.val }} {{ item.unit }}</span>
         </div>
       </div>
@@ -63,7 +63,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.data);
   },
   methods: {
     changeIndex(step) {

@@ -6,6 +6,69 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1718321",
+      "name": "返回",
+      "font_class": "fanhui",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "1680713",
+      "name": "月报",
+      "font_class": "yuebao",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "11537792",
+      "name": "周报S",
+      "font_class": "zhoubaoS",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "12331690",
+      "name": "总结",
+      "font_class": "zongjie",
+      "unicode": "e66d",
+      "unicode_decimal": 58989
+    },
+    {
+      "icon_id": "14401866",
+      "name": "年报表",
+      "font_class": "shouyetubiao2-27",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "11007901",
+      "name": "报表",
+      "font_class": "baobiao",
+      "unicode": "e70d",
+      "unicode_decimal": 59149
+    },
+    {
+      "icon_id": "1228",
+      "name": "首页",
+      "font_class": "shouye",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "33719082",
+      "name": "捷克",
+      "font_class": "jieke",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "33718486",
+      "name": "德国",
+      "font_class": "deguo",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
       "icon_id": "909131",
       "name": "i-离床监测",
       "font_class": "lichuangjiance",
@@ -46,13 +109,6 @@
       "font_class": "jiankong",
       "unicode": "e6c4",
       "unicode_decimal": 59076
-    },
-    {
-      "icon_id": "7969907",
-      "name": "icon_CZ(捷克)",
-      "font_class": "icon_CZjieke",
-      "unicode": "e620",
-      "unicode_decimal": 58912
     },
     {
       "icon_id": "1509753",

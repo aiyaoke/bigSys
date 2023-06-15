@@ -27,9 +27,10 @@
 
       <el-form-item :label="$translate('功率')" prop="designPower">
         <el-input
-          type="number"
+          type="text"
           v-model="formData.designPower"
           autocomplete="off"
+          
         ></el-input>
       </el-form-item>
 
@@ -157,6 +158,10 @@ export default {
             message: this.$translate("请输入电站功率"),
             trigger: "blur",
           },
+          {
+            pattern:/^\d{1,9}$/,
+            message:this.$translate("请输入正确电站功率"),
+          }
         ],
         position: [
           {
@@ -179,7 +184,7 @@ export default {
             trigger: "blur",
           },
           {
-            pattern: /^[\-\+]?([0-8]?\d{1}(\.\d{1,5})*|90(\.0{1,6})*)$/,
+            pattern: /^[\-\+]?([0-8]?\d{1}(\.\d{1,6})*|90(\.0{1,6})*)$/,
             message: this.$translate("坐标格式有误"),
           },
         ],
@@ -191,7 +196,7 @@ export default {
           },
           {
             pattern:
-              /^[\-\+]?(0?\d{1,2}(\.\d{1,5})*|1[0-7]?\d{1}(\.\d{1,6})*|180(\.0{1,5})*)$/,
+              /^[\-\+]?(0?\d{1,2}(\.\d{1,6})*|1[0-7]?\d{1}(\.\d{1,6})*|180(\.0{1,6})*)$/,
             message: this.$translate("坐标格式有误"),
           },
         ],
@@ -233,7 +238,6 @@ export default {
     handleCancle() {
       this.$emit("update:dialogObj", {});
       this.$refs.ruleForm.resetFields();
-      console.log(this.formData);
     },
     async handleSure() {
       this.$refs.ruleForm.validate(async (valid) => {
@@ -244,7 +248,7 @@ export default {
           ...this.formData,
           plantId: plantId || 0,
           userId: [userId],
-          installDate: Date.parse(new Date()),
+          installDate: plantId ? null:Date.parse(new Date()),
         };
         let { data } = await apiUpdatePlant(requestData);
         if (data) {
@@ -253,8 +257,8 @@ export default {
             plantId ? this.$translate("编辑成功") : this.$translate("添加成功")
           );
           this.$emit("e_upDateList");
-          this.handleCancle();
         }
+        this.handleCancle();
       });
     },
   },

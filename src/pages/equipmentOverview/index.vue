@@ -1,11 +1,8 @@
 <template>
-  <div>
-    <EquipmentLayout />
-  </div>
+    <router-view></router-view>
 </template>
 
 <script>
-import EquipmentLayout from "./components/equipmentLayout/index.vue";
 import { createNamespacedHelpers } from "vuex";
 const {
   mapGetters: device_getters,
@@ -24,7 +21,7 @@ export default {
   },
   created() {},
   mounted() {},
-  components: { EquipmentLayout },
+  components: {  },
 };
 </script>
 <style lang="scss" scoped>

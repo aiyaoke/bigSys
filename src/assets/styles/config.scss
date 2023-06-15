@@ -20,6 +20,7 @@ $colorful-6: #31e0f0;
   colorful_4: $colorful-4;
   colorful_5: $colorful-5;
   colorful_6: $colorful-6;
+  colorful_7: $primary-color;
 }
 
 $img-url: "~@/assets/images/";
@@ -153,7 +154,7 @@ $green: (
   bg-color1: #1b2535,
   bg-color2: #1c2a39,
   text-color1: #fff,
-  text-color2: #fff
+  text-color2: #fff,
 );
 //定义映射集合
 $themes: (

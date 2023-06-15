@@ -58,6 +58,13 @@
 <script>
 import { apiDeleteDevice } from "@/api/device";
 import { showMessage } from "@/common/utils";
+import { createNamespacedHelpers } from "vuex";
+
+const {
+  mapGetters: device_getters,
+  mapMutations: device_mutations,
+  mapActions: device_actions,
+} = createNamespacedHelpers("device");
 export default {
   name: "List",
   data() {
@@ -75,6 +82,8 @@ export default {
     },
   },
   methods: {
+    ...device_actions(["getDevicesCount"]),
+
     handleEdit(row) {
       this.$emit("e_edit", row);
     },
@@ -91,6 +100,7 @@ export default {
         let { code } = await apiDeleteDevice({ dtuId });
         if (code === "ok") {
           showMessage("success", this.$translate("删除成功"));
+          this.getDevicesCount();
           this.$emit("e_upDateList");
           if (!this.tableData) {
             this.$router.replace("/containerIndex");
@@ -99,6 +109,8 @@ export default {
       });
     },
   },
+  mounted () {
+  }
 };
 </script>
 <style lang="scss">

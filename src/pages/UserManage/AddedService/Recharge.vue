@@ -14,7 +14,7 @@
 
     <div class="item">
       <span class="label">充值设备：</span>
-      <el-select v-model="deviceId" size="medium" @change="changeDevice">
+      <el-select v-model="deviceId" size="medium" @change="changeDevice" >
         <el-option
           v-for="item in deviceList"
           :key="item.sn"
@@ -138,7 +138,7 @@ export default {
     return {
       flag: false,
       deviceList: [],
-      deviceId: "",
+      deviceId:"",
       serverTypes: [],
       rechargeServer: "",
       moneyTypes: [],
@@ -162,6 +162,7 @@ export default {
     this.getServerType();
     this.getAllDevices();
     this.debounceCreatQrCode = thtotate(this.creatQrCode, 1500);
+
   },
   methods: {
     clearCode() {
@@ -227,7 +228,7 @@ export default {
           this.clearCode();
           let fn = this.payMethod == 1 ? apiRechargeAlipay : apiRechargeWechart;
           let res = await fn({
-            equipment: this.deviceId,
+            equipment: !this.deviceId?this.deviceList[0].sn:this.deviceId,
             total: this.rechargeMoney,
             functionType: this.rechargeServer,
           });

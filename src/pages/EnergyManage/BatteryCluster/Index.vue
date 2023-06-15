@@ -43,7 +43,7 @@
               >
               <span class="unit">V</span>
             </div>
-            <div class="value" @click="showDetailChart(index + 1, uuIndex + 1)">
+            <div class="value" @click="version=='2'?showDetailChartV2(index + 1, uuIndex + 1):showDetailChart(index + 1, uuIndex + 1)">
               <div
                 :style="{
                   color: '#fff',
@@ -58,11 +58,17 @@
               >
                 <div
                   :class="'electric-current '"
-                  :style="{ '--width': 30 + '%' }"
+                  v-if="item.soc"
+                  :style="{ '--width': item.soc[uuIndex] + '%' }"
+                ></div>
+                <div
+                  :class="'electric-current '"
+                  style="width: 100%;"
+                  v-if="!item.soc"
                 ></div>
                 <!--  class="electric-current1 charge1" -->
-                <span class="vol-value">30</span>
-                <span class="unit">%</span>
+                <span v-if="item.soc" class="vol-value">{{item.soc[uuIndex]}}</span>
+                <span v-if="item.soc" class="unit">%</span>
               </div>
             </div>
           </div>
@@ -113,7 +119,10 @@
 import {
   apiBatteryClusterChart,
   apiBatteryCount,
-  apiClusterInfo,
+  apiClusterInfo, 
+  apiGetContainerAllCell,
+  apiGetContainerCellCount,
+  apiGetBatteryClusterHistory
 } from "@/api/device";
 import { nowTime, momentFormate } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
@@ -123,7 +132,7 @@ export default {
   data() {
     return {
       batteryGroup: [],
-      currentGroup: 1,
+      currentGroup:null,
       batteryCluster: [],
       date: nowTime(0, "YYYY-MM-DD"),
       chartVisible: false,
@@ -178,19 +187,34 @@ export default {
     this.getBatteryCount();
   },
   computed: {
-    ...device_getters(["currentDevice"]),
+    ...device_getters(["currentDevice","version"]),
     clusterIndex() {
       return (index) => {
-        return `Pack ${parseInt(index / 2) + 1}-${index % 2 ? 2 : 1}`;
+        if(this.version=='2'){
+          return `Pack ${index+1}`;
+        }else{
+          return `Pack ${parseInt(index / 2) + 1}-${index % 2 ? 2 : 1}`;
+        }
+       
       };
     },
     chartTitle() {
+     if(this.version=='2') {
+      let { packIdx, bmcIdx, cellId, date } = this.httpData;
+      return `${date}_${this.$translate("第")}${bmcIdx+1}${this.$translate(
+        "电池组"
+      )}-Pack${packIdx+1}-${this.$translate("第")}${cellId+1}${this.$translate(
+        "节"
+      )}`;
+     }else{
       let { groupId, clusterId, cellId, date } = this.httpData;
       return `${date}_${this.$translate("第")}${groupId}${this.$translate(
         "电池组"
       )}-Pack${clusterId}-${this.$translate("第")}${cellId}${this.$translate(
         "节"
       )}`;
+     }
+      
     },
     // getTempBackColor() {
     //   return temp => {
@@ -253,6 +277,21 @@ export default {
   methods: {
     getTmptId(cellId) {
       let tmptId = 0;
+      if (this.version=='2') {
+        tmptId= Math.ceil(cellId/4)
+      }else{
+        if (cellId <= 4) {
+        tmptId = 15;
+      } else if (cellId >= 5 && cellId <= 8) {
+        tmptId = 16;
+      } else if (cellId >= 9 && cellId <= 12) {
+        tmptId = 17;
+      } else if (cellId >= 13 && cellId <= 16) {
+        tmptId = 18;
+      } else {
+        tmptId = 0;
+      }
+      }
       // if (cellId <= 3) {
       //     tmptId = 15;
       // } else if (cellId >= 4 && cellId <= 6) {
@@ -264,20 +303,14 @@ export default {
       // } else {
       //     tmptId = 0;
       // }
-      if (cellId <= 4) {
-        tmptId = 15;
-      } else if (cellId >= 5 && cellId <= 8) {
-        tmptId = 16;
-      } else if (cellId >= 9 && cellId <= 12) {
-        tmptId = 17;
-      } else if (cellId >= 13 && cellId <= 16) {
-        tmptId = 18;
-      } else {
-        tmptId = 0;
-      }
+      
       return tmptId;
     },
     async getBatteryCount() {
+      if (this.version=="2") {
+      this.getContainerCellCount();
+      return;
+      }
       let { data: count } = await apiBatteryCount({
         dtuId: this.currentDevice.id,
       });
@@ -290,20 +323,51 @@ export default {
           });
         }
       }
+      this.currentGroup=1;
+
+      this.getClusterInfo();
+    },
+    async getContainerCellCount(){
+      let { data} = await apiGetContainerCellCount({
+        containerId: sessionStorage.getItem("containerId"),
+      });
+      if (data) {
+        for(let i=1;i<=data.length;i++){
+            for(let j = 1; j <= +data[i-1]; j++) {
+          let heapNum = `${this.$translate("第")}${i}${this.$translate("堆")}${j}#${this.$translate("电池组")}`;
+          this.batteryGroup.push({
+            label: heapNum,
+            value: i+','+j,
+          });
+            }
+        }
+      }
+      this.currentGroup='1,1';
       this.getClusterInfo();
     },
     async getClusterInfo() {
+      if (this.version=="2") {
+      let ArrCurrentGroup =this.currentGroup.split(","); 
+        let postData={
+          containerId: sessionStorage.getItem("containerId"),
+          bmsIdx:(+ArrCurrentGroup[0])-1,
+          bmcIdx:(+ArrCurrentGroup[1])-1
+        }
+      let { data } = await apiGetContainerAllCell(postData);
+      this.batteryCluster = data ? data : [];
+      console.log(1111,this.batteryCluster);
+      return;
+      }
       let httpData = {
         dtuId: this.currentDevice.id,
         groupId: this.currentGroup,
       };
       let { data } = await apiClusterInfo(httpData);
       this.batteryCluster = data ? data : [];
-      console.log(data);
     },
     async getChartData() {
       this.httpData.date = this.date;
-      let { data } = await apiBatteryClusterChart(this.httpData);
+      let { data } = await (this.version=='2'? apiGetBatteryClusterHistory(this.httpData):apiBatteryClusterChart(this.httpData));
       if (data) {
         let { volData, tmptData } = JSON.parse(data);
         this.volChartArgs.options.xAxis.data = volData
@@ -327,6 +391,21 @@ export default {
         groupId: this.currentGroup,
         clusterId,
         cellId,
+        date: this.date,
+        tmptId: this.getTmptId(cellId),
+      };
+      this.getChartData();
+    },
+    async showDetailChartV2(clusterId, cellId) {
+      this.chartVisible = true;
+      let ArrCurrentGroup =this.currentGroup.split(","); 
+      this.httpData = {
+        // groupId: this.currentGroup,
+        containerId:+sessionStorage.getItem("containerId"),
+        bmsIdx:(+ArrCurrentGroup[0])-1,
+        bmcIdx:(+ArrCurrentGroup[1])-1,
+        packIdx:clusterId-1,
+        cellId:cellId-1,
         date: this.date,
         tmptId: this.getTmptId(cellId),
       };
@@ -471,7 +550,8 @@ export default {
   background: $colorful-6;
   position: absolute;
   left: 0;
-  border-radius: 5px 0 0 5px;
+  top:0;
+  border-radius: 5px 2px 2px 5px;
   display: flex;
   align-items: center;
   padding-left: 5px;

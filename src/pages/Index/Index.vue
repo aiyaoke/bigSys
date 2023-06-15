@@ -1,10 +1,10 @@
 <template>
   <div class="containerIndex">
-    <!-- <Test /> -->
     <div class="left-wrapper">
       <Left />
     </div>
     <div class="right-wrapper">
+      <Header/>
       <Map />
     </div>
   </div>
@@ -22,7 +22,6 @@ export default {
     Right: (_) => import("./components/Right"),
     Left: (_) => import("./components/Left"),
     Footer: (_) => import("@/components/Footer"),
-    // Test: (_) => import("./components/Test"),
   },
   mounted() {
     this.getDevicePermissions({ type: 0 });
@@ -40,10 +39,8 @@ export default {
   height: 100vh;
   position: relative;
   @include bg-color("1");
-  // padding: 20px;
   box-sizing: border-box;
   display: flex;
-
   > div {
     height: 100%;
   }
@@ -52,9 +49,14 @@ export default {
     width: 20%;
     margin-right: 20px;
   }
+.header{
+  width: 100%;
+  height: 60px;
 
+}
   .right-wrapper {
-    flex: 1;
+    flex: 2;
+
   }
 }
 </style>

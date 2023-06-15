@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { apiGetHistoryAlarm } from "@/api/alarm";
+import { apiGetHistoryAlarm,apiGetAlarmsByContainerIdWithPage } from "@/api/alarm";
 import { nowTime, getEchatsData, momentFormate } from "@/common/utils";
 import { dayTypes, tooltipStyle, colorList } from "@/common/config";
 import { apiGetPowerCurve, apiGetPvCurve, apiGetSocCurve } from "@/api/device";
@@ -110,7 +110,7 @@ export default {
         ExportExcel: (_) => import("@/components/ExportExcel"),
     },
     computed: {
-        ...device_getters(["currentDevice"]),
+        ...device_getters(["currentDevice","version"]),
         alarmPrior1Class() {
             return "alarm-prior1";
         },
@@ -118,14 +118,28 @@ export default {
     methods: {
         async getAlarmData() {
             this.loading = true;
-            let requestData = {
+            let requestData={};
+            if (this.timeValue===null) {
+                this.timeValue=[nowTime(-7, "YYYY-MM-DD"), nowTime(0, "YYYY-MM-DD")];
+            }
+            if (this.version=='2') {
+                requestData = {
+                containerId:sessionStorage.getItem("containerId"),
+                start: this.timeValue[0],
+                currentPage: this.currentPage,
+                pageSize: this.pageSize,
+                end: this.timeValue[1],
+            };
+            }else{
+                requestData = {
                 dtuId: this.currentDevice.id,
                 start: this.timeValue[0],
                 currentPage: this.currentPage,
                 pageSize: this.pageSize,
                 end: this.timeValue[1],
             };
-            let { data } = await apiGetHistoryAlarm(requestData);
+            }
+            let { data } = await (this.version=='2'?apiGetAlarmsByContainerIdWithPage(requestData):apiGetHistoryAlarm(requestData));
             let { list, total } = JSON.parse(data);
             this.tableData = list;
             this.total = total;

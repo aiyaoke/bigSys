@@ -70,7 +70,6 @@ export default {
         pageNum: this.currentPage,
         pageSize: this.pageSize
       });
-      console.log(list);
       this.tableData = list;
       this.total = total;
     },

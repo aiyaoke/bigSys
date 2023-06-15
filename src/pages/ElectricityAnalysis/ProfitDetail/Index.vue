@@ -99,7 +99,7 @@ export default {
         ExportExcel: (_) => import("@/components/ExportExcel"),
     },
     computed: {
-        ...device_getters(["currentDevice"]),
+        ...device_getters(["currentDevice","version","allDevices"]),
         getExcelParams() {
             return {
                 header: `${this.currentDevice.sn}-收益统计`,
@@ -117,7 +117,7 @@ export default {
                     "平时段放电电量/kWh": "disCharge3",
                     "谷时段放电电量/kWh": "disCharge4",
                     "当天收益/元": "fee",
-                    当天充放电比率: "effect",
+                    "当天充放电比率": "effect",
                 },
             };
         },
@@ -154,7 +154,7 @@ export default {
         async getData() {
             this.loading = true;
             let requestData = {
-                dtuId: this.currentDevice.id,
+                dtuId: this.version=='2'?this.allDevices[0].dtuId:this.currentDevice.id,
                 sDate: this.date[0],
                 eDate: this.date[1],
             };
@@ -164,6 +164,7 @@ export default {
             this.formatterExcelData();
         },
         formatterExcelData() {
+            console.log( this.tableData);
             this.excelData = [];
             let arr = [];
             this.tableData.forEach((item) => {

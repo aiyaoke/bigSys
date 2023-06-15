@@ -21,7 +21,10 @@ export default {
       let { active, direction } = this.options;
       return active ? (direction ? direction : "forward") : "";
     },
+    
   },
+  mounted(){
+  }
 };
 </script>
 
@@ -40,6 +43,16 @@ export default {
 @keyframes backward {
   100% {
     stroke-dashoffset: 8;
+  }
+}
+
+.stop{
+  animation: stop 0.4s linear infinite;
+
+}
+@keyframes stop {
+  100% {
+    stroke-dashoffset: 0;
   }
 }
 .svg {

@@ -76,6 +76,11 @@ import { apiUpdateDevice } from "@/api/device";
 import { showMessage, deepClone } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
 const { mapGetters: plant_getters } = createNamespacedHelpers("plant");
+const {
+  mapGetters: device_getters,
+  mapMutations: device_mutations,
+  mapActions: device_actions,
+} = createNamespacedHelpers("device");
 export default {
   name: "AddUser",
   data() {
@@ -86,6 +91,7 @@ export default {
         sn: "",
         type: "",
         plantId: "",
+        lechengDeviceSN:""
       },
       rules: {
         sn: [
@@ -130,6 +136,8 @@ export default {
     this.getTableList();
   },
   methods: {
+    ...device_actions(["getDevicesCount"]),
+
     handleCancle() {
       this.$refs.ruleForm.resetFields();
       this.$emit("update:dialogObj", {});
@@ -145,7 +153,7 @@ export default {
         let requestData = {
           ...this.formData,
           id: id || 0,
-          deviceTypeId: 1,
+          deviceTypeId:this.version==2?6:1,
         };
         let { data } = await apiUpdateDevice(requestData);
         if (data) {
@@ -153,6 +161,7 @@ export default {
             "success",
             id ? this.$translate("编辑成功") : this.$translate("添加成功")
           );
+          this.getDevicesCount();
           this.$emit("e_upDateList");
           this.handleCancle();
         }
@@ -161,6 +170,7 @@ export default {
   },
   computed: {
     ...plant_getters(["allPlants"]),
+    ...device_getters(["version"]),
   },
   watch: {
     dialogObj(obj) {

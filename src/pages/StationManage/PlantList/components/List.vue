@@ -92,7 +92,6 @@ export default {
             this.$emit("e_edit", row);
         },
         handleDelete({ plantId }) {
-            console.log(this.tableData);
             this.$confirm(
                 this.$translate("确定删除？"),
                 this.$translate("系统提示"),

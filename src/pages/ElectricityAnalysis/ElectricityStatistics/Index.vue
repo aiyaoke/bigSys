@@ -46,7 +46,7 @@
         </div>
       </div>
     </div>
-    <PlaneBox v-if="devicePermissions['N/A']">
+    <PlaneBox v-if="devicePermissions['N/A']||version=='2'">
       <span slot="title">{{ $translate("电量统计") }}</span>
       <CategoryChart :args="elecTotalOptions" slot="content" />
     </PlaneBox>
@@ -169,7 +169,7 @@ export default {
     ExportExcel: _ => import("@/components/ExportExcel")
   },
   computed: {
-    ...device_getters(["currentDevice", "devicePermissions"]),
+    ...device_getters(["currentDevice", "devicePermissions","version","allDevices"]),
     getExcelParams() {
       return {
         elecTotal: {
@@ -237,7 +237,7 @@ export default {
       });
       this.formatterElecTotalExcelData([]);
       let requestData = {
-        dtuId: this.currentDevice.id,
+        dtuId:this.version=='2'? this.allDevices[0].dtuId:this.currentDevice.id,
         sDate: this.date[0],
         eDate: this.date[1]
       };
@@ -264,12 +264,11 @@ export default {
       this.helpMaterOptions.options.xAxis.data = [];
       this.helpMaterOptions.options.series[0].data = [];
       let requestData = {
-        dtuId: this.currentDevice.id,
+        dtuId:this.version=='2'? this.allDevices[0].dtuId:this.currentDevice.id,
         start: this.date[0],
         end: this.date[1]
       };
       let { data } = await apiGetHelpMaterELecCure(requestData);
-      console.log(data);
       if (data) {
         let dataArr = [],
           valueArr = [];

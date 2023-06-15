@@ -54,7 +54,6 @@ const actions = {
   },
   async getAllUsers({ commit }) {
     let { data } = await apiUserList();
-    console.log(data);
     commit("setAllUsers", JSON.parse(data || "[]"));
   },
   subscribeAlarm({ dispatch, getters }) {

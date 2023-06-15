@@ -6,9 +6,10 @@
 </template>
 
 <script>
-import { showMessage, redirectPath } from "@/common/utils";
+import { showMessage, redirectPath, deepClone } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
 import point from "@/assets/images/point.png";
+import routes_container from "@/router/routes.container";
 const { mapGetters: plant_getters, mapMutations: plant_mutations } =
   createNamespacedHelpers("plant");
 const {
@@ -28,6 +29,7 @@ export default {
         center: [113.62, 34.75],
         zoom: 6,
         pitch: 75,
+        routes: [],
       },
     };
   },
@@ -44,7 +46,7 @@ export default {
   },
   methods: {
     ...device_mutations(["setAllDevices", "setCurrentDevice"]),
-    ...device_actions(["getAllDevices", "getDevicePermissions"]),
+    ...device_actions(["getAllDevices", "getDevicePermissions","getSummary"]),
     ...plant_mutations(["setCurrentPlant"]),
     initMap() {
       this.addStyle();
@@ -72,9 +74,12 @@ export default {
       this.setCurrentPlant(plant);
       this.getAllDevices({ plantId }).then(() => {
         if (this.version === 2) {
-          redirectPath("/containerIndex/equipmentOverview");
+          this.getSummary({ plantId,type:1 });
+          redirectPath("/containerIndex/equipment/overview");
         } else {
           this.flag = true;
+          // redirectPath("/system/overview");
+         
         }
       });
     },
@@ -104,18 +109,6 @@ export default {
       `;
       return infoWindow;
     },
-    // async handleShowDetail(item) {
-    //   this.setCurrentDevice(item);
-    //   if (
-    //     item.deviceTypeId &&
-    //     (item.deviceTypeId == 1 || item.deviceTypeId === 3)
-    //   ) {
-    //     await this.getDevicePermissions({ type: item.type });
-    //     redirectPath("/containerIndex/equipmentOverview");
-    //   } else {
-    //     redirectPath("/system/status");
-    //   }
-    // },
     addInfoWindow(plants) {
       plants.forEach((item) => {
         this.addMarker(
@@ -165,20 +158,23 @@ export default {
   width: 100%;
   height: calc(100% - 80px);
   border-radius: 5px;
-  //border: 1px solid #0c5c81;
   position: relative;
+
   #__map {
     width: 100%;
     height: 100%;
     border-radius: 5px;
   }
 }
->>> .amap-info-content {
+
+>>>.amap-info-content {
   background: #1b2535;
 }
->>> .amap-info-sharp {
+
+>>>.amap-info-sharp {
   border-top: 8px solid #1b2535;
 }
+
 // >>> .amap-info-content {
 //   // background: linear-gradient(to right, #033447, #033447f5, #133f5800);
 //   background: none;

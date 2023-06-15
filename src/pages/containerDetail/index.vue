@@ -1,10 +1,14 @@
 <template>
-  <div>
-    <AllBattery />
-  </div>
+    <router-view></router-view>
 </template>
 
 <script>
+import { createNamespacedHelpers } from "vuex";
+const {
+  mapGetters: device_getters,
+  mapMutations: device_mutations,
+  mapActions: device_actions,
+} = createNamespacedHelpers("device");
 export default {
   props: {},
   data() {
@@ -12,12 +16,12 @@ export default {
   },
   watch: {},
   computed: {},
-  methods: {},
+  methods: {
+    ...device_actions(["getContainer"]),
+  },
   created() {},
   mounted() {},
-  components: {
-    AllBattery: (_) => import("./allBattery"),
-  },
+  components: {  },
 };
 </script>
 <style lang="scss" scoped>

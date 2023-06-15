@@ -1,9 +1,10 @@
 const state = {
-  locale: (navigator.language || navigator.browserLanguage).toLowerCase() == 'zh' ? 'zh' : "en",
+  locale: (navigator.language || navigator.browserLanguage).toLowerCase() == 'zh-cn' ? 'zh' : "en",
   axiosInstanceArry: [],
   systemTheme: "green",
   themeVisible: false,
-  plantListVisible: false
+  plantListVisible: false,
+  toggleSideBar:false
 };
 
 const getters = {
@@ -11,7 +12,8 @@ const getters = {
   axiosInstanceArry: state => state.axiosInstanceArry,
   systemTheme: state => state.systemTheme,
   themeVisible: state => state.themeVisible,
-  plantListVisible: state => state.plantListVisible
+  plantListVisible: state => state.plantListVisible,
+  toggleSideBar:state => state.toggleSideBar
 };
 
 const mutations = {
@@ -29,6 +31,9 @@ const mutations = {
   },
   set_plantListVisible(state, flag) {
     state.plantListVisible = flag;
+  },
+  set_toggleSideBar(state, toggleSideBar) {
+    state.toggleSideBar = toggleSideBar;
   }
 };
 
