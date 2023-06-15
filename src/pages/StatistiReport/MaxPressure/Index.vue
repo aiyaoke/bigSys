@@ -3,7 +3,8 @@
     <div class="search-wrapper">
       <div class="search-wrapper">
         <span class="search-name">{{ $translate("电池组") }}：</span>
-        <el-select v-model="currentGroup" size="mini" placeholder="请选择">
+        <el-select v-model="currentGroup" 
+        size="mini" placeholder="请选择">
           <el-option
             v-for="item in batteryGroup"
             :key="item.value"
@@ -39,7 +40,7 @@
 </template>
 
 <script>
-import { apiBatteryCount, apiGetMaxMinVolCure } from "@/api/device";
+import { apiBatteryCount, apiGetMaxMinVolCure,apiGetContainerCellCount,apiGetMaxMinVolDiffByGroupId } from "@/api/device";
 import { nowTime } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
 const { mapGetters: device_getters } = createNamespacedHelpers("device");
@@ -91,7 +92,7 @@ export default {
     this.getBatteryCount();
   },
   computed: {
-    ...device_getters(["currentDevice"]),
+    ...device_getters(["currentDevice","version"]),
     getExcelParams() {
       return {
         header: `${this.date}-${this.currentDevice.sn}-电池最大压差/V`,
@@ -127,7 +128,29 @@ export default {
     changeDate(value) {
       this.date = value;
     },
+    async getContainerCellCount() {
+            this.currentGroup='1,1';
+            let { data } = await apiGetContainerCellCount({
+                containerId: sessionStorage.getItem("containerId"),
+            });
+            if (data) {
+                for (let i = 1; i <= data.length; i++) {
+                    for (let j = 1; j <= +data[i - 1]; j++) {
+                        let heapNum = `${this.$translate("第")}${i}${this.$translate("堆")}${j}#${this.$translate("电池组")}`;
+                        this.batteryGroup.push({
+                            label: heapNum,
+                            value: i + ',' + j,
+                        });
+                    }
+                }
+            }
+        },
     async getBatteryCount() {
+      if (this.version == "2") {
+                this.getContainerCellCount();
+                this.getChartsData();
+                return;
+            }
       let { data: count } = await apiBatteryCount({
         dtuId: this.currentDevice.id,
       });
@@ -175,12 +198,23 @@ export default {
       return text;
     },
     async getChartsData() {
-      let requestData = {
-        groupId: this.currentGroup,
-        dtuId: this.currentDevice.id,
-        date: this.date,
+      let requestData={};
+            if (this.version=='2') {
+                 requestData = {      
+                 containerId: sessionStorage.getItem('containerId'),
+                 bmsIdx: this.currentGroup.split(',')[0]-1,
+                 bmcIdx: this.currentGroup.split(',')[1]-1,
+                date: this.date,
+            };
+            }else{
+              requestData = {
+                dtuId: this.currentDevice.id,
+                date: this.date,
+                groupId:this.currentGroup,
+                
       };
-      let { data } = await apiGetMaxMinVolCure(requestData);
+    }
+      let { data } = await (this.version=="2"?apiGetMaxMinVolDiffByGroupId(requestData):apiGetMaxMinVolCure(requestData));
       let parseData = JSON.parse(data || "[]");
       let [volxData, maxVol, minVol] = [[], [], []];
       let maxValue = 0;

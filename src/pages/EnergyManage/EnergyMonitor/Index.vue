@@ -2,9 +2,18 @@
     <div class="runMonitor">
         <div class="search-wrapper">
             <div>
-                <span class="search-name">pcs：</span>
-                <el-select v-model="monitorPoint" size="mini">
-                    <el-option label="pcs" :value="0"> </el-option>
+                <span class="search-name">PCS：</span>
+                <el-select v-model="monitorPoint" size="mini" placeholder="请选择" defaultValue="pcs">
+                    <el-option v-if="version!='2'" label="pcs" :value="1">
+                     </el-option>
+                    
+                    <el-option 
+                    v-else 
+                    v-for="item in pcsGroup" 
+                    :key="item.value"
+                    :label="item.label" 
+                    :value="item.value"> </el-option>
+
                 </el-select>
             </div>
             <div>
@@ -38,7 +47,7 @@
                 :header="getExcelParams.header"
                 :title="getExcelParams.title"
                 :fields="getExcelParams.fields"
-                :data="excelData"
+           getEchatsData     :data="excelData"
             />
         </div>
         <PlaneBox>
@@ -50,7 +59,7 @@
 </template>
 
 <script>
-import { apiGetEnergyMonitor } from "@/api/device";
+import { apiGetEnergyMonitor,apiGetNewEnergyPcsHistory,apiGetNewPCSCount } from "@/api/device";
 import { energyMonitor_dataList } from "@/common/config";
 import {
     nowTime,
@@ -64,7 +73,8 @@ export default {
     name: "EnergyMonitor",
     data() {
         return {
-            monitorPoint: 0,
+            monitorPoint: 1,
+            pcsGroup:[],
             dataValue: "169_kW",
             dataList: energyMonitor_dataList,
             date: nowTime(-1, "YYYY-MM-DD"),
@@ -108,9 +118,10 @@ export default {
     },
     mounted() {
         this.handleSearch();
+        this.getSelectData();
     },
     computed: {
-        ...device_getters(["currentDevice"]),
+        ...device_getters(["currentDevice","version","PCS"]),
         getExcelParams() {
             let dataType = this.dataList.find(
                 (item) => item.value == this.dataValue
@@ -141,14 +152,27 @@ export default {
         },
         async getChartsData() {
             let requestData = {
+            };
+            if (this.version=='2') {
+                requestData = {
+                containerId: sessionStorage.getItem('containerId'),
+                dataType: this.dataValue.split("_")[0],
+                pcsIdx:this.monitorPoint-1,
+                compareDate: this.date,
+            }; 
+            }else{
+                requestData = {
                 dtuId: this.currentDevice.id,
                 dataType: this.dataValue.split("_")[0],
                 compareDate: this.date,
-            };
-            let { data } = await apiGetEnergyMonitor(requestData);
+            }; 
+            }
+
+            let { data } = await (this.version=='2'?apiGetNewEnergyPcsHistory(requestData):apiGetEnergyMonitor(requestData));
             data = JSON.parse(data || "[]");
             let { nowDatas, compareDatas, nowMaxMinAvg, compareMaxMinAvg } =
                 data;
+            console.log(nowMaxMinAvg,compareMaxMinAvg);
             this.chartArgs.options.series[0].data = getEchatsData(
                 compareDatas || []
             );
@@ -180,6 +204,7 @@ export default {
         },
         initTable(nowMaxMinAvg, compareMaxMinAvg) {
             this.tableData = [];
+            console.log(nowMaxMinAvg,compareMaxMinAvg);
             if (nowMaxMinAvg) {
                 this.tableData.push({
                     time: nowMaxMinAvg.max.time,
@@ -199,8 +224,22 @@ export default {
                     MinValueTime: compareMaxMinAvg.min.time,
                     AvgValue: compareMaxMinAvg.avg,
                 });
+            console.log(this.tableData);
             }
         },
+        async getSelectData(){
+            if (this.version=="2") {
+                if (this.PCS) {
+                    for (let i = 1; i <=this.PCS.length; i++) {
+                     let pcslab=`${i}#PCS`;
+                    this.pcsGroup.push({
+                        value:i,
+                        label:pcslab
+                    })
+                    }
+                }
+            }
+        }
     },
 };
 </script>

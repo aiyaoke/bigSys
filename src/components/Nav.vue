@@ -1,60 +1,33 @@
 <template>
-  <el-menu
-    :default-active="activeIndex"
-    class="el-menu-demo"
-    mode="horizontal"
-    :text-color="menuStyle.menuTextColor"
-    active-text-color="#3af3a7"
-    :background-color="menuStyle.menuBg"
-    @select="handleSelect"
-  >
+  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" :text-color="menuStyle.menuTextColor"
+    active-text-color="#3af3a7" :background-color="menuStyle.menuBg" @select="handleSelect">
     <template v-for="item in routes">
       <el-submenu :index="item.path" v-if="item.children" :key="item.path">
         <template slot="title">
-          <el-badge
-            v-if="item.meta.icon === 'icon-lingdang' && activeAlarmCount"
-            :value="activeAlarmCount"
-            :max="99"
-          >
-            <i
-              :class="'iconfont ' + item.meta.icon"
-              :style="{
-                color: activeAlarmCount ? '#F56C6C' : '',
-              }"
-            ></i>
+          <el-badge v-if="item.meta.icon === 'icon-lingdang' && activeAlarmCount" :value="activeAlarmCount" :max="99">
+            <i :class="'iconfont ' + item.meta.icon" :style="{
+              color: activeAlarmCount ? '#F56C6C' : '',
+            }"></i>
           </el-badge>
           <i v-else :class="'iconfont ' + item.meta.icon"></i>
         </template>
         <template v-for="uu in item.children">
-          <el-menu-item
-            :key="uu.path"
-            :index="uu.path"
-            v-if="
-              devicePermissions[uu.code] === undefined ||
-              devicePermissions[uu.code]
-            "
-            >{{ $translate(uu.meta.name) }}</el-menu-item
-          >
+          <el-menu-item :key="uu.path" :index="uu.path" v-if="
+            devicePermissions[uu.code] === undefined ||
+            devicePermissions[uu.code]
+          ">{{ $translate(uu.meta.name) }}</el-menu-item>
         </template>
       </el-submenu>
-      <el-tooltip
-        effect="dark"
-        v-else
-        :key="item.path + ''"
-        :content="$translate(item.meta.name)"
-        placement="bottom"
-      >
+      <el-tooltip effect="dark" v-else :key="item.path + ''" :content="$translate(item.meta.name)"
+        placement="bottom">
         <el-menu-item :index="item.path" :key="item.path">
           <i :class="'iconfont ' + item.meta.icon"></i>
         </el-menu-item>
       </el-tooltip>
     </template>
-    <el-menu-item
-      class="menu-index"
-      index="/containerIndex/equipmentOverview"
-      key="index"
-      >{{ $translate("设备总览页") }}</el-menu-item
-    >
+    <el-menu-item class="menu-index"
+      index="/containerIndex" key="index">{{
+      $translate("首页") }}</el-menu-item>
   </el-menu>
 </template>
 
@@ -70,6 +43,7 @@ import { createNamespacedHelpers } from "vuex";
 import { apiGetPublicKey } from "@/api/user";
 import { apiReset } from "@/api/device";
 import { deepClone } from "@/common/utils";
+
 const { mapGetters: user_getters } = createNamespacedHelpers("user");
 const {
   mapGetters: device_getters,
@@ -90,13 +64,13 @@ export default {
   },
   mounted() {
     this.getDevicesCount();
-    this.routes = deepClone(this.$router.options.routes[4].children);
+    this.initRoutes();
     this.activeIndex = this.$route.path;
   },
   computed: {
     ...app_getters(["systemTheme"]),
     ...user_getters(["userInfo", "activeAlarmCount"]),
-    ...device_getters(["currentDevice", "devicePermissions", "devicesCount"]),
+    ...device_getters(["currentDevice", "devicePermissions", "devicesCount", "version"]),
     menuStyle() {
       let lightTheme = {
         menuTextColor: "#999",
@@ -123,13 +97,16 @@ export default {
     ...device_actions(["getDevicesCount"]),
     subscribe() {
       SubSocket(this.subUrl, this.topic, getToken(), 5, (res) => {
-        console.log(res);
         this.$notify({
           title: this.$translate("执行结果"),
           message: res.msg,
           position: "bottom-right",
         });
       });
+    },
+    initRoutes() {
+    this.routes = this.$router.options.routes[5].children;
+      // console.log(this.$router.options.routes[5].children);
     },
     goReset() {
       this.$prompt(
@@ -169,6 +146,7 @@ export default {
       this.activeIndex = to.path;
     },
   },
+
 };
 </script>
 
@@ -176,6 +154,7 @@ export default {
 .icon-jiankong {
   font-size: 25px !important;
 }
+
 .el-menu.el-menu--horizontal {
   border-bottom: none;
 }
@@ -191,9 +170,11 @@ export default {
 }
 
 .el-menu--horizontal {
-  > .el-menu-item,
+
+  >.el-menu-item,
   .el-submenu {
     margin: 0 8px;
+
     &.is-active {
       i {
         color: $colorful-1;
@@ -202,6 +183,7 @@ export default {
 
     i {
       font-size: 17px;
+
       &.icon-dianchi {
         transform: rotate(-90deg);
         display: inline-block;
@@ -210,11 +192,12 @@ export default {
   }
 }
 
->>> .el-badge__content.is-fixed {
+>>>.el-badge__content.is-fixed {
   right: 8px;
   top: 21px;
 }
->>> .el-badge__content {
+
+>>>.el-badge__content {
   height: 10px;
   line-height: 10px;
   padding: 2px 3px;

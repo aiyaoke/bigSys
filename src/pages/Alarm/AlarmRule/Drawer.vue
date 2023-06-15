@@ -1,6 +1,6 @@
 <template>
   <el-drawer
-    title="默认规则"
+    :title="updateRow.id==0?'默认规则':'编辑规则'"
     :visible.sync="visible"
     direction="rtl"
     @close="close"
@@ -60,7 +60,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button @click="resetForm('ruleForm')">取消</el-button>
+        <el-button @click="close()">取消</el-button>
         <el-button type="primary" @click="submitForm('ruleForm')"
           >保存</el-button
         >
@@ -138,6 +138,7 @@ export default {
       this.typesArr = data;
     },
     close() {
+      this.resetForm("ruleForm");
       this.$emit("close");
     },
     submitForm(formName) {
@@ -162,7 +163,6 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.close();
     }
   },
   watch: {

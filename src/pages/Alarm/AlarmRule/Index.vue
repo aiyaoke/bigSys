@@ -1,5 +1,6 @@
 <template>
   <div class="alarm-config">
+    <PasswordModal />
     <div class="table-wrapper">
       <div class="card-title ">
         <span>{{ $translate("报警规则") }}</span>
@@ -95,7 +96,6 @@ export default {
     this.getAlarmConfig();
   },
   components: {
-    Drawer
   },
   methods: {
     showDrawer() {
@@ -134,7 +134,11 @@ export default {
         }
       });
     }
-  }
+  },
+  components: {
+        PasswordModal: (_) => import("@/components/PasswordModal"),
+        Drawer
+    },
 };
 </script>
 

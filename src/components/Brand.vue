@@ -1,7 +1,7 @@
 <template>
     <div class="brand">
         <img :src="userInfo.headImg" alt="" />
-        <div class="plant-sn">
+        <div class="plant-sn" v-if="NavType==='nav'">
             <span>{{ currentPlant.name }}</span>
             <span class="sn" v-if="currentDevice.sn">{{
                 currentDevice.sn
@@ -19,6 +19,7 @@ const { mapGetters: device_getters } = createNamespacedHelpers("device");
 
 export default {
     name: "Brand",
+    props:["NavType"],
     computed: {
         ...user_getters(["userInfo"]),
         ...plant_getters(["currentPlant"]),
@@ -34,6 +35,8 @@ export default {
         width: 120px;
         height: 40px;
         margin-right: 20px;
+        margin-left: 20px;
+
     }
     .plant-sn {
         @include dis-flex(center, flex-start, column);

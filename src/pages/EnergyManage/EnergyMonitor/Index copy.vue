@@ -2,7 +2,7 @@
     <div class="runMonitor">
         <div class="search-wrapper">
             <div>
-                <span class="search-name">pcs：</span>
+                <span class="search-name">PCS：</span>
                 <el-select v-model="monitorPoint" size="mini">
                     <el-option label="pcs" :value="0"> </el-option>
                 </el-select>
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { apiGetEnergyMonitor } from "@/api/device";
+import { apiGetEnergyMonitor,apiGetNewEnergyPcsHistory } from "@/api/device";
 import { energyMonitor_dataList } from "@/common/config";
 import {
     nowTime,
@@ -110,7 +110,7 @@ export default {
         this.handleSearch();
     },
     computed: {
-        ...device_getters(["currentDevice"]),
+        ...device_getters(["currentDevice","verison","BMS"]),
         getExcelParams() {
             let dataType = this.dataList.find(
                 (item) => item.value == this.dataValue
@@ -145,7 +145,7 @@ export default {
                 dataType: this.dataValue.split("_")[0],
                 compareDate: this.date,
             };
-            let { data } = await apiGetEnergyMonitor(requestData);
+            let { data } = await (this.version=='2'?apiGetNewEnergyPcsHistory(requestData):apiGetEnergyMonitor(requestData));
             data = JSON.parse(data || "[]");
             let { nowDatas, compareDatas, nowMaxMinAvg, compareMaxMinAvg } =
                 data;

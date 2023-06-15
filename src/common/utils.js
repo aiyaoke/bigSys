@@ -48,7 +48,7 @@ export const clearStore = () => {
 
 //将两组日期合并为一组 ( 今日和对比日期 )
 export const makeSameDate = (arr1, arr2) => {
-  arr2.forEach((item, i) => (arr1[i]["time"] = item["time"]));
+  arr2.forEach((item, i) => {arr1[i]["time"] = item["time"]});
   return arr1;
 };
 

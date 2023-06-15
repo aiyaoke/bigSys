@@ -146,7 +146,7 @@ export default {
         this.getTimePrice();
     },
     computed: {
-        ...device_getters(["currentDevice"]),
+        ...device_getters(["currentDevice","version","allDevices"]),
         getContent() {
             return ({ priceType, price, sTime, eTime }) =>
                 `￥:${price} ${priceType}:${sTime}-${eTime} `;
@@ -210,7 +210,7 @@ export default {
     methods: {
         async getTimePrice() {
             let requestData = {
-                dtuId: this.currentDevice.id,
+                dtuId:this.version=='2'? this.allDevices[0].dtuId:this.currentDevice.id,
             };
             let { data } = await apiGetTimePrice(requestData);
             data = JSON.parse(data || "[]");
@@ -221,7 +221,7 @@ export default {
             this.priceBlock = data;
         },
         add() {
-            let dtuId = this.currentDevice.id;
+            let dtuId = this.version=='2'?this.allDevices[0].dtuId:this.currentDevice.id;
             let sTime = this.sTime;
             let eTime = this.eTime;
             let priceType = this.priceType;
@@ -290,7 +290,7 @@ export default {
                 }
             ).then(async (_) => {
                 let { code } = await apiClearTimePrice({
-                    dtuId: this.currentDevice.id,
+                    dtuId: this.version=='2'?this.allDevices[0].dtuId:this.currentDevice.id,
                 });
                 if (code === "ok") {
                     showMessage("success", this.$translate("清空成功"));

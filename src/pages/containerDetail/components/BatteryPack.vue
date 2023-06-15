@@ -9,20 +9,24 @@
     >
       <div
         class="batteryWrap"
-        v-for="(item, index) in options"
+        v-for="(item, index) in BMC"
         :ref="`wrap${index}`"
         :key="`wrap${index}`"
         @click="toCellDetails"
       >
         <Battery
+          ref="battery"
           :options="{
             color: '#3af3a7',
-            value: { soc: item.value.soc, current: item.value.current },
+            value: { soc: item.soc||'',
+            direction:deriction||0},
           }"
           class="battery"
           :style="{ '--width': height * 0.7 + 'px' }"
         />
-        <svg class="svg" version="1.1">
+        <svg class="svg" version="1.1"
+        :style="{ '--top': height * 0.72   + 'px' }"
+        >
           <path
             fill="none"
             stroke-width="3"
@@ -40,46 +44,48 @@
 import { redirectPath, deepClone } from "@/common/utils";
 
 export default {
-  props: ["options"],
+  props: ["BMC","deriction"],
   data() {
     let count = 0;
     let width = 0;
     let height = 0;
-    let batteryAnimatePath = `M 13 50 H 200`;
-    let packHeight = 0;
+    let batteryAnimatePath = ``;
     return {
       count,
       width,
       height,
       batteryAnimatePath,
-      packHeight,
     };
   },
   watch: {},
   computed: {},
   methods: {
     initBatteryAnimatePath() {
-      let width = this.$refs.wrap0[0].offsetWidth;
-      let height = this.$refs.wrap0[0].offsetHeight;
-      this.batteryAnimatePath = `M 10 50 H ${height * (1 - width / height)}`;
+      this.width = this.$refs.wrap0[0].offsetWidth;
+      this.height = this.$refs.wrap0[0].offsetHeight;
+      this.batteryAnimatePath = `M ${this.width/2} 0 v ${this.height*0.4}`;
     },
     toCellDetails() {
-      console.log("111");
-      this.$router.push("/system/energyManage/batteryCluster");
+      this.$router.push({
+                    path: "/containerIndex/equipmentOverview/EnergyManage", 
+                    query: {
+                        id:sessionStorage.getItem('containerId')||null,
+                    }
+                })
     },
   },
   created() {},
   mounted() {
-    this.width = this.$refs.wrap0[0].offsetWidth;
-    this.height = this.$refs.wrap0[0].offsetHeight;
-    this.packHeight = this.$refs.pack1.offsetHeight;
+    this.$nextTick(() => {
+      this.initBatteryAnimatePath();
+    });
     window.onresize = () => {
       this.initBatteryAnimatePath();
     };
   },
   components: {
     Battery: () =>
-      import("@/pages/Overview/components/Graph/components/Battery.vue"),
+      import("./Battery.vue"),
     AnimatePath: () =>
       import("@/pages/Overview/components/Graph/components/AnimatePath"),
   },
@@ -97,14 +103,13 @@ export default {
     grid-auto-flow: column;
     padding-left: 2%;
     padding-right: 1%;
-    box-sizing: content-box;
-    border-bottom: 2px solid #37414e;
+    border-bottom: 4px solid #37414e;
     border-right: 4px solid #37414e;
+    margin-bottom: 10px;
     .batteryWrap {
       max-width: 50px;
       width: 100%;
-      height: 90%;
-      transform-origin: left top;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -112,20 +117,17 @@ export default {
       flex: 1;
       position: relative;
       .battery {
-        transform: rotate(90deg);
-        height: 20%;
-        width: var(--width);
+        height: 60%;
+        // width: var(--width);
+        width: 100%;
         cursor: pointer;
       }
     }
   }
 }
 .svg {
-  width: 260%;
-  height: 100px;
-  position: absolute;
-  top: 120px;
-  // left: var(--left);
-  transform: rotate(90deg);
+  height:40%;
+  width: 100%;
+  flex: 1;
 }
 </style>

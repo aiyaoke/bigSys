@@ -27,8 +27,8 @@
       </div>
       <el-button type="primary" size="mini" @click="handleSearch">{{
         $translate("查询")
-      }}</el-button
-      ><ExportExcel
+      }}</el-button>
+      <ExportExcel
         :header="getExcelParams.header"
         :title="getExcelParams.title"
         :fields="getExcelParams.fields"
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { apiGetBatteryCure } from "@/api/device";
+import { apiGetBatteryCure,apiGetNewAllBatteryCVS } from "@/api/device";
 import { nowTime, getEchatsData, momentFormate } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
 const { mapGetters: device_getters } = createNamespacedHelpers("device");
@@ -69,14 +69,15 @@ export default {
           series: []
         }
       },
-      excelData: []
+      excelData: [],
+      charsData:null
     };
   },
   mounted() {
     this.handleSearch();
   },
   computed: {
-    ...device_getters(["currentDevice"]),
+    ...device_getters(["currentDevice","version"]),
     getChartName() {
       return _ => {
         let { label } = this.dataList.find(
@@ -89,14 +90,17 @@ export default {
       let { label, value } = this.dataList.find(
         item => item.value == this.dataValue
       );
+      console.log(this.dataList);
       let { series: seriesData } = this.chartArgs.options;
+      console.log(seriesData);
+
       let batteryObj = {};
       seriesData.forEach(
         (item, index) =>
           (batteryObj[`${index + 1}#电池组`] = `${index + 1}#电池组`)
       );
       return {
-        header: `${this.currentDevice.sn}-${this.date}-电池组${label}/${
+        header: `${this.currentDevice.sn||sessionStorage.getItem('containId')}-${this.date}-电池组${label}/${
           value.split("_")[1]
         }`,
         title: `电池组${label}`,
@@ -120,6 +124,29 @@ export default {
     },
     async getChartsData() {
       this.chartArgs.options.series = [];
+      if (this.version=="2") {
+        let requestData = {
+        containerId: sessionStorage.getItem('containerId'),
+        dataType: this.dataValue.split("_")[0],
+        date: this.date
+      };
+      let { data } = await apiGetNewAllBatteryCVS(requestData);
+      let keys = Object.keys(data).sort(
+        (a, b) => +a.split("battery")[1] - +b.split("battery")[1]
+      );
+      if (data) {
+        keys.forEach((key, index) => {
+          this.chartArgs.options.series.push({
+            name: `${+key.split("battery")[1] + 1}#${this.$translate(
+              "电池组"
+            )}`,
+            data: data[key] ? getEchatsData(data[key]) : []
+          });
+        });
+      }
+      this.formatterExcelData();
+      return;
+      }
       let requestData = {
         dtuId: this.currentDevice.id,
         dataType: this.dataValue.split("_")[0],
@@ -149,7 +176,8 @@ export default {
         seriesData[0].data.forEach((item, index) => {
           let dataItem = {};
           seriesData.forEach(({ name, data }, _uuIndex) => {
-            let [time, value] = data[index]["value"];
+            console.log(seriesData);
+            let [time, value] = data[index].value||[];
             dataItem.time = momentFormate(time, "HH:mm");
             dataItem[`${_uuIndex + 1}#电池组`] = value;
             dataItem = {

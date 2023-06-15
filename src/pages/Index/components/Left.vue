@@ -109,11 +109,13 @@ export default {
             margin-bottom: 20px;
         }
         .card-title {
+            font-size: 18px;
             padding: 0 20px;
             box-sizing: border-box;
             @include dis-flex(flex-start, center);
 
             i {
+                font-size: 18px;
                 margin-right: 8px;
                 color: $colorful-6;
             }
@@ -126,19 +128,20 @@ export default {
 
             .today-value {
                 flex: 2;
-                font-size: 45px;
+                font-size: 60px;
                 @include font-color("1");
                 font-weight: bold;
                 font-family: DINCondensed-Bold;
-                @include dis-flex(flex-start, center);
+                @include dis-flex(center, center);
             }
 
             .unit,
             .sum-text,
             .sum-value {
                 flex: 1;
+                font-size: 20px;
                 .value {
-                    font-size: 20px;
+                    font-size: 30px;
                     font-family: DINCondensed-Bold;
                     color: $colorful-2;
                 }
@@ -159,15 +162,17 @@ export default {
             &.energy {
                 > div {
                     flex: 1;
+                    font-size: 20px;
                     @include dis-flex(space-between, center);
                     i {
+                        font-size: 20px;
                         color: $colorful-6;
                     }
                     &:not(:last-child) {
                         border-bottom: 1px solid rgba(235, 221, 227, 0.09);
                     }
                     .value {
-                        font-size: 20px;
+                        font-size: 30px;
                         font-family: DINCondensed-Bold;
                         color: $colorful-3;
                     }

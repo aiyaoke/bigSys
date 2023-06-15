@@ -1,6 +1,6 @@
 <template>
   <transition mode="out-in">
-    <div class="device-content" v-show="allDevices.length && version === 1">
+    <div class="device-content" v-show="allDevices.length && version !== 2">
       <el-tooltip
         v-for="item in allDevices"
         :key="item.id"
@@ -26,6 +26,9 @@ import containerImg from "@/assets/images/box.png";
 import inverterImg from "@/assets/images/5-10kdtu.png";
 import { showMessage, redirectPath } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
+import  routes_container  from "@/router/routes.container";
+import { deepClone } from "../../../common/utils";
+
 
 const {
   mapGetters: device_getters,
@@ -84,8 +87,8 @@ export default {
 .device-content {
   position: absolute;
   top: 0;
-  right: 0;
-  width: 140px;
+  right: 0px;
+  width:140px;
   height: 100%;
   flex-wrap: wrap;
   overflow-y: scroll;

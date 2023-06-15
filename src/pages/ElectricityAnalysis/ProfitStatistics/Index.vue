@@ -113,7 +113,7 @@ export default {
         ExportExcel: (_) => import("@/components/ExportExcel"),
     },
     computed: {
-        ...device_getters(["currentDevice"]),
+        ...device_getters(["currentDevice","allDevices","version"]),
         getExcelParams() {
             return {
                 header: `${this.currentDevice.sn}-储能节省电费/元`,
@@ -128,7 +128,7 @@ export default {
     methods: {
         async getChartsData() {
             let requestData = {
-                dtuId: this.currentDevice.id,
+                dtuId: this.version=='2'?this.allDevices[0].dtuId:this.currentDevice.id,
                 date: this.date,
             };
             let { data } = await apiGetProfitStatistics(requestData);

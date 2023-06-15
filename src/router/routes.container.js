@@ -15,19 +15,6 @@ export default [
           import(/* webpackChunkName: "Overview" */ "@/pages/Overview")
       },
       {
-        path: "/system/containerDetail/",
-        // code: "A",
-        // name:'containerDetail',
-        meta: {
-          name: "设备舱详情",
-          icon: "icon-chanpinzonglan"
-        },
-        component: _ =>
-          import(
-            /* webpackChunkName: "Overview" */ "@/pages/containerDetail"
-          )
-      },
-      {
         path: "/system/monitor",
         code: "B",
         meta: {
@@ -173,22 +160,22 @@ export default [
         },
         redirect: "/system/stationManage/plantList",
         children: [
-          // {
-          //   path: "/system/stationManage/plantList",
-          //   code: "O",
-          //   meta: {
-          //     name: "电站列表"
-          //   },
-          //   component: _ => import("@/pages/StationManage/PlantList")
-          // },
-          // {
-          //   path: "/system/stationManage/deviceList",
-          //   code: "P",
-          //   meta: {
-          //     name: "设备列表"
-          //   },
-          //   component: _ => import("@/pages/StationManage/DeviceList")
-          // },
+          {
+            path: "/system/stationManage/plantList",
+            code: "O",
+            meta: {
+              name: "电站列表"
+            },
+            component: _ => import("@/pages/StationManage/PlantList")
+          },
+          {
+            path: "/system/stationManage/deviceList",
+            code: "P",
+            meta: {
+              name: "设备列表"
+            },
+            component: _ => import("@/pages/StationManage/DeviceList")
+          },
           {
             path: "/system/energyManage/controlStrategy",
             code: "Q",
@@ -207,41 +194,41 @@ export default [
           }
         ]
       },
-      // {
-      //   path: "/system/userManage",
-      //   component: _ => import("@/pages/UserManage/Index"),
-      //   meta: {
-      //     name: "用户管理",
-      //     icon: "icon-geren"
-      //   },
-      //   redirect: "/system/userManage/personalInfo",
-      //   children: [
-      //     {
-      //       path: "/system/userManage/personalInfo",
-      //       code: "S",
-      //       meta: {
-      //         name: "个人信息"
-      //       },
-      //       component: _ => import("@/pages/UserManage/PersonalInfo")
-      //     },
-      //     {
-      //       path: "/system/userManage/addedService",
-      //       code: "S",
-      //       meta: {
-      //         name: "增值业务"
-      //       },
-      //       component: _ => import("@/pages/UserManage/AddedService")
-      //     },
-      //     {
-      //       path: "/system/userManage/userList",
-      //       code: "T",
-      //       meta: {
-      //         name: "用户列表"
-      //       },
-      //       component: _ => import("@/pages/UserManage/UserList")
-      //     }
-      //   ]
-      // },
+      {
+        path: "/system/userManage",
+        component: _ => import("@/pages/UserManage/Index"),
+        meta: {
+          name: "用户管理",
+          icon: "icon-geren"
+        },
+        redirect: "/system/userManage/personalInfo",
+        children: [
+          {
+            path: "/system/userManage/personalInfo",
+            code: "S",
+            meta: {
+              name: "个人信息"
+            },
+            component: _ => import("@/pages/UserManage/PersonalInfo")
+          },
+          {
+            path: "/system/userManage/addedService",
+            code: "S",
+            meta: {
+              name: "增值业务"
+            },
+            component: _ => import("@/pages/UserManage/AddedService")
+          },
+          {
+            path: "/system/userManage/userList",
+            code: "T",
+            meta: {
+              name: "用户列表"
+            },
+            component: _ => import("@/pages/UserManage/UserList")
+          }
+        ]
+      },
       {
         path: "/system/alarm",
         component: _ => import(/* webpackChunkName: "Alarm" */ "@/pages/Alarm"),

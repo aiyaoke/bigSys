@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { apiGetBatteryCount, apiTmpCurve } from "@/api/device";
+import { apiGetBatteryCount, apiTmpCurve,apiGetBattClusterMaxTmptDiff,apiGetContainerCellCount } from "@/api/device";
 import { nowTime, momentFormate } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
 const { mapGetters: device_getters } = createNamespacedHelpers("device");
@@ -93,7 +93,7 @@ export default {
         this.handleSearch();
     },
     computed: {
-        ...device_getters(["currentDevice"]),
+        ...device_getters(["currentDevice","version"]),
     },
     components: {
         PlaneBox: (_) => import("@/components/PlaneBox"),
@@ -150,7 +150,38 @@ export default {
         handleSearch() {
             this.getChartsData();
         },
+        async getContainerCellCount() {
+            this.value=["1,1",1];
+
+            let { data } = await apiGetContainerCellCount({
+                containerId: sessionStorage.getItem("containerId"),
+            });
+            if (data) {
+                for (let i = 1; i <= data.length; i++) {
+                    for (let j = 1; j <= +data[i - 1]; j++) {
+                        let heapNum = `${this.$translate("第")}${i}${this.$translate("堆")}${j}#${this.$translate("电池组")}`;
+                        let cluster = [];
+                    for (let k = 1; k <= 32; k++) {
+                        cluster.push({ 
+                            label: `Pack ${k} `,
+                            value: k,
+                        });
+                    }
+                        this.batteryGroup.push({
+                            label: heapNum,
+                            value: i + ',' + j,
+                            children: cluster,
+
+                        });
+                    }
+                }
+            }
+        },
         async getBatteryCount() {
+            if (this.version == "2") {
+                this.getContainerCellCount();
+                return;
+            }
             let { data: count } = await apiGetBatteryCount({
                 dtuId: this.currentDevice.id,
             });
@@ -173,13 +204,24 @@ export default {
             }
         },
         async getChartsData() {
-            let requestData = {
+            let requestData={};
+            if (this.version=='2') {
+                 requestData = {
+                 containerId: sessionStorage.getItem('containerId'),
+                 bmsIdx: this.value[0].split(',')[0]-1,
+                 bmcIdx: this.value[0].split(',')[1]-1,
+                 packIdx:this.value[1]-1,
+                date: this.date,
+            };
+            }else{
+             requestData = {
                 dtuId: this.currentDevice.id,
                 group: this.value[0],
                 cluster: this.value[1],
                 date: this.date,
             };
-            let { data } = await apiTmpCurve(requestData);
+        }
+            let { data } = await (this.version=='2'?apiGetBattClusterMaxTmptDiff(requestData):apiTmpCurve(requestData));
             this.resData = JSON.parse(data || "[]");
             let nowData = [];
             let compareData = [];

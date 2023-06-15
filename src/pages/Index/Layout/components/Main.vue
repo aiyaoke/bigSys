@@ -24,16 +24,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main {
-  height: 100vh;
-  min-height: 100vh;
-  margin-bottom: 20px;
+  height: 100%;
   width: 100%;
-  position: fixed;
-  top: 60px;
-  left: 0;
-  @include bg-color("1");
-  padding: 20px;
-  box-sizing: border-box;
+  // box-sizing: border-box;
+  overflow-y: scroll;
+  margin-bottom: 20px;
   > div {
     margin: 0 auto;
   }

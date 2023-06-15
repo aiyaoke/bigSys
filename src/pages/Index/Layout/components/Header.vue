@@ -22,14 +22,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .header {
-  width: 100%;
+  width: calc(100% - 200px);
   height: 60px;
   @include bg-color("2");
   box-sizing: border-box;
   @include dis-flex(space-between, center);
   position: fixed;
   top: 0;
-  left: 0;
-  z-index: 1000;
+  // left: 200px;
+  // z-index: 1000;
 }
 </style>

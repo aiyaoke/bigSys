@@ -146,7 +146,7 @@ export default {
         ExportExcel: (_) => import("@/components/ExportExcel"),
     },
     computed: {
-        ...device_getters(["currentDevice"]),
+        ...device_getters(["currentDevice","allDevices","version"]),
         getExcelParams() {
             return {
                 chargeDischarge: {
@@ -201,9 +201,10 @@ export default {
         },
         getData() {
             let requestData = {
-                dtuId: this.currentDevice.id,
+                dtuId: this.version=='2'?this.allDevices[0].dtuId:this.currentDevice.id,
                 dateType: this.type,
             };
+            console.log(requestData.dtuId);
             this.getChargeDisChargeCurve(requestData);
             this.getChargeDisChargeMostValue(requestData);
             this.getChargeAmount(requestData);

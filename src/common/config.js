@@ -2,10 +2,10 @@ const domain = ".sermatec-cloud.com";
 
 export const serve = 1; // 1 国内 0 国外
 
-// export const baseUrl = 'http://192.168.6.9/api' //联想
+export const baseUrl = 'http://192.168.6.9/api' //联想
 // export const socketUrl = 'http://192.168.6.9'
 
-export const baseUrl = `https://${serve ? "api" : "api1"}${domain}`;
+// export const baseUrl = `https://${serve ? "api" : "api1"}${domain}`;
 export const socketUrl = `https://${serve ? "www" : "eur"}${domain}`;
 
 export const uploadLogoUrl = `${baseUrl}/zuul/user/uploadHead/`;
@@ -60,7 +60,8 @@ export const plantStatus = [
 export const plantTypes = [
   { label: "家用屋顶", value: 1 },
   { label: "小型工商业", value: 2 },
-  { label: "微网", value: 3 }
+  { label: "微网", value: 3 },
+  { label: "工商业", value: 6 }
 ];
 
 export const accountSatus = [
@@ -165,7 +166,7 @@ export const dayTypes = [
   { id: 4, type: "年" }
 ];
 
-export const tooltipStyle = {
+export const tooltipStyle = { 
   backgroundColor: "rgb(255, 255, 255)",
   borderColor: "rgba(77, 80, 84, 0.2)",
   borderWidth: 1,
@@ -184,7 +185,150 @@ export const colorList = [
   "#31e0f0",
   "#749f83"
 ];
-
+export const basicInfo={
+  title:"电站基础数据",
+  name: {
+      name: "场站名称",
+      value: ''
+  },
+  date: {
+    name: "日期",
+      value: this.date,
+  },
+  temperature: {
+    name: "温度",
+      value: '',
+  },
+  weather: {
+    name: "天气",
+      value: '',
+  },
+  designPower: {
+    name: "额定功率",
+      value: '',
+  },
+  installDate: {
+    name: "并网日期",
+      value: '',
+  },
+  runTime: {
+    name: "安全运行天数（天）",
+      value: '',
+  },
+  humidity: {
+    name: "湿度",
+      value: '',
+  },
+  winddirection: {
+    name: "风向描述",
+      value: '',
+  },
+  windpower: {
+    name: "风力等级",
+      value: '',
+  },
+  timeZone: {
+    name: "时区",
+      value: '',
+  },
+  city: {
+    name: "城市",
+      value: '',
+  },
+  priceUnit: {
+    name: "货币",
+      value: '',
+  },
+};
+export const runInfo={
+  title:"运行数据",
+  income:{
+    name: "合计收益",
+      value: '',
+  },
+  dm:{
+    name: "当月最大需量",
+      value: '',
+  },
+  efficiency:{
+    name: "充放电能量转换效率",
+      value: '',
+  },
+  TPo:{
+    name: "充电次数",
+      value: '',
+  },
+  TPi:{
+    name: "放电次数",
+      value: '',
+  },
+  charge:{
+    name: "放电电量",
+      value: '',
+  },
+  disCharge:{
+    name: "充电电量",
+      value: '',
+  },
+  chargeFee:{
+    name: "充电花费",
+      value: '',
+  },
+  disChargeFee:{
+    name: "放电收益",
+      value: '',
+  },
+};
+export const totalColumn=[
+  {
+  key:"no",
+  label:"储能单元编号",
+  width:"25%",
+  formatter:function(r,c) {
+    return `${r.no}#电池舱`
+  }
+},
+{
+  key:"charge",
+  label:"充电电量（kWh）",
+  width:"25%",
+},
+{
+  key:"discharge",
+  label:"放电电量（kWh）",
+  width:"25%",
+},
+{
+  key:"efficiency",
+  label:"充放电能量转换效率（%）",
+  width:"25%",
+},
+];
+export const energyColumn=[
+  {
+  key:"no",
+  label:"储能单元编号",
+  width:"25%",
+  formatter:function(r,c) {
+    return `${r.no}#电池舱`
+  }
+},
+{
+  key:"charge",
+  label:"充电电量（kWh）",
+  width:"25%",
+},
+{
+  key:"discharge",
+  label:"放电电量（kWh）",
+  width:"25%",
+},
+{
+  key:"efficiency",
+  label:"充放电能量转换效率（%）",
+  width:"25%",
+},
+]
 // 大系统
 // 写
 // 1000 控制通道执行指令

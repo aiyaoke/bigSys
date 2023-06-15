@@ -27,6 +27,7 @@ router.beforeEach((to, from, next) => {
     redictPath ? next(redictPath) : next();
   } else {
     if (whiteRouter.indexOf(path) !== -1) {
+    console.log(whiteRouter);
       next(); // 必须要用 否则不会往下执行代码
       // 不带参数默认跳转到to.path 不会触发beforeEach
     } else {

@@ -3,33 +3,19 @@
         <div class="search-wrapper">
             <div>
                 <span class="search-name">{{ $translate("电池组") }}：</span>
-                <el-cascader
-                    size="mini"
-                    v-model="value"
-                    :options="batteryGroup"
-                    :props="{ expandTrigger: 'hover' }"
-                ></el-cascader>
+                <el-cascader size="mini" v-model="value" :options="batteryGroup" :props="{ expandTrigger: 'hover' }">
+                </el-cascader>
             </div>
             <div>
                 <span class="search-name">{{ $translate("对比日期") }}：</span>
-                <el-date-picker
-                    v-model="date"
-                    type="date"
-                    size="mini"
-                    :editable="false"
-                    :clearable="false"
-                    value-format="yyyy-MM-dd"
-                >
+                <el-date-picker v-model="date" type="date" size="mini" :editable="false" :clearable="false"
+                    value-format="yyyy-MM-dd">
                 </el-date-picker>
             </div>
             <el-button type="primary" size="mini" @click="handleSearch">{{
-                $translate("查询")
+            $translate("查询")
             }}</el-button>
-            <ExportExcel
-                :title="excel_title"
-                :fields="excel_fields"
-                :data="resData"
-            />
+            <ExportExcel :title="excel_title" :fields="excel_fields" :data="resData" />
         </div>
         <PlaneBox>
             <span slot="title">{{ $translate("压差曲线") }}</span>
@@ -39,7 +25,7 @@
 </template>
 
 <script>
-import { apiGetBatteryCount, apiVolCurve } from "@/api/device";
+import { apiGetBatteryCount, apiVolCurve, apiGetContainerCellCount,apiGetBattClusterMaxVolDiff } from "@/api/device";
 import { nowTime, momentFormate } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
 const { mapGetters: device_getters } = createNamespacedHelpers("device");
@@ -91,9 +77,10 @@ export default {
     mounted() {
         this.getBatteryCount();
         this.handleSearch();
+
     },
     computed: {
-        ...device_getters(["currentDevice"]),
+        ...device_getters(["currentDevice", "version"]),
     },
     components: {
         PlaneBox: (_) => import("@/components/PlaneBox"),
@@ -149,7 +136,38 @@ export default {
         handleSearch() {
             this.getChartsData();
         },
+        async getContainerCellCount() {
+            this.value=["1,1",1];
+
+            let { data } = await apiGetContainerCellCount({
+                containerId: sessionStorage.getItem("containerId"),
+            });
+            if (data) {
+                for (let i = 1; i <= data.length; i++) {
+                    for (let j = 1; j <= +data[i - 1]; j++) {
+                        let heapNum = `${this.$translate("第")}${i}${this.$translate("堆")}${j}#${this.$translate("电池组")}`;
+                        let cluster = [];
+                    for (let k = 1; k <= 32; k++) {
+                        cluster.push({ 
+                            label: `Pack ${k} `,
+                            value: k,
+                        });
+                    }
+                        this.batteryGroup.push({
+                            label: heapNum,
+                            value: i + ',' + j,
+                            children: cluster,
+
+                        });
+                    }
+                }
+            }
+        },
         async getBatteryCount() {
+            if (this.version == "2") {
+                this.getContainerCellCount();
+                return;
+            }
             let { data: count } = await apiGetBatteryCount({
                 dtuId: this.currentDevice.id,
             });
@@ -172,17 +190,28 @@ export default {
             }
         },
         async getChartsData() {
-            let requestData = {
+        let requestData={};
+            if (this.version=='2') {
+                 requestData = {
+                 containerId: sessionStorage.getItem('containerId'),
+                 bmsIdx: this.value[0].split(',')[0]-1,
+                 bmcIdx: this.value[0].split(',')[1]-1,
+                 packIdx:this.value[1]-1,
+                date: this.date,
+            };
+            }else{
+                 requestData = {
                 dtuId: this.currentDevice.id,
                 group: this.value[0],
                 cluster: this.value[1],
                 date: this.date,
             };
-            let { data } = await apiVolCurve(requestData);
+            }
+           
+            let { data } = await (this.version=='2'?apiGetBattClusterMaxVolDiff(requestData):apiVolCurve(requestData));
             this.resData = JSON.parse(data || "[]");
             let nowData = [];
             let compareData = [];
-
             this.resData.forEach(({ nowTime, nowDiff, cmpDiff }) => {
                 let time = momentFormate(
                     parseInt(nowTime) * 1000,

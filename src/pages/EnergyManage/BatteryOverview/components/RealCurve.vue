@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { apiGetRealCurve } from "@/api/device";
+import { apiGetRealCurve,apiGetMaxMinValtage } from "@/api/device";
 import { momentFormate } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
 const { mapGetters: device_getters } = createNamespacedHelpers("device");
@@ -96,7 +96,7 @@ export default {
         this.getChartsData();
     },
     computed: {
-        ...device_getters(["currentDevice"]),
+        ...device_getters(["currentDevice","version"]),
     },
     components: {
         Table: (_) => import("@/components/Table"),
@@ -120,10 +120,18 @@ export default {
             return text;
         },
         async getChartsData() {
-            let requestData = {
+            let requestData ={}
+            if(this.version=='2'){
+                requestData={
+                    containerId: sessionStorage.getItem('containerId'),
+                }
+            }else{
+                requestData = {
                 dtuId: this.currentDevice.id,
             };
-            let { data } = await apiGetRealCurve(requestData);
+            }
+             
+            let { data } = await (this.version=='2'?apiGetMaxMinValtage(requestData):apiGetRealCurve(requestData));
             if (data) {
                 let parseData = JSON.parse(data);
                 let [volxData, maxVol, minVol, tmpxData, maxTemp, minTemp] = [

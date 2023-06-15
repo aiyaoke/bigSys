@@ -1,6 +1,6 @@
 <template>
     <div class="alarm-search">
-        <el-tabs value="first" @tab-click="handleClick">
+        <el-tabs value="first" @tab-click="handleClick" v-if="$route.path!='/containerIndex/equipmentOverview/alarm'">
             <el-tab-pane :label="$translate('实时报警')" name="first">
                 <ActiveAlarm />
             </el-tab-pane>
@@ -8,6 +8,7 @@
                 ><HistoryAlarm
             /></el-tab-pane>
         </el-tabs>
+        <HistoryAlarm v-else/>
     </div>
 </template>
 

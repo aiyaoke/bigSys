@@ -17,7 +17,7 @@
 
 <script>
 //import   '../../../lib/cyberplayer.js'
-import { apiGetVideo } from "@/api/device";
+import { apiGetVideo,apiGetNewHLS } from "@/api/device";
 import { createNamespacedHelpers } from "vuex";
 import { showMessage } from "@/common/utils";
 const { mapGetters: device_getters } = createNamespacedHelpers("device");
@@ -35,7 +35,7 @@ export default {
     this.getVideo();
   },
   computed: {
-    ...device_getters(["currentDevice"])
+    ...device_getters(["currentDevice","version"])
   },
   methods: {
     getOptions(file) {
@@ -60,6 +60,21 @@ export default {
       };
     },
     async getVideo() {
+      if (this.version=="2") {
+      let { data, msg } = await apiGetNewHLS({ containerId: sessionStorage.getItem("containerId") });
+      if (msg) {
+        return;
+      }
+      if (!data.length) {
+        return;
+      }
+      let [url1, url2, url3, url4] = data;
+      this.player1 = cyberplayer("video1").setup(this.getOptions(url1));
+      this.player2 = cyberplayer("video2").setup(this.getOptions(url2));
+      this.player3 = cyberplayer("video3").setup(this.getOptions(url3));
+      this.player4 = cyberplayer("video4").setup(this.getOptions(url4));
+      return;
+      }
       let { data, msg } = await apiGetVideo({ dtuId: this.currentDevice.id });
       if (msg) {
         return;

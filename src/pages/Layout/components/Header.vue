@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <Brand />
+        <Brand :NavType="NavType='nav'"/>
         <Nav />
     </div>
 </template>
@@ -9,7 +9,9 @@
 export default {
     name: "Header",
     data() {
-        return {};
+        return {
+            NavType:'nav'
+        };
     },
     components: {
         Brand: (_) => import("@/components/Brand"),

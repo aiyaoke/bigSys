@@ -92,7 +92,7 @@ export default {
       let code = await this.login(requestData);
       closeLoading(loginLoding);
       code && (this.showCode = true);
-    }
+    },
   }
 };
 </script>
