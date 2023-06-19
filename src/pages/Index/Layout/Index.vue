@@ -4,7 +4,7 @@
   <el-aside :width="!toggleSideBar?'220px':'60px'"><Sider/></el-aside>
   <el-container class="right">
     <el-header><Header /></el-header>
-    <Breadcrumb/>
+    <!-- <Breadcrumb/> -->
     <el-main> <Main /></el-main>
   </el-container>
 </el-container>

@@ -28,7 +28,8 @@ class HttpRequest {
       }
     );
     instance.interceptors.response.use(
-      ({ data }) => {
+      (response) => {
+       let { data }=response;
         let { msg } = data;
         if (data.msg) {
           showMessage(data.code == 'error' ? 'error' : "info", msg);
@@ -41,6 +42,11 @@ class HttpRequest {
           data = {
             data
           };
+        }
+        console.log(response);
+        if (response.config.responseType === "arraybuffer") {
+          console.log(response);
+          return response
         }
         return data;
       },

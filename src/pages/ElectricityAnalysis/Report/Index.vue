@@ -24,8 +24,9 @@
 
                 <DataSelect class="margin-l" :dataChange="dataModel" @updateList="getTableData" :type="currentType" />
 
-                <ExportExcel class="margin-l" :header="excelData.header" :title="excelData.name" :fields="excelData.fields"
-                    :data="excelData.data" />
+                <el-button class="margin-l" size="mini" type="warning" @click="exportExcel">
+                    ↓ Excel
+                </el-button>
             </div>
             <div class="content" id="pdfDom" v-loading.lock="loading" element-loading-text="拼命加载中"
                 element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
@@ -63,8 +64,10 @@
 </template>
 
 <script>
-import { momentFormate } from "@/common/utils";
-import { apigetDtuReport, getReportList, apiupdateReportTemplate } from "@/api/device";
+import { momentFormate, getToken } from "@/common/utils";
+import { exportExcelMethod } from "@/common/excelExport";
+import { baseUrl } from "@/common/config";
+import { apigetDtuReport, getReportList, apiupdateReportTemplate, apiExoprtReport } from "@/api/device";
 import { basicInfo, runInfo, totalColumn, energyColumn } from "@/common/config";
 import { createNamespacedHelpers } from "vuex";
 const {
@@ -154,7 +157,6 @@ export default {
         ReportMenu: (_) => import('./components/ReportMenu.vue'),
         BasicInfo: (_) => import('./components/BasicInfo.vue'),
         PlaneBox: _ => import("@/components/PlaneBox"),
-        ExportExcel: (_) => import("@/components/ExportPDF"),
         DataSelect: (_) => import('./components/SelectDataModel.vue'),
         Table: (_) => import("@/components/TableNew"),
     },
@@ -239,7 +241,29 @@ export default {
                 }
             })
             target['name'] ? this.basic = target : this.run = target;
+        },
+        async exportExcel() {
+            // let content = await apiExoprtReport({
+            //     plantId: this.currentPlant.plantId,
+            //     date: this.date,
+            //     type: this.currentType
+            // })
+
+            const myObj = {
+                method: 'get',
+                url: baseUrl+'/energy/report/exportReport',
+                fileName: `${this.formatDate + this.$translate('统计报表')}`,
+                token: getToken(),
+                params: {
+                    plantId: this.currentPlant.plantId,
+                    date: this.date,
+                    type: this.currentType
+                }
+            }
+            exportExcelMethod(myObj)
+
         }
+
     },
     watch: {
         basic: {

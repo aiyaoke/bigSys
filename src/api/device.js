@@ -536,7 +536,16 @@ axios.request({
   method: "post",
   data
 });
+// 报表内容导出
+const apiExoprtReport = params =>
+axios.request({
+  url: "/energy/report/exportReport",
+  methods: "get",
+  responseType: "arraybuffer",
+  params
+});
 export {
+  apiExoprtReport,
   getReportList,
   apiupdateReportTemplate,
   apigetDtuReport,
