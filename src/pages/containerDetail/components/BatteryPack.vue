@@ -12,7 +12,6 @@
         v-for="(item, index) in BMC"
         :ref="`wrap${index}`"
         :key="`wrap${index}`"
-        @click="toCellDetails"
       >
         <Battery
           ref="battery"
@@ -65,14 +64,14 @@ export default {
       this.height = this.$refs.wrap0[0].offsetHeight;
       this.batteryAnimatePath = `M ${this.width/2} 0 v ${this.height*0.4}`;
     },
-    toCellDetails() {
-      this.$router.push({
-                    path: "/containerIndex/equipmentOverview/EnergyManage", 
-                    query: {
-                        id:sessionStorage.getItem('containerId')||null,
-                    }
-                })
-    },
+    // toCellDetails() {
+    //   this.$router.push({
+    //                 path: "/containerIndex/equipmentOverview/EnergyManage", 
+    //                 query: {
+    //                     id:sessionStorage.getItem('containerId')||null,
+    //                 }
+    //             })
+    // },
   },
   created() {},
   mounted() {

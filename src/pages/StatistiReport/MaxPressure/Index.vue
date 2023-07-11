@@ -2,7 +2,7 @@
   <div class="maxPressure">
     <div class="search-wrapper">
       <div class="search-wrapper">
-        <span class="search-name">{{ $translate("电池组") }}：</span>
+        <span class="search-name">{{ $translate("电池簇") }}：</span>
         <el-select v-model="currentGroup" 
         size="mini" placeholder="请选择">
           <el-option
@@ -98,7 +98,7 @@ export default {
         header: `${this.date}-${this.currentDevice.sn}-电池最大压差/V`,
         title: "电池最大压差",
         fields: {
-          ["电池组"]: {
+          ["电池簇"]: {
             field: "time",
             callback: () => this.currentGroup,
           },
@@ -136,7 +136,7 @@ export default {
             if (data) {
                 for (let i = 1; i <= data.length; i++) {
                     for (let j = 1; j <= +data[i - 1]; j++) {
-                        let heapNum = `${this.$translate("第")}${i}${this.$translate("堆")}${j}#${this.$translate("电池组")}`;
+                        let heapNum = `${this.$translate("第")}${i}${this.$translate("堆")}${j}#${this.$translate("电池簇")}`;
                         this.batteryGroup.push({
                             label: heapNum,
                             value: i + ',' + j,
@@ -156,7 +156,7 @@ export default {
       });
       if (count) {
         for (let i = 1; i <= count; i++) {
-          let group = i + `#${this.$translate("电池组")}`;
+          let group = i + `#${this.$translate("电池簇")}`;
           this.batteryGroup.push({
             label: group,
             value: i,

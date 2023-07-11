@@ -1,7 +1,7 @@
 <template>
   <div class="batteryCluster">
     <div class="search-wrapper">
-      <span class="search-name">{{ $translate("电池组") }}：</span>
+      <span class="search-name">{{ $translate("电池簇") }}：</span>
       <el-select v-model="currentGroup" size="mini" placeholder="请选择">
         <el-option
           v-for="item in batteryGroup"
@@ -202,14 +202,14 @@ export default {
      if(this.version=='2') {
       let { packIdx, bmcIdx, cellId, date } = this.httpData;
       return `${date}_${this.$translate("第")}${bmcIdx+1}${this.$translate(
-        "电池组"
+        "电池簇"
       )}-Pack${packIdx+1}-${this.$translate("第")}${cellId+1}${this.$translate(
         "节"
       )}`;
      }else{
       let { groupId, clusterId, cellId, date } = this.httpData;
       return `${date}_${this.$translate("第")}${groupId}${this.$translate(
-        "电池组"
+        "电池簇"
       )}-Pack${clusterId}-${this.$translate("第")}${cellId}${this.$translate(
         "节"
       )}`;
@@ -316,7 +316,7 @@ export default {
       });
       if (count) {
         for (let i = 1; i <= count; i++) {
-          let group = i + `#${this.$translate("电池组")}`;
+          let group = i + `#${this.$translate("电池簇")}`;
           this.batteryGroup.push({
             label: group,
             value: i,
@@ -334,7 +334,7 @@ export default {
       if (data) {
         for(let i=1;i<=data.length;i++){
             for(let j = 1; j <= +data[i-1]; j++) {
-          let heapNum = `${this.$translate("第")}${i}${this.$translate("堆")}${j}#${this.$translate("电池组")}`;
+          let heapNum = `${this.$translate("第")}${i}${this.$translate("堆")}${j}#${this.$translate("电池簇")}`;
           this.batteryGroup.push({
             label: heapNum,
             value: i+','+j,

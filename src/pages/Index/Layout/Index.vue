@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container class="wrap">
-  <el-aside :width="!toggleSideBar?'220px':'60px'"><Sider/></el-aside>
+  <el-aside :width="!toggleSideBar?'220px':'60px'"><SiderNew/></el-aside>
   <el-container class="right">
     <el-header><Header /></el-header>
     <!-- <Breadcrumb/> -->
@@ -35,6 +35,7 @@ export default {
     Header: (_) => import("./components/Header"),
     Main: (_) => import("./components/Main"),
     Sider: _ => import("./components//Sider.vue"),
+    SiderNew: _ => import("./components//SiderNew.vue"),
     Breadcrumb:(_)=>import("@/components/Breadcrumb")
   },
 };

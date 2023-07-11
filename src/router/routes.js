@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import containerRoutes from './routes.container'
 import containerRoutes_v2 from './routes.container_v2'
+import containerRoutes_v3 from './routes.container_v3'
+
 Vue.use(Router)
 
 /* 解决点击多次点击同一导航报错问题  */
@@ -38,7 +40,8 @@ let routes = [
                     },
                    
             },
-    ...containerRoutes_v2,
+    // ...containerRoutes_v2,
+    ...containerRoutes_v3,
     ...containerRoutes,
     
 ];

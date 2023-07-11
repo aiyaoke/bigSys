@@ -65,11 +65,11 @@ export default {
             let batteryObj = {};
             seriesData.forEach(
                 (item, index) =>
-                    (batteryObj[`${index + 1}#电池组`] = `${index + 1}#电池组`)
+                    (batteryObj[`${index + 1}#电池簇`] = `${index + 1}#电池簇`)
             );
             return {
-                header: `${this.currentDevice.sn}-${this.date}-电池组SOC/%`,
-                title: "电池组SOC",
+                header: `${this.currentDevice.sn}-${this.date}-电池簇SOC/%`,
+                title: "电池簇SOC",
                 fields: {
                     [this.$translate("时间")]: "time",
                     ...batteryObj,
@@ -88,7 +88,7 @@ export default {
             let chartData = JSON.parse(data || "[]");
             Object.values(chartData).forEach((item, index) => {
                 this.chartArgs.options.series.push({
-                    name: `${index + 1}#${this.$translate("电池组")}`,
+                    name: `${index + 1}#${this.$translate("电池簇")}`,
                     data: item ? getEchatsData(item) : [],
                 });
             });
@@ -104,7 +104,7 @@ export default {
                     seriesData.forEach(({ name, data }, _uuIndex) => {
                         let [time, value] = data[index]["value"];
                         dataItem.time = momentFormate(time, "HH:mm");
-                        dataItem[`${_uuIndex + 1}#电池组`] = value;
+                        dataItem[`${_uuIndex + 1}#电池簇`] = value;
                         dataItem = {
                             ...dataItem,
                         };

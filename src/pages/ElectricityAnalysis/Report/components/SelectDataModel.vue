@@ -81,7 +81,6 @@ export default {
             })
             this.checkData = [...this.runData, ...this.deviceData];
             this.checkData = [...new Set(this.checkData)];
-            console.log( this.checkData );
         }
     },
     watch: {

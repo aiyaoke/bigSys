@@ -44,12 +44,6 @@ export default {
     mounted () {
     },
     watch: {
-        // tableData:{
-        //    deep:true
-        // },
-        // columns(a,b){
-        //     this.data=this.tableData;
-        // }
 }
 };
 </script>

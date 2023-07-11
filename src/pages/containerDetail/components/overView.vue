@@ -84,7 +84,6 @@ export default {
       this.loading=false;
     })
   }, 24000);
-  console.log(this.tableData);
   },
   components: {
     AllBattery: (_) => import("../AllBattery/Index.vue"),

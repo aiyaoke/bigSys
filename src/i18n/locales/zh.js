@@ -724,5 +724,17 @@ export const zh = {
   sermatec_00733:"总报表",
   sermatec_00734:"月报表",
   sermatec_00735:"BMS数据",
+  sermatec_00736:"BMS舱",
+  sermatec_00737:"PCS舱",
+  sermatec_00738:"混合舱",  
+  sermatec_00739:"电池堆",
+  sermatec_00740:"概览",
+  sermatec_00741:"实时数据",
+  sermatec_00742:"告警查询",
+  sermatec_00743:"实时告警",
+  sermatec_00744:"历史告警",
+  sermatec_00745:"场站设置",
+  sermatec_00746:"电池簇",
+
 
 };
