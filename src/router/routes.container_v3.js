@@ -112,7 +112,7 @@ export default [{
         },
         {
             path: "/containerIndex/alarm",
-            component: _ => import("@/pages/Alarm/AlarmSearch/components/ActiveAlarm"),
+            component: _ => import("@/pages/Alarm"),
             meta: {
                 name: "告警查询",
                 icon: "icon-lingdang"

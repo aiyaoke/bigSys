@@ -1,4 +1,4 @@
--+++<template>
+<template>
     <div class="history-alarm">
         <div class="search-wrapper">
             <div>
