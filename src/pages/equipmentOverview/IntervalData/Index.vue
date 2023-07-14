@@ -102,8 +102,6 @@ export default {
             this.chartArgs.color.splice(this.httpData.list.indexOf(tag), 1);
             this.columns.splice(this.dynamicTags.indexOf(tag), 1);
             this.getQueryData();
-            console.log(this.httpData.list);
-
             }
           
         },
@@ -122,7 +120,6 @@ export default {
                     val[0] = item.children[flag].label;
                     this.chartArgs.options.series.name = val[0];
                     let index = item.children[flag].children.findIndex(i => i.value === val[2]);
-                    console.log(this.httpData.list);
                     if (this.httpData.list.length > 4) {
                         showMessage("warning", "最多添加5个对象")
                     } else if (this.dynamicTags.indexOf(`${item.label}/${val[0]}/${item.children[flag].children[index].label}`) == -1) {
@@ -152,12 +149,12 @@ export default {
                             }
                         });
                         this.chartArgs.color.push(this.alleCharData.colors[this.dynamicTags.length - 1]);
+            this.getQueryData();
                     } else {
                         showMessage("warning", "已经选择该对象")
                     }
                 }
             });
-            this.getQueryData();
             
         },
         async getQueryData() {
@@ -203,17 +200,15 @@ export default {
         },
       
         getTableData(data){
-            if (this.dynamicTags.length==this.columns.length-2) {
-               
-            }
             data.forEach((item,ii)=>{
                 item.list.forEach((it,index)=>{
-                    console.log(this.dynamicTags[ii],"0000000");
+
                     this.tableData[index]={
                         ...this.tableData[index],
                         time:momentFormate(it.time, "YYYY-MM-DD HH:mm:ss"),
                         [this.dynamicTags[ii]]:it.value ,
                     }
+                console.log( this.tableData[index],this.columns,222222222);
                 })
                this.getExcelParams.fields={
                 "time":"time",
@@ -223,7 +218,6 @@ export default {
 
             })
                 this.excelData=this.tableData;
-            
         }
     },
     mounted() {

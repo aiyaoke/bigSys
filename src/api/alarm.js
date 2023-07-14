@@ -50,7 +50,31 @@ const apiGetAlarmsByContainerIdWithPage = params =>
     methods: "get",
     params
   });
+  // 集装箱实时报警
+const apiGetNowAlarmsByContainerIdWithPage = params =>
+axios.request({
+  url: "/energy/getNowAlarmsByContainerIdWithPage",
+  methods: "get",
+  params
+});
+  // 电站实时报警
+  const apiGetNowAlarmsByPlantIdWithPage = params =>
+  axios.request({
+    url: "/energy/getNowAlarmsByPlantIdWithPage",
+    methods: "get",
+    params
+  });
+    // 电站历史报警
+const apiGetHistoryAlarmsByPlantIdWithPage = data =>
+axios.request({
+  url: "/energy/getHistoryAlarmsByPlantIdWithPage",
+  method: "post",
+  data
+});
 export {
+  apiGetHistoryAlarmsByPlantIdWithPage,
+  apiGetNowAlarmsByPlantIdWithPage,
+  apiGetNowAlarmsByContainerIdWithPage,
   apiGetAlarmsByContainerIdWithPage,
   apiGetActiveAlarm,
   apiGetHistoryAlarm,
