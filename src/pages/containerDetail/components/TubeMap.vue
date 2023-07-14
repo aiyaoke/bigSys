@@ -117,7 +117,6 @@ export default {
                 pageId: id, //图表的ID，发布图表的地方可以找到
             }, function (comId, eventType, reData) {
             });
-
         }
 
     },

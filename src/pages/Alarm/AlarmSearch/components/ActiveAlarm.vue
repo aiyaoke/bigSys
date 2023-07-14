@@ -1,27 +1,36 @@
 <template>
-    <div class="active-alarm">
-        <div class="table-wrapper">
-            <Table
-                :columns="columns"
-                :tableData="tableData"
-                :loading="loading"
-            />
+        <div>
+    <PlaneBox v-show="$route.path=='/containerIndex/alarm/activeAlarm'">
+        <span slot="title">{{ $translate("实时告警") }}</span>
+        <div class="menuAll" slot="content">
+
+            <div class="active-alarm">
+                <div class="table-wrapper">
+                    <Table :columns="columns" :tableData="tableData" :loading="loading" />
+                </div>
+                <div class="pagination-wrapper">
+                    <Pagination :total="tableData.length" :pageSize="pageSize" @e_changePage="e_changePage" />
+                </div>
+            </div>
         </div>
-        <div class="pagination-wrapper">
-            <Pagination
-                :total="tableData.length"
-                :pageSize="pageSize"
-                @e_changePage="e_changePage"
-            />
+    </PlaneBox>
+    <div class="active-alarm" v-show="$route.path!=='/containerIndex/alarm/activeAlarm'">
+                <div class="table-wrapper">
+                    <Table :columns="columns" :tableData="tableData" :loading="loading" />
+                </div>
+                <div class="pagination-wrapper">
+                    <Pagination :total="tableData.length" :pageSize="pageSize" @e_changePage="e_changePage" />
+                </div>
+            </div>
         </div>
-    </div>
 </template>
 
 <script>
-import { apiGetAppNowAlarmsWithPage } from "@/api/alarm";
+import { apiGetAppNowAlarmsWithPage, apiGetNowAlarmsByContainerIdWithPage, apiGetNowAlarmsByPlantIdWithPage } from "@/api/alarm";
 import { nowTime } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
 const { mapGetters: device_getters } = createNamespacedHelpers("device");
+const { mapGetters: plant_getters } = createNamespacedHelpers("plant");
 const { mapActions: user_actions } = createNamespacedHelpers("user");
 export default {
     name: "ActiveAlarm",
@@ -70,6 +79,7 @@ export default {
             currentPage: 1,
             pageSize: 30,
             total: 0,
+            allData: {}
         };
     },
     mounted() {
@@ -79,9 +89,13 @@ export default {
     components: {
         Table: (_) => import("@/components/Table"),
         Pagination: (_) => import("@/components/Pagination"),
+        PlaneBox: _ => import("@/components/PlaneBox"),
+
     },
     computed: {
-        ...device_getters(["currentDevice"]),
+        ...device_getters(["currentDevice", "version"]),
+        ...plant_getters(["currentPlant"]),
+
         alarmPrior1Class() {
             return "alarm-prior1";
         },
@@ -97,8 +111,26 @@ export default {
                 pageSize: this.pageSize,
                 end: this.end,
             };
-            let { data } = await apiGetAppNowAlarmsWithPage(requestData);
-            let { list, total } = data;
+            if (this.version == '2') {
+                let { data } = await (this.$route.path == "/containerIndex/alarm/activeAlarm" ? apiGetNowAlarmsByPlantIdWithPage({
+                    currentPage: this.currentPage,
+                    pageSize: this.pageSize,
+                    plantId: this.currentPlant.plantId,
+                }) : apiGetNowAlarmsByContainerIdWithPage({
+                    currentPage: this.currentPage,
+                    pageSize: this.pageSize,
+                    containerId: sessionStorage.getItem("containerId"),
+                }));
+                this.allData = data;
+                console.log(this.allData);
+
+            } else {
+                let { data } = await apiGetAppNowAlarmsWithPage(requestData);
+                this.allData = data;
+            }
+
+
+            let { list, total } = this.allData;
             this.tableData = list;
             this.total = total;
             this.loading = false;
@@ -116,6 +148,7 @@ export default {
     .alarm-icon {
         margin-right: 5px;
     }
+
     .pagination-wrapper {
         text-align: right;
         margin-top: 20px;

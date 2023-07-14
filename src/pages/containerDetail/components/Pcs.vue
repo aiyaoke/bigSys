@@ -10,7 +10,7 @@
         <el-tab-pane :label="$translate(item.label)" :name="item.name"></el-tab-pane>
       </template>
     </el-tabs>
-    <component :is="isComponent" v-loading="loading"></component>
+    <component :is="isComponent" v-loading="loading"  element-loading-background="rgba(0, 0, 0, 0.8)"></component>
   </div>
 </template>
 
@@ -37,13 +37,14 @@ export default {
             name: "EnergyMonitor",
           },
           {
+            label: '告警',
+            name: "Alarm",
+          },
+          {
             label: '视屏监控',
             name: "VideoMonitor",
           },
-          {
-            label: '报警',
-            name: "Alarm",
-          },
+          
         ],
       activeName: "PCS",
       componentsList:  {

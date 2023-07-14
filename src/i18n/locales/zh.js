@@ -735,6 +735,6 @@ export const zh = {
   sermatec_00744:"历史告警",
   sermatec_00745:"场站设置",
   sermatec_00746:"电池簇",
-
+  sermatec_00747:"电池监测",
 
 };

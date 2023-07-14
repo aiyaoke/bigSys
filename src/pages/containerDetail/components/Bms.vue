@@ -10,7 +10,7 @@
           <el-tab-pane :label="$translate(item.label)" :name="item.name"></el-tab-pane>
         </template>
       </el-tabs>
-      <component :is="isComponent" v-loading="loading"></component>
+      <component :is="isComponent" v-loading="loading"  element-loading-background="rgba(0, 0, 0, 0.8)"></component>
     </div>
   </template>
   
@@ -54,7 +54,7 @@
   
           },
           {
-            label: '报警',
+            label: '告警',
             name: "Alarm",
           },
           {
@@ -93,10 +93,11 @@
       handleClick(tab, event) {
       },
       getOptionList() {
+        let i=1;
         this.allDevices.map((item, index) => {
           if (item.type === 2) {
             this.options.push({
-              label: `${index + 1}#${this.$translate("BMS舱")}`,
+              label: `${ i++}#${this.$translate("BMS舱")}`,
               value: item.id
             })
           }

@@ -18,7 +18,7 @@ export default [{
         {
             path: "/containerIndex/equipment/currentData",
             meta: {
-                name: "实时数据",
+                name: "运行监测",
                 icon: "icon-jiance"
             },
             component: _ =>
@@ -86,7 +86,7 @@ export default [{
         },
         {
             path: "/containerIndex/electricityAnalysis",
-            component: _ => import("@/pages/ElectricityAnalysis/ProfitStatistics"),
+            component: _ => import("@/pages/ElectricityAnalysis/Index.vue"),
             meta: {
                 name: "收益统计",
                 icon: "icon-shouyi2"
@@ -112,7 +112,7 @@ export default [{
         },
         {
             path: "/containerIndex/alarm",
-            component: _ => import("@/pages/Alarm/AlarmSearch/components/ActiveAlarm"),
+            component: _ => import("@/pages/Alarm"),
             meta: {
                 name: "告警查询",
                 icon: "icon-lingdang"

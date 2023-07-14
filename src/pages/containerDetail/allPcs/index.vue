@@ -1,9 +1,13 @@
 <template>
+  <div>
   <div class="all_pcsWrap">
     <template v-for="(item,index) in PCS">
       <PcsBox :pcs="item"/>
     </template>
+
   </div>
+  <Table></Table>
+</div>
 </template>
 
 <script>
@@ -48,7 +52,9 @@ export default {
   components: {
     IconBox,
     AnimatePath,
-    PcsBox
+    PcsBox,
+    Table: (_) => import("../components/overView.vue"),
+
   },
 };
 </script>
