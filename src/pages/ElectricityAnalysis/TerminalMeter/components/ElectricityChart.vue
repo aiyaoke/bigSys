@@ -1,13 +1,5 @@
 <template>
   <div class="profitStatistics">
-    <PlaneBox v-if="devicePermissions['N/A']||version=='2'">
-      <span slot="title">{{ $translate("电量统计") }}</span>
-      <CategoryChart :args="elecTotalOptions" slot="content" />
-    </PlaneBox>
-    <PlaneBox v-if="devicePermissions['N/B']">
-      <span slot="title">{{ $translate("辅源侧电表") }}</span>
-      <CategoryChart :args="helpMaterOptions" slot="content" />
-    </PlaneBox>
     <div class="card-wrapper">
       <div v-for="(item, index) in cardData" :key="index">
         <span class="name"> {{ $translate(item.name) }}：</span>
@@ -17,6 +9,14 @@
         </div>
       </div>
     </div>
+    <PlaneBox v-if="devicePermissions['N/A']||version=='2'">
+      <span slot="title">{{ $translate("电量统计") }}</span>
+      <CategoryChart :args="elecTotalOptions" slot="content" />
+    </PlaneBox>
+    <PlaneBox v-if="devicePermissions['N/B']">
+      <span slot="title">{{ $translate("辅源侧电表") }}</span>
+      <CategoryChart :args="helpMaterOptions" slot="content" />
+    </PlaneBox>
   </div>
 </template>
 

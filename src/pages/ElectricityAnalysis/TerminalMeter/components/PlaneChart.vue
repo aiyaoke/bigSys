@@ -1,6 +1,11 @@
 <template>
     <div class="plane">
         <div>
+            <div class="info">
+                <template v-for="(item, index) in args.mostValue">
+                    <MostValue :key="index" :value="item" class="info-item"></MostValue>
+                </template>
+            </div>
             <PlaneBox class="chartPlane-wrapper">
                 <span slot="title"> {{ $translate(args.title) }}</span>
                 <TimeChart
@@ -10,11 +15,6 @@
                 />
                 <CategoryChart v-else :args="args" slot="content" />
             </PlaneBox>
-            <div class="info">
-                <template v-for="(item, index) in args.mostValue">
-                    <MostValue :key="index" :value="item" class="info-item"></MostValue>
-                </template>
-            </div>
         </div>
     </div>
 </template>
