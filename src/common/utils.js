@@ -67,11 +67,11 @@ export const momentFormate = (timeStamp, format) => {
     : moment(timeStamp).format(format);
 };
 
-export const nowTime = (count, format) => {
+export const nowTime = (count, format, dateType) => {
   let { timeZone } = Vue.$store.getters["plant/currentPlant"];
   return moment()
     .utcOffset(timeZone * 60)
-    .add(count, "days")
+    .add(count, dateType || "days")
     .format(format);
 };
 
