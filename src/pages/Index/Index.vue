@@ -1,62 +1,248 @@
 <template>
   <div class="containerIndex">
-    <div class="left-wrapper">
-      <Left />
+    <div class="top">
+      <div class="top-item top-left">
+        <div class="top-icon"><i class='iconfont icon-fenxiangzhuanshouyi top-item-iconfont'></i></div>
+        <div class="top-data">
+          <div class="top-item-data">
+            <div class="top-item-data-title">今日收益(元)</div>
+            <div class="top-item-data-num">{{todayIncome}}</div>
+          </div>
+          <div class="top-item-data">
+            <div class="top-item-data-title">总收益(元)</div>
+            <div class="top-item-data-num">{{allIncome}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="top-item top-right">
+        <div class="top-icon"><i class='iconfont icon-dian top-item-iconfont'></i></div>
+        <div class="top-data">
+          <div class="top-item-data">
+            <div class="top-item-data-title">当日放电(度)</div>
+            <div class="top-item-data-num">{{todayDischarge}}</div>
+          </div>
+          <div class="top-item-data">
+            <div class="top-item-data-title">总放电量(度)</div>
+            <div class="top-item-data-num">{{allDischarge}}</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="right-wrapper">
-      <Header/>
-      <Map />
+    <div class="bottom">
+      <div class="bottom-item bottom-left">
+        <div class="bottom-left-top">
+          <div class="bottom-left-top-title">
+            <i class='iconfont icon-tubiao- top-item-iconfont'></i>
+            <span class="bottom-left-top-title-desc">节能减排</span>
+          </div>
+          <div class="bottom-left-top-item">
+            <div class="bottom-left-top-item-icon"><i class='iconfont icon-meiqi bottom-left-top-item-iconfont'></i></div>
+            <div class="bottom-left-top-item-title">累计煤炭</div>
+            <div class="bottom-left-top-item-num">{{coal}}</div>
+          </div>
+          <div class="bottom-left-top-item">
+            <div class="bottom-left-top-item-icon"><i class='iconfont icon-co bottom-left-top-item-iconfont'></i></div>
+            <div class="bottom-left-top-item-title">CO₂减排量</div>
+            <div class="bottom-left-top-item-num">{{co2}}</div>
+          </div>
+           <div class="bottom-left-top-item">
+            <div class="bottom-left-top-item-icon"><i class='iconfont icon-lvyouchengshijianzhucity-treexiaoheshumur bottom-left-top-item-iconfont'></i></div>
+            <div class="bottom-left-top-item-title">折合树木</div>
+            <div class="bottom-left-top-item-num">{{tree}}</div>
+          </div>
+        </div>
+        <div class="bottom-left-bottom">
+        </div>
+      </div>
+      <div class="bottom-item bottom-right">
+        <MyMap />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { createNamespacedHelpers } from "vuex";
+import { apiGetDailyDisCharge } from "@/api/plant";
 const { mapActions: plant_actions } = createNamespacedHelpers("plant");
 const { mapActions: device_actions } = createNamespacedHelpers("device");
 export default {
   name: "ContainerIndex",
+  data(){
+    return {
+      todayIncome: 0,
+      allIncome: 0,
+      todayDischarge: 0,
+      allDischarge: 0,
+      coal: 0,
+      co2: 0,
+      tree: 0
+    }
+  },
   components: {
-    Header: (_) => import("./components/Header"),
-    Map: (_) => import("./components/Map"),
-    Right: (_) => import("./components/Right"),
-    Left: (_) => import("./components/Left"),
-    Footer: (_) => import("@/components/Footer"),
+    MyMap: (_) => import("./components/Map"),
   },
   mounted() {
     this.getDevicePermissions({ type: 0 });
     this.getAllPlants();
+    this.getDailyDisCharge()
   },
   methods: {
     ...plant_actions(["getAllPlants"]),
     ...device_actions(["getDevicePermissions"]),
+    async getDailyDisCharge(){
+      let { data } = await apiGetDailyDisCharge();
+      if(data){
+        data = JSON.parse(data);
+        this.todayIncome = data.dailyProfit;
+        this.allIncome = data.sumProfit;
+        this.todayDischarge = data.dailyDisCharge;
+        this.allDischarge = data.sumDisCharge;
+        this.coal = data.coal;
+        this.co2 = data.co2;
+        this.tree = data.tree;
+      }
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .containerIndex {
-  height: 100vh;
+  height: calc(100vh - 100px);
   position: relative;
   @include bg-color("1");
+  padding: 50px;
+}
+
+.top{
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.top-item{
+  flex: 1;
+  height: 140px;
+  @include bg-color("2");
+  display: flex;
+  align-items: center;
+}
+
+.top-icon{
+  width: 150px;
+  text-align: center;
+}
+
+.top-item-iconfont{
+  font-size: 50px;
+  color: #31e0f0;
+}
+
+.top-data{
+  display: flex;
+  flex: 1;
+}
+
+.top-item-data{
+  flex: 1;
+}
+
+.top-item-data-title{
+  font-size: 20px;
+  margin-bottom: 25px;
+  @include font-color("3");
+}
+
+.top-item-data-num{
+  font-size: 35px;
+  font-weight: 600;
+  @include font-color("1");
+}
+
+.bottom{
+  display: flex;
+  gap: 20px;
+}
+
+.bottom-item{
+  height: calc(100vh - 250px);
+}
+
+.bottom-left{
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bottom-left-top{
+  width: 100%;
+  height: 40%;
+  @include bg-color("2");
+  padding: 20px;
   box-sizing: border-box;
   display: flex;
-  > div {
-    height: 100%;
-  }
-
-  .left-wrapper {
-    width: 20%;
-    margin-right: 20px;
-  }
-.header{
-  width: 100%;
-  height: 60px;
-
+  flex-direction: column;
+  flex:1;
 }
-  .right-wrapper {
-    flex: 2;
 
+.bottom-left-bottom{
+  width: 100%;
+  height: 40%;
+  @include bg-color("2");
+  padding: 20px;
+  box-sizing: border-box;
+  flex:1;
+}
+
+.bottom-left-top-title{
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.bottom-left-top-title-desc{
+  font-size: 20px;
+  @include font-color("3");
+  margin-left: 20px;
+}
+
+.bottom-left-top-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+
+  &:not(:last-child) {
+      border-bottom: 1px solid rgba(235, 221, 227, 0.09);
   }
+}
+
+.bottom-left-top-item-icon{
+  width: 100px;
+  text-align: center;
+  margin-right: 30px;
+}
+
+.bottom-left-top-item-iconfont{
+  font-size: 30px;
+  color: #31e0f0;
+}
+
+.bottom-left-top-item-title{
+  font-size: 20px;
+  @include font-color("3");
+}
+
+.bottom-left-top-item-num{
+  font-size: 25px;
+  font-weight: 600;
+  @include font-color("1");
+}
+
+.bottom-right{
+  @include bg-color("2");
+  flex: 1;
 }
 </style>

@@ -43,26 +43,33 @@ export default {
 <style lang="scss" scoped>
 .mostValue {
     width: 100%;
-    height: 180px;
-    border-radius: 5px;
-    @include bg-color("2");
-    @include dis-flex(center, center, column);
-    padding: 10px;
-    box-sizing: border-box;
+    height: 100%;
+    @include dis-flex(stretch, stretch, column);
+
+    > div {
+        @include dis-flex(center, center);
+    }
 
     .title {
-        margin-bottom: 10px;
+        height: 30px;
+        border-bottom: 1px solid #999;
     }
+
     .value {
-        font-size: 35px;
-        font-weight: bolder;
-        margin-right: 5px;
-        font-size: 45px;
+        flex: 1;
+        font-size: 25px;
+        font-family: fantasy;
         @include font-color("1");
-        font-family: DINCondensed-Bold;
+        .unit {
+            font-size: 15px;
+            position: relative;
+            left: 5px;
+            top: 3px;
+        }
     }
-    .time{
-        margin-top: 10px;
+
+    .time {
+        height: 30px;
     }
 }
 </style>

@@ -1,10 +1,11 @@
 <template>
-  <div class="overview">
-    <!-- <Nav/> -->
-    <!-- <TubeMap/> -->
-    <!-- <AllBattery  v-if="type==2" key="2"     v-cloak/>
+  <div></div>
+  <!-- <div class="overview">
+    <Nav/>
+    <TubeMap/>
+    <AllBattery  v-if="type==2" key="2"     v-cloak/>
     <PcsAndBattery v-else-if="type==3" key="3" v-cloak/>
-    <AllPcs v-else-if="type==1" key="1" v-cloak/> -->
+    <AllPcs v-else-if="type==1" key="1" v-cloak/>
     <div class="table-wrapper-overview">
       <div v-for="(item, index) in tableData" v-if="item.arr&&item.arr.length" :class="tableType[index].className" :key="item.title">
         <div>
@@ -19,7 +20,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -91,8 +92,6 @@ export default {
     TableData:(_)=>import("./TableData.vue"),
     Nav:(_)=>import("./DetailsNav.vue"),
     // TubeMap:(_)=>import("./TubeMap.vue")
-
-
   },
   destroyed () {
     clearInterval(this.timer);

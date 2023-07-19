@@ -41,34 +41,13 @@
                             :buttonText="$translate('放电统计')"
                         />
                     </el-dropdown-item>
-                    <el-dropdown-item>
-                        <ExportExcel
-                            :header="getExcelParams.elecTotal.header"
-                            :title="getExcelParams.elecTotal.title"
-                            :fields="getExcelParams.elecTotal.fields"
-                            :data="elecTotalExcelData"
-                            :buttonText="$translate('电量统计')"
-                        />
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                        <ExportExcel
-                        :header="getExcelParams.helpMeter.header"
-                        :title="getExcelParams.helpMeter.title"
-                        :fields="getExcelParams.helpMeter.fields"
-                        :data="helpMeterExcelData"
-                        :buttonText="$translate('辅源侧电表')"
-                        />
-                    </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
 
-       <div class="chart">
-          <PlaneChart :args="chargeStatistics"></PlaneChart>
-          <PlaneChart :args="dischargeStatistics"></PlaneChart>
-          <PlaneChart :args="chargeDischargeCurve"></PlaneChart>
-          <ElectricityChart :dateType="type" @changeDownloadExcelData="changeDownloadExcelData" />
-       </div>
+        <PlaneChart :args="chargeDischargeCurve"></PlaneChart>
+        <PlaneChart :args="chargeStatistics"></PlaneChart>
+        <PlaneChart :args="dischargeStatistics"></PlaneChart>
     </div>
 </template>
 
@@ -92,8 +71,6 @@ export default {
                 { label: "近1月", value: "1month" },
                 { label: "近3月", value: "3month" },
             ],
-            elecTotalExcelData:[],
-            helpMeterExcelData: [],
             chargeDischargeCurve: {
                 title: "充放电曲线",
                 ref: "chargeDischargeCurve",
@@ -167,7 +144,6 @@ export default {
     components: {
         PlaneChart: (_) => import("./components/PlaneChart"),
         ExportExcel: (_) => import("@/components/ExportExcel"),
-        ElectricityChart: (_) => import("./components/ElectricityChart")
     },
     computed: {
         ...device_getters(["currentDevice","allDevices","version"]),
@@ -215,43 +191,10 @@ export default {
                         },
                     },
                 },
-                elecTotal: {
-                    header: `${this.currentDevice.sn}-电量统计/kWh`,
-                    title: "电量统计",
-                    fields: {
-                        [this.$translate("日期")]: "date",
-                        充电尖: "charge1",
-                        充电峰: "charge2",
-                        充电平: "charge3",
-                        充电谷: "charge4",
-                        放电尖: "disCharge1",
-                        放电峰: "disCharge2",
-                        放电平: "disCharge3",
-                        放电谷: "disCharge4"
-                    }
-                },
-                helpMeter: {
-                    header: `${this.currentDevice.sn}-辅源侧电表/kWh`,
-                    title: "辅源侧电表",
-                    fields: {
-                        [this.$translate("日期")]: {
-                        field: "time",
-                        callback: time => momentFormate(time, "MM-DD")
-                        },
-                        [this.$translate("用电量")]: {
-                        field: "value",
-                        callback: value => value
-                        }
-                    }
-                }
             };
         },
     },
     methods: {
-        changeDownloadExcelData(elecTotalExcelData, helpMeterExcelData){
-            this.elecTotalExcelData = elecTotalExcelData;
-            this.helpMeterExcelData = helpMeterExcelData;
-        },
         changeType(value) {
             this.type = value;
             this.getData();
@@ -261,6 +204,7 @@ export default {
                 dtuId: this.version=='2'?this.allDevices[0].dtuId:this.currentDevice.id,
                 dateType: this.type,
             };
+            console.log(requestData.dtuId);
             this.getChargeDisChargeCurve(requestData);
             this.getChargeDisChargeMostValue(requestData);
             this.getChargeAmount(requestData);
@@ -344,10 +288,5 @@ export default {
         width: 100%;
         text-align: center;
     }
-}
-.chart{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 20px
 }
 </style>

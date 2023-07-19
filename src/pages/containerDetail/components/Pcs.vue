@@ -10,7 +10,7 @@
         <el-tab-pane :label="$translate(item.label)" :name="item.name"></el-tab-pane>
       </template>
     </el-tabs>
-    <component :is="isComponent" v-loading="loading"  element-loading-background="rgba(0, 0, 0, 0.8)"></component>
+    <component :is="isComponent" v-loading="loading" :containerId="defaultOption" type="PCS"  element-loading-background="rgba(0, 0, 0, 0.8)"></component>
   </div>
 </template>
 
@@ -33,6 +33,10 @@ export default {
             name: "PCS",
           },
           {
+            label: 'PCS数据',
+            name: 'PcsData'
+          },
+          {
             label: '储能检测',
             name: "EnergyMonitor",
           },
@@ -43,8 +47,7 @@ export default {
           {
             label: '视屏监控',
             name: "VideoMonitor",
-          },
-          
+          }
         ],
       activeName: "PCS",
       componentsList:  {
@@ -52,6 +55,7 @@ export default {
           PCS: "PCS",
           VideoMonitor: "VideoMonitor",
           Alarm: "Alarm",
+          PcsData: "PcsData"
         },
       defaultOption: "",
       options: [],
@@ -118,7 +122,7 @@ export default {
     VideoMonitor: (_) => import("@/pages/VideoMonitor"),
     Alarm: (_) => import("@/pages/Alarm/AlarmSearch/components/ActiveAlarm"),
     PCS: (_) => import("@/pages/containerDetail/AllPcs"),
-
+    PcsData: (_) => import("./Data")
   },
   destroyed() {
     clearInterval(this.timer);

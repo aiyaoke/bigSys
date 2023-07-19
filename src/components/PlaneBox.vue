@@ -21,7 +21,7 @@ export default {
 <style lang="scss" scoped>
 .plane-box {
     @include bg-color("2");
-    height: calc(100vh - 350px);
+    height: calc(100vh - 320px);
     min-height: 350px;
     margin: 20px 0;
     border-radius: 5px;
