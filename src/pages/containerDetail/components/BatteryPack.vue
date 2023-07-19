@@ -12,7 +12,6 @@
         v-for="(item, index) in BMC"
         :ref="`wrap${index}`"
         :key="`wrap${index}`"
-        @click="toCellDetails"
       >
         <Battery
           ref="battery"
@@ -32,7 +31,7 @@
             stroke-width="3"
             stroke="red"
             stroke-dasharray="4"
-            :d="batteryAnimatePath"
+            :d="batteryAnimatePath||' M 25 0 v 168'"
           />
         </svg>
       </div>
@@ -64,18 +63,21 @@ export default {
       this.width = this.$refs.wrap0[0].offsetWidth;
       this.height = this.$refs.wrap0[0].offsetHeight;
       this.batteryAnimatePath = `M ${this.width/2} 0 v ${this.height*0.4}`;
+      console.log( this.batteryAnimatePath ,2222222);
+
     },
-    toCellDetails() {
-      this.$router.push({
-                    path: "/containerIndex/equipmentOverview/EnergyManage", 
-                    query: {
-                        id:sessionStorage.getItem('containerId')||null,
-                    }
-                })
-    },
+    // toCellDetails() {
+    //   this.$router.push({
+    //                 path: "/containerIndex/equipmentOverview/EnergyManage", 
+    //                 query: {
+    //                     id:sessionStorage.getItem('containerId')||null,
+    //                 }
+    //             })
+    // },
   },
   created() {},
   mounted() {
+    this.initBatteryAnimatePath();
     this.$nextTick(() => {
       this.initBatteryAnimatePath();
     });

@@ -1,5 +1,5 @@
 <template>
-    <chart class="echarts" :ref="args.ref" :options="options" :auto-resize="true" @finished="finished"></chart>
+    <chart :class="echarts" :ref="args.ref" :options="options" :auto-resize="true" @finished="finished"></chart>
 </template>
 
 <script>
@@ -125,10 +125,15 @@ export default {
                         this.options[item]
                     );
                     if (type === "[object Array]") {
-                        this.options[item] = [
-                            ...this.options[item],
-                            ...aOptions[item],
-                        ];
+                        // 以前的逻辑我不敢动，所以我只能添加一个属性dataZoom的判断
+                        if(item==="dataZoom"&&aOptions["dataZoom"]){
+                            this.options["dataZoom"] = aOptions["dataZoom"]
+                        }else{
+                            this.options[item] = [
+                                ...this.options[item],
+                                ...aOptions[item],
+                            ];
+                        }
                     } else {
                         this.options[item] = {
                             ...this.options[item],

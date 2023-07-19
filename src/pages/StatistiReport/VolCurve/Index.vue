@@ -2,7 +2,7 @@
     <div class="volCurve">
         <div class="search-wrapper">
             <div>
-                <span class="search-name">{{ $translate("电池组") }}：</span>
+                <span class="search-name">{{ $translate("电池簇") }}：</span>
                 <el-cascader size="mini" v-model="value" :options="batteryGroup" :props="{ expandTrigger: 'hover' }">
                 </el-cascader>
             </div>
@@ -145,7 +145,7 @@ export default {
             if (data) {
                 for (let i = 1; i <= data.length; i++) {
                     for (let j = 1; j <= +data[i - 1]; j++) {
-                        let heapNum = `${this.$translate("第")}${i}${this.$translate("堆")}${j}#${this.$translate("电池组")}`;
+                        let heapNum = `${this.$translate("第")}${i}${this.$translate("堆")}${j}#${this.$translate("电池簇")}`;
                         let cluster = [];
                     for (let k = 1; k <= 32; k++) {
                         cluster.push({ 
@@ -173,7 +173,7 @@ export default {
             });
             if (count) {
                 for (let i = 1; i <= count; i++) {
-                    let group = i + `#${this.$translate("电池组")}`;
+                    let group = i + `#${this.$translate("电池簇")}`;
                     let cluster = [];
                     for (let j = 1; j <= 32; j++) {
                         cluster.push({

@@ -1,9 +1,13 @@
 <template>
+  <div>
   <div class="all_pcsWrap">
-    <template v-for="item,index in PCS">
+    <template v-for="(item,index) in PCS">
       <PcsBox :pcs="item"/>
     </template>
+
   </div>
+  <Table></Table>
+</div>
 </template>
 
 <script>
@@ -48,14 +52,16 @@ export default {
   components: {
     IconBox,
     AnimatePath,
-    PcsBox
+    PcsBox,
+    Table: (_) => import("../components/overView.vue"),
+
   },
 };
 </script>
 <style lang="scss" scoped>
 .all_pcsWrap {
   width: 100%;
-  height: 100%;
+  height: 80vh;
   @include bg-color("2");
   padding: 30px 30px;
   display: grid;

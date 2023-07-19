@@ -90,20 +90,17 @@ export default {
       let { label, value } = this.dataList.find(
         item => item.value == this.dataValue
       );
-      console.log(this.dataList);
       let { series: seriesData } = this.chartArgs.options;
-      console.log(seriesData);
-
       let batteryObj = {};
       seriesData.forEach(
         (item, index) =>
-          (batteryObj[`${index + 1}#电池组`] = `${index + 1}#电池组`)
+          (batteryObj[`${index + 1}#电池簇`] = `${index + 1}#电池簇`)
       );
       return {
-        header: `${this.currentDevice.sn||sessionStorage.getItem('containId')}-${this.date}-电池组${label}/${
+        header: `${this.currentDevice.sn||sessionStorage.getItem('containId')}-${this.date}-电池簇${label}/${
           value.split("_")[1]
         }`,
-        title: `电池组${label}`,
+        title: `电池簇${label}`,
         fields: {
           [this.$translate("时间")]: "time",
           ...batteryObj
@@ -138,7 +135,7 @@ export default {
         keys.forEach((key, index) => {
           this.chartArgs.options.series.push({
             name: `${+key.split("battery")[1] + 1}#${this.$translate(
-              "电池组"
+              "电池簇"
             )}`,
             data: data[key] ? getEchatsData(data[key]) : []
           });
@@ -160,7 +157,7 @@ export default {
         keys.forEach((key, index) => {
           this.chartArgs.options.series.push({
             name: `${+key.split("battery")[1] + 1}#${this.$translate(
-              "电池组"
+              "电池簇"
             )}`,
             data: data[key] ? getEchatsData(data[key]) : []
           });
@@ -176,10 +173,9 @@ export default {
         seriesData[0].data.forEach((item, index) => {
           let dataItem = {};
           seriesData.forEach(({ name, data }, _uuIndex) => {
-            console.log(seriesData);
             let [time, value] = data[index].value||[];
             dataItem.time = momentFormate(time, "HH:mm");
-            dataItem[`${_uuIndex + 1}#电池组`] = value;
+            dataItem[`${_uuIndex + 1}#电池簇`] = value;
             dataItem = {
               ...dataItem
             };

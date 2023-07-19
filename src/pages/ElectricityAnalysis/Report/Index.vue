@@ -24,8 +24,9 @@
 
                 <DataSelect class="margin-l" :dataChange="dataModel" @updateList="getTableData" :type="currentType" />
 
-                <ExportExcel class="margin-l" :header="excelData.header" :title="excelData.name" :fields="excelData.fields"
-                    :data="excelData.data" />
+                <el-button class="margin-l" size="mini" type="warning" @click="exportExcel">
+                    ↓ Excel
+                </el-button>
             </div>
             <div class="content" id="pdfDom" v-loading.lock="loading" element-loading-text="拼命加载中"
                 element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
@@ -44,17 +45,17 @@
                     </div>
                     <BasicInfo :basicInfo="run" />
                 </div>
-                <div class="oneModel" v-if="energy !== undefined">
+                <div class="oneModel" v-if="pcsData !== undefined">
                     <div class="statistics-title">
-                        储能单元充放电运行指标
+                        PCS运行指标
                     </div>
-                    <Table :columns="energyColumn" :tableData="energy" />
+                    <Table :columns="PCS" :tableData="pcsData" />
                 </div>
-                <div class="oneModel" v-if="totalEnergy !== undefined">
+                <div class="oneModel" v-if="bmsData !== undefined">
                     <div class="statistics-title">
-                        储能单元总运行指标
+                        BMS运行指标
                     </div>
-                    <Table :columns="totalColumn" :tableData="totalEnergy" />
+                    <Table :columns="BMS" :tableData="bmsData" />
                 </div>
 
             </div>
@@ -63,9 +64,11 @@
 </template>
 
 <script>
-import { momentFormate } from "@/common/utils";
-import { apigetDtuReport, getReportList, apiupdateReportTemplate } from "@/api/device";
-import { basicInfo, runInfo, totalColumn, energyColumn } from "@/common/config";
+import { momentFormate, getToken } from "@/common/utils";
+import { exportExcelMethod } from "@/common/excelExport";
+import { baseUrl } from "@/common/config";
+import { apigetDtuReport, getReportList, apiupdateReportTemplate, apiExoprtReport } from "@/api/device";
+import { basicInfo, runInfo, PCS, BMS } from "@/common/config";
 import { createNamespacedHelpers } from "vuex";
 const {
     mapGetters: plant_getters,
@@ -125,11 +128,11 @@ export default {
             run: {},
             dataModel: [],
             basicInfo,
+            PCS,
+            BMS,
             runInfo,
-            totalEnergy: [],
-            energy: [],
-            totalColumn,
-            energyColumn,
+            pcsData: [],
+            bmsData: [],
             excelData: {
                 header: `${momentFormate(Date.now(), 'YYYY-MM-DD') + this.$translate("统计报表")}`,
                 name: "电站报表",
@@ -154,7 +157,6 @@ export default {
         ReportMenu: (_) => import('./components/ReportMenu.vue'),
         BasicInfo: (_) => import('./components/BasicInfo.vue'),
         PlaneBox: _ => import("@/components/PlaneBox"),
-        ExportExcel: (_) => import("@/components/ExportPDF"),
         DataSelect: (_) => import('./components/SelectDataModel.vue'),
         Table: (_) => import("@/components/TableNew"),
     },
@@ -203,20 +205,12 @@ export default {
                 date: this.date,
                 type
             });
-            let { dtu, run, energy, totalEnergy } = tableData;
+            let { dtu, run, energy, totalEnergy,BMS,PCS } = tableData;
             this.initTableData(basicInfo, dtu, this.basic);
             this.initTableData(runInfo, run, this.run);
-            this.energy = energy;
-            this.totalEnergy = totalEnergy;
-            if (energy && totalEnergy) {
-                this.excelData.data = [...energy, ...totalEnergy]
-
-            }
-            totalColumn.forEach(it => {
-                this.excelData.fields[it.label] = it.key;
-            })
-            this.excelData.header = `${this.formatDate + this.$translate('统计报表')}`
-
+            this.pcsData = PCS;
+            this.bmsData = BMS;
+          
         },
         dateChange() {
             this.getDate(this.dateType);
@@ -239,7 +233,24 @@ export default {
                 }
             })
             target['name'] ? this.basic = target : this.run = target;
+        },
+        async exportExcel() {
+
+            const myObj = {
+                method: 'get',
+                url: baseUrl+'/energy/report/exportReport',
+                fileName: `${this.formatDate + this.$translate('统计报表')}`,
+                token: getToken(),
+                params: {
+                    plantId: this.currentPlant.plantId,
+                    date: this.date,
+                    type: this.currentType
+                }
+            }
+            exportExcelMethod(myObj)
+
         }
+
     },
     watch: {
         basic: {

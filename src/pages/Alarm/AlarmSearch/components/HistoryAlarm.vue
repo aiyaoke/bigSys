@@ -1,4 +1,4 @@
--+++<template>
+<template>
     <div class="history-alarm">
         <div class="search-wrapper">
             <div>
@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import { apiGetHistoryAlarm,apiGetAlarmsByContainerIdWithPage } from "@/api/alarm";
+import { apiGetHistoryAlarm,apiGetAlarmsByContainerIdWithPage,apiGetHistoryAlarmsByPlantIdWithPage } from "@/api/alarm";
 import { nowTime, getEchatsData, momentFormate } from "@/common/utils";
 import { dayTypes, tooltipStyle, colorList } from "@/common/config";
-import { apiGetPowerCurve, apiGetPvCurve, apiGetSocCurve } from "@/api/device";
 import { createNamespacedHelpers } from "vuex";
 const { mapGetters: device_getters } = createNamespacedHelpers("device");
+const { mapGetters: plant_getters } = createNamespacedHelpers("plant");
 
 export default {
     name: "HistoryAlarm",
@@ -83,6 +83,7 @@ export default {
             currentPage: 1,
             pageSize: 30,
             total: 0,
+            allData:{},
             excel_title: this.$translate("历史报警"),
             excel_fields: {
                 sn: {
@@ -111,6 +112,8 @@ export default {
     },
     computed: {
         ...device_getters(["currentDevice","version"]),
+        ...plant_getters(["currentPlant"]),
+
         alarmPrior1Class() {
             return "alarm-prior1";
         },
@@ -123,13 +126,16 @@ export default {
                 this.timeValue=[nowTime(-7, "YYYY-MM-DD"), nowTime(0, "YYYY-MM-DD")];
             }
             if (this.version=='2') {
-                requestData = {
-                containerId:sessionStorage.getItem("containerId"),
+                let {data}=await apiGetHistoryAlarmsByPlantIdWithPage({
+                plantId:this.currentPlant.plantId,
                 start: this.timeValue[0],
                 currentPage: this.currentPage,
                 pageSize: this.pageSize,
                 end: this.timeValue[1],
-            };
+            })
+               let { list, total } = data;
+            this.tableData = list;
+            this.total = total;
             }else{
                 requestData = {
                 dtuId: this.currentDevice.id,
@@ -138,11 +144,13 @@ export default {
                 pageSize: this.pageSize,
                 end: this.timeValue[1],
             };
-            }
-            let { data } = await (this.version=='2'?apiGetAlarmsByContainerIdWithPage(requestData):apiGetHistoryAlarm(requestData));
+            let { data } = await apiGetHistoryAlarm(requestData)
             let { list, total } = JSON.parse(data);
             this.tableData = list;
             this.total = total;
+            }
+            
+          
             this.loading = false;
         },
         e_changePage(page) {

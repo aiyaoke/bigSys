@@ -8,15 +8,19 @@
             <ExportExcel :header="getExcelParams.header" :title="getExcelParams.title" :fields="getExcelParams.fields"
                 :data="excelData" />
         </div>
-        <PlaneBox>
-            <el-tag slot="tagHead" :key="index" v-for="(tag, index) in dynamicTags" closable :disable-transitions="false"
+        <div class="tag" v-if="dynamicTags&&dynamicTags.length>0">
+            <el-tag :key="index" v-for="(tag, index) in dynamicTags" closable :disable-transitions="false"
                 @close="handleClose(tag)" :style="{ 'color': alleCharData.colors[index] }">
                 {{ tag }}
             </el-tag>
-            <span slot="title">{{ $translate("区间数据") }}</span>
-            <MoreY :args="chartArgs" slot="content" />
-        </PlaneBox>
-        <Table :tableData="tableData" class="margin-t"  :columns="columns" />
+        </div>
+        <div class="chart-content">
+            <ChartTitle :title="$translate('区间数据')" />
+            <div class="chart">
+                <MoreY :args="chartArgs" />
+            </div>
+        </div>
+        <!-- <Table :tableData="tableData" class="margin-t"  :columns="columns" /> -->
     </div>
 </template>
 
@@ -30,12 +34,40 @@ const {
     mapMutations: device_mutations,
     mapActions: device_actions,
 } = createNamespacedHelpers("device");
+import { lineColor, labelColor } from "@/assets/styles/echarts-dark.scss";
 
 export default {
     name: "IntervalData",
     data() {
 
         return {
+            showXAxisList: [
+                "00:00:00",
+                "01:00:00",
+                "02:00:00",
+                "03:00:00",
+                "04:00:00",
+                "05:00:00",
+                "06:00:00",
+                "07:00:00",
+                "08:00:00",
+                "09:00:00",
+                "10:00:00",
+                "11:00:00",
+                "12:00:00",
+                "13:00:00",
+                "14:00:00",
+                "15:00:00",
+                "16:00:00",
+                "17:00:00",
+                "18:00:00",
+                "19:00:00",
+                "20:00:00",
+                "21:00:00",
+                "22:00:00",
+                "23:00:00",
+                "23:55:00"
+            ],
             props: { multiple: true },
             date:  nowTime(0, "YYYY-MM-DD "),
             optionVal: "",
@@ -59,16 +91,43 @@ export default {
                 ref: "intervalData",
                 color: [],
                 options: {
+                    grid: {
+                        bottom: 80
+                    },
                     legend: {
                         data: []
                     },
                     xAxis: {
                         data: [],
+                        splitNumber: 24,
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                            color: lineColor,
+                            width: 1,
+                            type: "dashed",
+                        },
+                        },
+                        boundaryGap: false,
+                        axisLabel:{
+                            rotate: 30,
+                            formatter(value){
+                                const dataArr = value.split(' ')
+                                const YMD = dataArr[0];
+                                const SMM = dataArr[1];
+                                return `${SMM}`
+                            }
+                        }
                     },
                     yAxis: [],
                     series: [
                         { name: '', type: 'line', data: [] },
                     ],
+                    dataZoom: [
+                        {
+                            show: false
+                        }
+                    ]
                 },
             },
             loading: {
@@ -102,8 +161,6 @@ export default {
             this.chartArgs.color.splice(this.httpData.list.indexOf(tag), 1);
             this.columns.splice(this.dynamicTags.indexOf(tag), 1);
             this.getQueryData();
-            console.log(this.httpData.list);
-
             }
           
         },
@@ -122,7 +179,6 @@ export default {
                     val[0] = item.children[flag].label;
                     this.chartArgs.options.series.name = val[0];
                     let index = item.children[flag].children.findIndex(i => i.value === val[2]);
-                    console.log(this.httpData.list);
                     if (this.httpData.list.length > 4) {
                         showMessage("warning", "最多添加5个对象")
                     } else if (this.dynamicTags.indexOf(`${item.label}/${val[0]}/${item.children[flag].children[index].label}`) == -1) {
@@ -152,12 +208,12 @@ export default {
                             }
                         });
                         this.chartArgs.color.push(this.alleCharData.colors[this.dynamicTags.length - 1]);
+            this.getQueryData();
                     } else {
                         showMessage("warning", "已经选择该对象")
                     }
                 }
             });
-            this.getQueryData();
             
         },
         async getQueryData() {
@@ -170,8 +226,10 @@ export default {
                 let xData = [];
                 let yData = [];
                 it.list.forEach((item) => {
-                    xData.push(momentFormate(item.time, "YYYY-MM-DD HH:mm:ss"));
-                    yData.push(item.value);
+                    if(this.showXAxisList.includes(momentFormate(item.time, "HH:mm:ss"))){
+                        xData.push(momentFormate(item.time, "YYYY-MM-DD HH:mm:ss"));
+                        yData.push(item.value);
+                    } 
                 });
                 if (xData.length!==0) {
                 this.chartArgs.options.xAxis.data = xData;
@@ -203,12 +261,9 @@ export default {
         },
       
         getTableData(data){
-            if (this.dynamicTags.length==this.columns.length-2) {
-               
-            }
             data.forEach((item,ii)=>{
                 item.list.forEach((it,index)=>{
-                    console.log(this.dynamicTags[ii],"0000000");
+
                     this.tableData[index]={
                         ...this.tableData[index],
                         time:momentFormate(it.time, "YYYY-MM-DD HH:mm:ss"),
@@ -223,7 +278,6 @@ export default {
 
             })
                 this.excelData=this.tableData;
-            
         }
     },
     mounted() {
@@ -233,7 +287,8 @@ export default {
         PlaneBox: (_) => import("@/components/PlaneBox"),
         MoreY: (_) => import("@/components/Chart/MoreY"),
         ExportExcel: (_) => import("@/components/ExportExcel"),
-        Table:(_)=> import("@/components/TableNew")
+        Table:(_)=> import("@/components/TableNew"),
+        ChartTitle: (_) => import("@/components/ChartTitle"),
     }
 }
 </script>
@@ -251,5 +306,20 @@ export default {
 }
 .margin-t{
     margin-top: 50px;
+}
+
+.tag{
+    margin-top: 10px;
+}
+
+.chart-content{
+    @include bg-color("2");
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.chart{
+    width: 100%;
+    height: calc(100vh - 240px);
 }
 </style>

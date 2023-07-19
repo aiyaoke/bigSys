@@ -2,10 +2,10 @@ const domain = ".sermatec-cloud.com";
 
 export const serve = 1; // 1 国内 0 国外
 
-export const baseUrl = 'http://192.168.6.9/api' //联想
+// export const baseUrl = 'http://192.168.6.9/api' //联想
 // export const socketUrl = 'http://192.168.6.9'
 
-// export const baseUrl = `https://${serve ? "api" : "api1"}${domain}`;
+export const baseUrl = `https://${serve ? "api" : "api1"}${domain}`;
 export const socketUrl = `https://${serve ? "www" : "eur"}${domain}`;
 
 export const uploadLogoUrl = `${baseUrl}/zuul/user/uploadHead/`;
@@ -239,6 +239,10 @@ export const basicInfo={
     name: "货币",
       value: '',
   },
+  position: {
+    name: "位置",
+      value: '',
+  },
 };
 export const runInfo={
   title:"运行数据",
@@ -254,24 +258,24 @@ export const runInfo={
     name: "充放电能量转换效率",
       value: '',
   },
-  TPo:{
+  TPi:{
     name: "充电次数",
       value: '',
   },
-  TPi:{
+  TPo:{
     name: "放电次数",
       value: '',
   },
   charge:{
-    name: "放电电量",
-      value: '',
-  },
-  disCharge:{
     name: "充电电量",
       value: '',
   },
+  disCharge:{
+    name: "放电电量",
+      value: '',
+  },
   chargeFee:{
-    name: "充电花费",
+    name: "充电费用",
       value: '',
   },
   disChargeFee:{
@@ -279,13 +283,13 @@ export const runInfo={
       value: '',
   },
 };
-export const totalColumn=[
+export const PCS=[
   {
   key:"no",
   label:"储能单元编号",
   width:"25%",
   formatter:function(r,c) {
-    return `${r.no}#电池舱`
+    return `${r.no}#PCS`
   }
 },
 {
@@ -294,7 +298,7 @@ export const totalColumn=[
   width:"25%",
 },
 {
-  key:"discharge",
+  key:"disCharge",
   label:"放电电量（kWh）",
   width:"25%",
 },
@@ -304,13 +308,13 @@ export const totalColumn=[
   width:"25%",
 },
 ];
-export const energyColumn=[
+export const BMS=[
   {
   key:"no",
   label:"储能单元编号",
   width:"25%",
   formatter:function(r,c) {
-    return `${r.no}#电池舱`
+    return `${r.no}#电池堆`
   }
 },
 {
@@ -319,10 +323,20 @@ export const energyColumn=[
   width:"25%",
 },
 {
-  key:"discharge",
+  key:"disCharge",
   label:"放电电量（kWh）",
   width:"25%",
 },
+// {
+//   key:"chargeNum",
+//   label:"充电次数",
+//   width:"25%",
+// },
+// {
+//   key:"dischargeNum",
+//   label:"放电次数",
+//   width:"25%",
+// },
 {
   key:"efficiency",
   label:"充放电能量转换效率（%）",

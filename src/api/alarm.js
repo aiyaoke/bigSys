@@ -50,7 +50,39 @@ const apiGetAlarmsByContainerIdWithPage = params =>
     methods: "get",
     params
   });
+  // 集装箱实时报警
+const apiGetNowAlarmsByContainerIdWithPage = params =>
+axios.request({
+  url: "/energy/getNowAlarmsByContainerIdWithPage",
+  methods: "get",
+  params
+});
+  // 电站实时报警
+  const apiGetNowAlarmsByPlantIdWithPage = params =>
+  axios.request({
+    url: "/energy/getNowAlarmsByPlantIdWithPage",
+    methods: "get",
+    params
+  });
+    // 电站历史报警
+const apiGetHistoryAlarmsByPlantIdWithPage = data =>
+axios.request({
+  url: "/energy/getHistoryAlarmsByPlantIdWithPage",
+  method: "post",
+  data
+});
+
+ // 根据告警等级获取告警类型
+ const apiFetchBigAlarmTypeByDtu = params =>
+ axios.request({
+   url: "/energy/fetchBigAlarmTypeByDtu",
+   methods: "get",
+   params
+ });
 export {
+  apiGetHistoryAlarmsByPlantIdWithPage,
+  apiGetNowAlarmsByPlantIdWithPage,
+  apiGetNowAlarmsByContainerIdWithPage,
   apiGetAlarmsByContainerIdWithPage,
   apiGetActiveAlarm,
   apiGetHistoryAlarm,
@@ -61,5 +93,6 @@ export {
   apiGetAlarmTypes,
   apiUpdateAlarmRule,
   apiAddAlarmRule,
-  apiDeleteAlarmRule
+  apiDeleteAlarmRule,
+  apiFetchBigAlarmTypeByDtu
 };

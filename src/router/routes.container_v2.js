@@ -97,14 +97,14 @@ export default [
         },
         redirect: "/equipment/electricityAnalysis/historicalDataQuery",
         children: [
-          {
-            path: "/equipment/electricityAnalysis/historicalDataQuery",
-            code: "K",
-            meta: {
-              name: "数据查询"
-            },
-            component: _ => import("@/pages/equipmentOverview/HistoricalDataQuery")
-          },
+          // {
+          //   path: "/equipment/electricityAnalysis/historicalDataQuery",
+          //   code: "K",
+          //   meta: {
+          //     name: "数据查询"
+          //   },
+          //   component: _ => import("@/pages/equipmentOverview/HistoricalDataQuery")
+          // },
           {
             path: "/equipment/electricityAnalysis/intervalData",
             code: "K",

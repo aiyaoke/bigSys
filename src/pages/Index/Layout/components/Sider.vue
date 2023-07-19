@@ -18,7 +18,7 @@
           v-if="item.meta.name === '设备舱列表' && $route.path !== '/containerIndex'">
           <i :class="'iconfont ' + item.meta.icon"></i>
           <span slot="title">{{ $translate(item.meta.name) }}</span></el-menu-item> -->
-        <el-submenu :index="item.path" v-if="item.children || item.meta.name !== '设备舱列表'" :key="item.path">
+        <el-submenu :index="item.path" v-if="item.children || item.meta.name !== '设备舱列表' " :key="item.path">
           <template slot="title">
             <i :class="'iconfont ' + item.meta.icon"></i>
             <span>{{ $translate(item.meta.name) }}</span>

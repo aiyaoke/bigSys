@@ -13,6 +13,17 @@
       ref="ruleForm"
       :rules="rules"
     >
+      <el-form-item label="告警等级" prop="level">
+        <el-select v-model="formData.level" placeholder="请选择" @change="changeAlmType">
+          <el-option
+            v-for="item in almTypeList"
+            :key="item.id"
+            :value="item.id"
+            :label="item.desc"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="告警类型" prop="almTypeId">
         <el-select v-model="formData.almTypeId" placeholder="请选择">
           <el-option
@@ -71,13 +82,18 @@
 
 <script>
 import { apiGetAllCommonUser } from "@/api/user";
+import { createNamespacedHelpers } from "vuex";
 import {
   apiGetAlarmConfig,
   apiUpdateAlarmRule,
-  apiAddAlarmRule
+  apiAddAlarmRule,
+  apiFetchBigAlarmTypeByDtu
 } from "@/api/alarm";
 import { deepCopy, showMessage, isEmptyObject } from "@/common/utils";
 import { apiGetIndexKeywords } from "@/api/command";
+const {
+  mapGetters: device_getters
+} = createNamespacedHelpers("device");
 export default {
   props: {
     updateRow: {
@@ -92,7 +108,18 @@ export default {
       typesArr: [],
       commonUsers: [],
       methods: [],
+      almTypeList: [
+        {
+          id: 1,
+          desc: '一般告警'
+        },
+        {
+          id: 2,
+          desc: '严重告警'
+        }
+      ],
       formData: {
+        level: "",
         almTypeId: "",
         initNum: "",
         maxNum: "",
@@ -101,6 +128,9 @@ export default {
         userIds: []
       },
       rules: {
+        level: [
+          { required: true, message: "请选择告警等级", trigger: "blur" }
+        ],
         almTypeId: [
           { required: true, message: "请选择告警类型", trigger: "blur" }
         ],
@@ -120,7 +150,7 @@ export default {
   mounted() {
     this.getMethods();
     this.getAllCommonUser();
-    this.getAlarmTypes();
+    // this.getAlarmTypes();
   },
   methods: {
     async getMethods() {
@@ -140,6 +170,25 @@ export default {
     close() {
       this.resetForm("ruleForm");
       this.$emit("close");
+    },
+    async getAlmTypeList(value) {
+      const res = await apiFetchBigAlarmTypeByDtu({
+        dtuId: 2140,
+        // dtuId: this.version=='2'?this.allDevices[0].dtuId:this.currentDevice.id,
+        level: value
+      })
+      if(res&&res.data){
+        this.typesArr = res.data.map(item => {
+          return {
+            id: item.id,
+            desc: item.eventDesc
+          }
+        })
+      }
+    },
+    changeAlmType(value){
+      this.formData.almTypeId=""
+      this.getAlmTypeList(value);
     },
     submitForm(formName) {
       this.$refs[formName].validate(async valid => {
@@ -172,8 +221,14 @@ export default {
         ...newVal,
         status: Boolean(newVal.status)
       };
+      if(newVal.level){
+        this.getAlmTypeList(newVal.level)
+      }
       this.visible = !isEmptyObject(newVal);
     }
+  },
+  computed: {
+    ...device_getters(["currentDevice","version","allDevices"]),
   }
 };
 </script>
