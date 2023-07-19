@@ -10,7 +10,13 @@
           <el-tab-pane :label="$translate(item.label)" :name="item.name"></el-tab-pane>
         </template>
       </el-tabs>
-      <component :is="isComponent" v-loading="loading"  element-loading-background="rgba(0, 0, 0, 0.8)"></component>
+      <component 
+        :is="isComponent" 
+        v-loading="loading" 
+        :type="dataType"
+        :containerId="defaultOption" 
+        element-loading-background="rgba(0, 0, 0, 0.8)">
+      </component>
     </div>
   </template>
   
@@ -31,6 +37,14 @@
           {
             label: '总览',
             name: "Battery",
+          },
+          {
+            label: 'BMS数据',
+            name: 'BmsData'
+          },
+          {
+            label: 'BMC数据',
+            name: 'BmcData'
           },
           {
             label: '电池监测',
@@ -61,8 +75,6 @@
             label: '视屏监控',
             name: "VideoMonitor",
           },
-         
-  
         ],
         activeName: "Battery",
         componentsList: {
@@ -75,6 +87,8 @@
           EnergyMonitor: "EnergyMonitor",
           VideoMonitor: "VideoMonitor",
           Alarm: "Alarm",
+          BmsData: "BmsData",
+          BmcData: "BmcData"
         },
         defaultOption: "",
         options: [],
@@ -86,6 +100,15 @@
       ...device_getters(["BMS", "PCS", "allDevices"]),
       isComponent() {
         return this.componentsList[this.activeName];
+      },
+      dataType(){
+        if(this.activeName==="BmsData"){
+          return "BMS"
+        }
+        if(this.activeName==="BmcData"){
+          return "BMC"
+        }
+        return ""
       }
     },
     methods: {
@@ -120,7 +143,7 @@
     },
     created() {
         this.getOptionList();
-    this.changeEvent();
+        this.changeEvent();
     },
     mounted() {
         this.changeEvent();
@@ -141,6 +164,8 @@
       VideoMonitor: (_) => import("@/pages/VideoMonitor"),
       Alarm: (_) => import("@/pages/Alarm/AlarmSearch/components/ActiveAlarm"),
       Battery: (_) => import("@/pages/containerDetail/AllBattery/Index"),
+      BmsData: (_) => import("./Data"),
+      BmcData: (_) => import("./Data")
     },
     destroyed() {
       clearInterval(this.timer);

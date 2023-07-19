@@ -5,7 +5,7 @@
                 <span class="search-name">{{ $translate("查询日期") }}：</span>
                 <DatePick
                     :defaultDate="date"
-                    type="date"
+                    type="daterange"
                     :disabledDate="disabledDate"
                     @change="changeDate"
                 ></DatePick>
@@ -48,7 +48,7 @@ export default {
     name: "ProfitStatistics",
     data() {
         return {
-            date: nowTime(0, "YYYY-MM-DD"),
+            date: [nowTime(-7, "YYYY-MM-DD"), nowTime(0, "YYYY-MM-DD")],
             disabledDate: {
                 disabledDate(time) {
                     const startDate = new Date();
@@ -129,7 +129,8 @@ export default {
         async getChartsData() {
             let requestData = {
                 dtuId: this.version=='2'?this.allDevices[0].dtuId:this.currentDevice.id,
-                date: this.date,
+                sDate: this.date[0],
+                eDate: this.date[1],
             };
             let { data } = await apiGetProfitStatistics(requestData);
             if (data) {

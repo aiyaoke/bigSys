@@ -26,8 +26,8 @@ export default {
       mapObj: null,
       mapStyle: {
         resizeEnable: true,
-        center: [113.62, 34.75],
-        zoom: 6,
+        center: [103,39],
+        zoom: 5,
         pitch: 75,
         routes: [],
       },
@@ -156,7 +156,7 @@ export default {
 <style lang="scss" scoped>
 .map {
   width: 100%;
-  height: calc(100% - 80px);
+  height: 100%;
   border-radius: 5px;
   position: relative;
 

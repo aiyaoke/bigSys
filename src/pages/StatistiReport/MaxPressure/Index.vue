@@ -230,7 +230,7 @@ export default {
       });
       this.volChartArgs.options.xAxis.data = volxData;
       this.volChartArgs.options.yAxis.max = maxValue + 0.02;
-      this.volChartArgs.options.yAxis.min = minValue - 0.1;
+      // this.volChartArgs.options.yAxis.min = minValue - 0.1;
       this.volChartArgs.options.series[0].data = maxVol;
       this.volChartArgs.options.series[1].data = minVol;
       this.excelData = parseData;
