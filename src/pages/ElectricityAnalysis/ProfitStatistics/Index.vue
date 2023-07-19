@@ -39,6 +39,7 @@
     </div>
 </template>
 
+
 <script>
 import { nowTime, momentFormate } from "@/common/utils";
 import { apiGetProfitStatistics } from "@/api/device";
