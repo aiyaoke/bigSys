@@ -78,7 +78,8 @@ import {
   apiGetAlarmConfig,
   apiUpdateAlarmConfig,
   apiGetAlarmRules,
-  apiDeleteAlarmRule
+  apiDeleteAlarmRule,
+  apiNewGetAlarmRules
 } from "@/api/alarm";
 import { showMessage } from "@/common/utils";
 import Drawer from "./Drawer.vue";
@@ -106,8 +107,8 @@ export default {
       this.getAlarmConfig();
     },
     async getAlarmConfig() {
-      let { data } = await apiGetAlarmRules();
-      this.tableData = JSON.parse(data || "[]");
+      let { data } = await apiNewGetAlarmRules();
+      this.tableData = data || [];
     },
     async changeSwitch(enable, id) {
       let requestData = [{ enable, id }];

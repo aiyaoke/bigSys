@@ -39,6 +39,16 @@ export default {
         CategoryChart: (_) => import("@/components/Chart/CategoryChart"),
         PlaneBox: (_) => import("@/components/PlaneBox"),
     },
+    watch: {
+        "args": {
+            handler(newVal){
+                setTimeout(() => {
+                   this.args = newVal 
+                }, 500);
+            },
+            deep: true
+        }
+    }
 };
 </script>
 

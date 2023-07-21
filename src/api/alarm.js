@@ -75,10 +75,17 @@ axios.request({
  // 根据告警等级获取告警类型
  const apiFetchBigAlarmTypeByDtu = params =>
  axios.request({
-   url: "/energy/fetchBigAlarmTypeByDtu",
+   url: "/energy/big/fetchBigAlarmTypeByDtu",
    methods: "get",
    params
  });
+
+ const apiNewGetAlarmRules = () =>
+  axios.request({ url: "/energy/big/fetchBigAlarms", method: "get", });
+
+const apiNewAddAlarmRule = data =>
+  axios.request({ url: "/energy/big/addListAlarmRule", method: "post", data });
+
 export {
   apiGetHistoryAlarmsByPlantIdWithPage,
   apiGetNowAlarmsByPlantIdWithPage,
@@ -94,5 +101,7 @@ export {
   apiUpdateAlarmRule,
   apiAddAlarmRule,
   apiDeleteAlarmRule,
-  apiFetchBigAlarmTypeByDtu
+  apiFetchBigAlarmTypeByDtu,
+  apiNewGetAlarmRules,
+  apiNewAddAlarmRule
 };
