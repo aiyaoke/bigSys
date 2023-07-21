@@ -130,8 +130,8 @@ export default {
         async getChartsData() {
             let requestData = {
                 dtuId: this.version=='2'?this.allDevices[0].dtuId:this.currentDevice.id,
-                sDate: this.date[0],
-                eDate: this.date[1],
+                startDate: this.date[0],
+                endDate: this.date[1],
             };
             let { data } = await apiGetProfitStatistics(requestData);
             if (data) {
