@@ -305,8 +305,10 @@ export default {
                 yData.push(item.value);
             });
             this.chargeExcelData = chartData;
-            this.chargeStatistics.options.xAxis.data = xData;
-            this.chargeStatistics.options.series[0].data = yData;
+            setTimeout(() => {
+                this.chargeStatistics.options.xAxis.data = xData;
+                this.chargeStatistics.options.series[0].data = yData;
+            }, 500);
             this.chargeStatistics.mostValue[0].value = tValue;
             this.chargeStatistics.mostValue[0].time = time;
             this.chargeStatistics.mostValue[1].value = value;
@@ -326,8 +328,10 @@ export default {
                 yData.push(item.value);
             });
             this.dischargeExcelData = chartData;
-            this.dischargeStatistics.options.xAxis.data = xData;
-            this.dischargeStatistics.options.series[0].data = yData;
+            setTimeout(() => {
+                this.dischargeStatistics.options.xAxis.data = xData;
+                this.dischargeStatistics.options.series[0].data = yData;
+            }, 500);
             this.dischargeStatistics.mostValue[0].value = tValue;
             this.dischargeStatistics.mostValue[0].time = time;
             this.dischargeStatistics.mostValue[1].value = value;
