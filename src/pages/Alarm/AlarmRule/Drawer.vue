@@ -16,7 +16,7 @@
       <el-form-item label="告警等级" prop="level">
         <el-select v-model="formData.level" placeholder="请选择" @change="changeAlmType">
           <el-option
-            v-for="item in almTypeList"
+            v-for="item in almLevelList"
             :key="item.id"
             :value="item.id"
             :label="item.desc"
@@ -24,8 +24,8 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="告警类型" prop="almTypeId">
-        <el-select v-model="formData.almTypeId" placeholder="请选择">
+      <el-form-item label="告警类型" prop="almTypeIdList">
+        <el-select v-model="formData.almTypeIdList" placeholder="请选择" multiple>
           <el-option
             v-for="item in typesArr"
             :key="item.id"
@@ -59,7 +59,7 @@
         >
         </el-switch>
       </el-form-item>
-      <el-form-item label="接收人" prop="userIds">
+      <!-- <el-form-item label="接收人" prop="userIds">
         <el-select v-model="formData.userIds" multiple placeholder="请选择">
           <el-option
             v-for="item in commonUsers"
@@ -69,7 +69,7 @@
           >
           </el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button @click="close()">取消</el-button>
         <el-button type="primary" @click="submitForm('ruleForm')"
@@ -86,7 +86,7 @@ import { createNamespacedHelpers } from "vuex";
 import {
   apiGetAlarmConfig,
   apiUpdateAlarmRule,
-  apiAddAlarmRule,
+  apiNewAddAlarmRule,
   apiFetchBigAlarmTypeByDtu
 } from "@/api/alarm";
 import { deepCopy, showMessage, isEmptyObject } from "@/common/utils";
@@ -108,7 +108,7 @@ export default {
       typesArr: [],
       commonUsers: [],
       methods: [],
-      almTypeList: [
+      almLevelList: [
         {
           id: 1,
           desc: '一般告警'
@@ -120,7 +120,7 @@ export default {
       ],
       formData: {
         level: "",
-        almTypeId: "",
+        almTypeIdList: [],
         initNum: "",
         maxNum: "",
         pushTypeIds: [],
@@ -131,7 +131,7 @@ export default {
         level: [
           { required: true, message: "请选择告警等级", trigger: "blur" }
         ],
-        almTypeId: [
+        almTypeIdList: [
           { required: true, message: "请选择告警类型", trigger: "blur" }
         ],
         initNum: [
@@ -187,7 +187,7 @@ export default {
       }
     },
     changeAlmType(value){
-      this.formData.almTypeId=""
+      this.formData.almTypeIdList=[]
       this.getAlmTypeList(value);
     },
     submitForm(formName) {
@@ -195,7 +195,7 @@ export default {
         if (valid) {
           let reqData = deepCopy(this.formData),
             { id, status } = reqData,
-            fn = id ? apiUpdateAlarmRule : apiAddAlarmRule;
+            fn = id ? apiUpdateAlarmRule : apiNewAddAlarmRule;
           reqData.status = +status;
           let { code } = await fn(reqData);
           if (code === "ok") {
@@ -211,7 +211,16 @@ export default {
       });
     },
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      // this.$refs[formName].resetFields();
+      this.formData =  {
+        level: "",
+        almTypeIdList: [],
+        initNum: "",
+        maxNum: "",
+        pushTypeIds: [],
+        status: false,
+        userIds: []
+      }
     }
   },
   watch: {
@@ -221,8 +230,16 @@ export default {
         ...newVal,
         status: Boolean(newVal.status)
       };
-      if(newVal.level){
-        this.getAlmTypeList(newVal.level)
+
+      if(newVal.eventLevelDesc){
+        const index = this.almLevelList.findIndex(item => item.desc === newVal.eventLevelDesc);
+        const value = this.almLevelList[index] && this.almLevelList[index].id
+        this.formData.level = value;
+        this.getAlmTypeList(value)
+      }
+
+      if(newVal.almTypeId){
+        this.formData.almTypeIdList = [newVal.almTypeId];
       }
       this.visible = !isEmptyObject(newVal);
     }
