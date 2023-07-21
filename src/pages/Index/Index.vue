@@ -1,32 +1,48 @@
 <template>
   <div class="containerIndex">
     <div class="top">
-      <div class="top-item top-left">
-        <div class="top-icon"><i class='iconfont icon-fenxiangzhuanshouyi top-item-iconfont'></i></div>
-        <div class="top-data">
-          <div class="top-item-data">
+        <div class="top-item">
+          <div class="top-icon"><i class='iconfont icon-fenxiangzhuanshouyi top-item-iconfont'></i></div>
+          <div>
             <div class="top-item-data-title">今日收益(元)</div>
             <div class="top-item-data-num">{{todayIncome}}</div>
           </div>
-          <div class="top-item-data">
+        </div>
+        <div class="top-item">
+          <div class="top-icon"><i class='iconfont icon-shouyetubiao2-27 top-item-iconfont'></i></div>
+          <div>
             <div class="top-item-data-title">总收益(元)</div>
             <div class="top-item-data-num">{{allIncome}}</div>
           </div>
         </div>
-      </div>
-      <div class="top-item top-right">
-        <div class="top-icon"><i class='iconfont icon-dian top-item-iconfont'></i></div>
-        <div class="top-data">
-          <div class="top-item-data">
+        <div class="top-item">
+          <div class="top-icon"><i class='iconfont icon-dian top-item-iconfont'></i></div>
+          <div>
             <div class="top-item-data-title">当日放电(度)</div>
             <div class="top-item-data-num">{{todayDischarge}}</div>
           </div>
-          <div class="top-item-data">
+        </div>
+        <div class="top-item">
+          <div class="top-icon"><i class='iconfont icon-tuiguangzhuanqian top-item-iconfont'></i></div>
+          <div>
             <div class="top-item-data-title">总放电量(度)</div>
             <div class="top-item-data-num">{{allDischarge}}</div>
           </div>
         </div>
-      </div>
+        <div class="top-item">
+          <div class="top-icon"><i class='iconfont icon-chatou top-item-iconfont'></i></div>
+          <div>
+            <div class="top-item-data-title">当日充电(度)</div>
+            <div class="top-item-data-num">{{todayDischarge}}</div>
+          </div>
+        </div>
+        <div class="top-item">
+          <div class="top-icon"><i class='iconfont icon-dianzhangaikuang top-item-iconfont'></i></div>
+          <div>
+            <div class="top-item-data-title">总充电量(度)</div>
+            <div class="top-item-data-num">{{todayDischarge}}</div>
+          </div>
+        </div>
     </div>
     <div class="bottom">
       <div class="bottom-item bottom-left">
@@ -35,7 +51,10 @@
             <i class='iconfont icon-tubiao- top-item-iconfont'></i>
             <span class="bottom-left-top-title-desc">节能减排</span>
           </div>
-          <div class="bottom-left-top-item">
+          <div class="bottom-left-top-chart">
+            <ReductionPieChart :args="reductionPieChartArgs" />
+          </div>
+          <!-- <div class="bottom-left-top-item">
             <div class="bottom-left-top-item-icon"><i class='iconfont icon-meiqi bottom-left-top-item-iconfont'></i></div>
             <div class="bottom-left-top-item-title">累计煤炭</div>
             <div class="bottom-left-top-item-num">{{coal}}</div>
@@ -49,7 +68,7 @@
             <div class="bottom-left-top-item-icon"><i class='iconfont icon-lvyouchengshijianzhucity-treexiaoheshumur bottom-left-top-item-iconfont'></i></div>
             <div class="bottom-left-top-item-title">折合树木</div>
             <div class="bottom-left-top-item-num">{{tree}}</div>
-          </div>
+          </div> -->
         </div>
         <div class="bottom-left-bottom">
         </div>
@@ -76,11 +95,20 @@ export default {
       allDischarge: 0,
       coal: 0,
       co2: 0,
-      tree: 0
+      tree: 0,
+      reductionPieChartArgs: {
+        ref: "reductionPieChartArgs",
+        data: {
+          coal: this.coal,
+          co2: this.co2,
+          tree: this.tree
+        }
+      }
     }
   },
   components: {
     MyMap: (_) => import("./components/Map"),
+    ReductionPieChart: (_) => import("./components/reductionPieChart"),
   },
   mounted() {
     this.getDevicePermissions({ type: 0 });
@@ -98,9 +126,12 @@ export default {
         this.allIncome = data.sumProfit;
         this.todayDischarge = data.dailyDisCharge;
         this.allDischarge = data.sumDisCharge;
-        this.coal = data.coal;
-        this.co2 = data.co2;
-        this.tree = data.tree;
+        // this.coal = data.coal;
+        // this.co2 = data.co2;
+        // this.tree = data.tree;
+        this.reductionPieChartArgs.data.coal = data.coal;
+        this.reductionPieChartArgs.data.co2 = data.co2;
+        this.reductionPieChartArgs.data.tree = data.tree;
       }
     }
   },
@@ -117,16 +148,15 @@ export default {
 
 .top{
   display: flex;
-  gap: 30px;
   margin-bottom: 30px;
+  @include bg-color("2");
+  height: 160px;
 }
 
 .top-item{
-  flex: 1;
-  height: 140px;
-  @include bg-color("2");
   display: flex;
   align-items: center;
+  flex: 1;
 }
 
 .top-icon{
@@ -139,18 +169,9 @@ export default {
   color: #31e0f0;
 }
 
-.top-data{
-  display: flex;
-  flex: 1;
-}
-
-.top-item-data{
-  flex: 1;
-}
-
 .top-item-data-title{
   font-size: 20px;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   @include font-color("3");
 }
 
@@ -170,7 +191,7 @@ export default {
 }
 
 .bottom-left{
-  width: 45%;
+  width: 600px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -200,6 +221,11 @@ export default {
   height: 50px;
   display: flex;
   align-items: center;
+}
+
+.bottom-left-top-chart{
+  width: 100%;
+  height: 100%;
 }
 
 .bottom-left-top-title-desc{
