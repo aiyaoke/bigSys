@@ -55,9 +55,9 @@ export default {
             deep: true,
             handler: function (args) {
                 this.options.series[0].data = [
-                    { value: parseFloat(args.data.coal), name: '累计煤炭' },
-                    { value: parseFloat(args.data.co2), name: 'CO₂减排量' },
-                    { value: parseFloat(args.data.tree)*20, name: 'tree' }
+                    { value: parseFloat(args.data.coal), name: '累计煤炭(吨)' },
+                    { value: parseFloat(args.data.co2), name: 'CO₂减排量(吨)' },
+                    { value: parseFloat(args.data.tree)*20, name: 'tree(公顷)' }
                 ]
             },
         },
