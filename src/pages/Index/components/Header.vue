@@ -7,7 +7,7 @@
     <div class="nameBar">
       <tagSiderBar class="hamburger-container" @toggleClick='handelToggleSideBar' :is-active="toggleSideBar"
         v-if="this.version == '2' && this.$route.path !== '/containerIndex'" />
-      <span class="system-name">{{ $translate("采日云平台监控系统") }}</span>
+      <!-- <span class="system-name">{{ $translate("采日云平台监控系统") }}</span> -->
     </div>
 
     <div class="end-wrapper">
