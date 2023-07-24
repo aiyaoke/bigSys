@@ -10,7 +10,7 @@
                 <span>support@sermatec-ess.com</span>
             </div>
         </div>
-        <h2>{{ $translate("采日云平台监控系统") }}</h2>
+        <!-- <h2>{{ $translate("采日云平台监控系统") }}</h2> -->
         <el-select v-model="defalutLocale" size="mini" @change="changeLocale">
             <el-option
                 v-for="item in localeOptions"
