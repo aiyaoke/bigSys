@@ -66,8 +66,8 @@
        <div class="chart">
           <PlaneChart :args="chargeStatistics"></PlaneChart>
           <PlaneChart :args="dischargeStatistics"></PlaneChart>
-          <PlaneChart :args="chargeDischargeCurve"></PlaneChart>
           <ElectricityChart :dateType="type" @changeDownloadExcelData="changeDownloadExcelData" />
+          <PlaneChart :args="chargeDischargeCurve"></PlaneChart>
        </div>
     </div>
 </template>
@@ -78,6 +78,7 @@ import {
     apiChargeDisChargeMostValue,
     apiChargeStatistics,
     apiDisChargeStatistics,
+    apiEnergyEfficiency
 } from "@/api/device";
 import { getEchatsData, momentFormate } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
@@ -94,15 +95,27 @@ export default {
             ],
             elecTotalExcelData:[],
             helpMeterExcelData: [],
-            chargeDischargeCurve: {
-                title: "充放电曲线",
+            energyEfficiency: {
+                title: "充放电效率",
                 ref: "chargeDischargeCurve",
                 colorIndex: 0,
                 options: {
                     yAxis: {
-                        name: "kW",
+                        name: "",
                     },
-                    series: [{ name: this.$translate("充放电"), data: [] }],
+                    series: [{ name: this.$translate("充放电效率"), data: [] }],
+                },
+               
+            },
+            chargeDischargeCurve: {
+                title: "充放电效率",
+                ref: "chargeDischargeCurve",
+                colorIndex: 0,
+                options: {
+                    yAxis: {
+                        name: "",
+                    },
+                    series: [{ name: this.$translate("充放电效率"), data: [] }],
                 },
                 mostValue: [
                     { title: "实时充电功率", value: "", time: "", unit: "kW" },
@@ -243,7 +256,8 @@ export default {
                         callback: value => value
                         }
                     }
-                }
+                },
+
             };
         },
     },
@@ -265,12 +279,25 @@ export default {
             this.getChargeDisChargeMostValue(requestData);
             this.getChargeAmount(requestData);
             this.getDisChargeAmount(requestData);
+            this.getEnergyEfficiency(requestData);
+        },
+        async getEnergyEfficiency(requestData){
+            this.chargeDischargeCurve.options.series[0].data=[];
+            let {data}= await apiEnergyEfficiency(requestData);
+            data.map(item=>{
+                this.chargeDischargeCurve.options.series[0].data.push({
+                    value:item.efficiency,
+                    time:item.time
+                })
+            })
+            this.chargeDischargeCurve.options.series[0].data=getEchatsData(this.chargeDischargeCurve.options.series[0].data)
         },
         async getChargeDisChargeCurve(requestData) {
             let { data } = await apiChargeDisChargeCurve(requestData);
             let prseData = JSON.parse(data || "[]");
-            this.chargeDischargeCurve.options.series[0].data =
-                getEchatsData(prseData);
+            console.log(getEchatsData(prseData),222222222);
+            // this.chargeDischargeCurve.options.series[0].data =
+            //     getEchatsData(prseData);
             this.chargeDischargeExcelData = prseData;
         },
         async getChargeDisChargeMostValue(requestData) {

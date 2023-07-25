@@ -43,7 +43,6 @@ class HttpRequest {
             data
           };
         }
-        console.log(response);
         if (response.config.responseType === "arraybuffer") {
           console.log(response);
           return response

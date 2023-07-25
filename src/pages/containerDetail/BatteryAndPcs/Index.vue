@@ -62,7 +62,7 @@ export default {
             this.initPcsAnimatePath();
         };
 
-    },
+    },  
     components: {
         Battery: (_) => import("../components/BatteryPack.vue"),
         CardInfo: (_) => import("../components/cardInfo.vue"),

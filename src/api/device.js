@@ -544,7 +544,23 @@ axios.request({
   responseType: "arraybuffer",
   params
 });
+// 充放电效率
+const apiEnergyEfficiency = params =>
+axios.request({
+  url: "/battery/fetchEnergyEfficiency",
+  methods: "get",
+  params
+});
+// 充放电量
+const apiChargeDisCharge = params =>
+axios.request({
+  url: "/energy/getChargeDisCharge",
+  methods: "get",
+  params
+});
 export {
+  apiChargeDisCharge,
+  apiEnergyEfficiency,
   apiExoprtReport,
   getReportList,
   apiupdateReportTemplate,

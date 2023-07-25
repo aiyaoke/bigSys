@@ -153,9 +153,11 @@ export default {
             deep: true,
             handler: function (new1) {
                 this.mergeOptions();
+                console.log(new1);
             },
         },
     },
+
 };
 </script>
 

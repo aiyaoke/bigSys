@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import moment from "moment";
 import { nowTime, momentFormate } from "@/common/utils";
 import {
   apiGetElectricityStatistics,
