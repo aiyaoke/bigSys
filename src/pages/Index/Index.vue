@@ -270,12 +270,10 @@ export default {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  flex: 1;
 }
 
 .bottom-left-bottom {
   width: 100%;
-  height: 40%;
   @include bg-color("2");
   padding: 20px;
   box-sizing: border-box;

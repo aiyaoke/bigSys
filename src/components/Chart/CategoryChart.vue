@@ -4,6 +4,7 @@
         :options="options"
         :auto-resize="true"
         @finished="finished"
+        class="echarts"
     ></chart>
 </template>
 
