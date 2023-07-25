@@ -104,6 +104,8 @@ export default {
       coal: 0,
       co2: 0,
       tree: 0,
+      dailyCharge: 0,
+      sumCharge: 0,
       reductionPieChartArgs: {
         ref: "reductionPieChartArgs",
         data: {
@@ -165,6 +167,8 @@ export default {
         this.allIncome = data.sumProfit;
         this.todayDischarge = data.dailyDisCharge;
         this.allDischarge = data.sumDisCharge;
+        this.dailyCharge = data.dailyCharge;
+        this.sumCharge = data.sumCharge;
         // this.coal = data.coal;
         // this.co2 = data.co2;
         // this.tree = data.tree;
