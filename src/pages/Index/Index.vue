@@ -75,7 +75,9 @@
             <i class='iconfont icon-qushi top-item-iconfont'></i>
             <span class="bottom-left-top-title-desc">充放电量</span>
           </div>
-          <TimeChart :args="chartArgs" slot="content" />
+          <div class="bottom-left-bottom-chart">
+            <TimeChart :args="chartArgs" slot="content" />
+          </div>
         </div>
       </div>
       <div class="bottom-item bottom-right">
@@ -278,6 +280,10 @@ export default {
   padding: 20px;
   box-sizing: border-box;
   flex: 1;
+}
+
+.bottom-left-bottom-chart{
+  height: calc(100% - 50px);
 }
 
 .bottom-left-top-title {
