@@ -64,10 +64,10 @@
         </div>
 
        <div class="chart">
-          <PlaneChart :args="chargeStatistics"></PlaneChart>
-          <PlaneChart :args="dischargeStatistics"></PlaneChart>
+          <PlaneChart :args="chargeStatistics" :showInfoData="true"></PlaneChart>
+          <PlaneChart :args="dischargeStatistics" :showInfoData="true"></PlaneChart>
           <ElectricityChart :dateType="type" @changeDownloadExcelData="changeDownloadExcelData" />
-          <PlaneChart :args="chargeDischargeCurve"></PlaneChart>
+          <PlaneChart :args="chargeDischargeCurve" :showInfoData="false"></PlaneChart>
        </div>
     </div>
 </template>
@@ -378,7 +378,9 @@ export default {
 }
 .chart{
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 20px
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
+    height: calc(100vh - 180px);
 }
 </style>
