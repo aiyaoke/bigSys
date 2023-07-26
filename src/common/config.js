@@ -183,7 +183,10 @@ export const colorList = [
   "#ca8622",
   "#b06ceb",
   "#31e0f0",
-  "#749f83"
+  "#749f83",
+  '#5470c6', 
+  '#91cc75', 
+  '#fac858'
 ];
 export const basicInfo={
   title:"电站基础数据",

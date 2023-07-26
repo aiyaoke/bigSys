@@ -293,7 +293,7 @@ export const zh = {
   sermatec_00301: "元",
   sermatec_00302: "累计节煤",
   sermatec_00303: "CO₂减排量",
-  sermatec_00304: "折合树木",
+  sermatec_00304: "节省树木",
   sermatec_00305: "电站PR",
   sermatec_00306: "当月发电趋势",
   sermatec_00307: "发电计划",

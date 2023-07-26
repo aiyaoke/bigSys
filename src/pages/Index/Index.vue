@@ -33,14 +33,14 @@
         <div class="top-icon"><i class='iconfont icon-chatou top-item-iconfont'></i></div>
         <div>
           <div class="top-item-data-title">当日充电(度)</div>
-          <div class="top-item-data-num">{{ todayDischarge }}</div>
+          <div class="top-item-data-num">{{ dailyCharge }}</div>
         </div>
       </div>
       <div class="top-item">
         <div class="top-icon"><i class='iconfont icon-dianzhangaikuang top-item-iconfont'></i></div>
         <div>
           <div class="top-item-data-title">总充电量(度)</div>
-          <div class="top-item-data-num">{{ todayDischarge }}</div>
+          <div class="top-item-data-num">{{ sumCharge }}</div>
         </div>
       </div>
     </div>
@@ -66,7 +66,7 @@
           </div>
            <div class="bottom-left-top-item">
             <div class="bottom-left-top-item-icon"><i class='iconfont icon-lvyouchengshijianzhucity-treexiaoheshumur bottom-left-top-item-iconfont'></i></div>
-            <div class="bottom-left-top-item-title">折合树木</div>
+            <div class="bottom-left-top-item-title">节省树木</div>
             <div class="bottom-left-top-item-num">{{tree}}</div>
           </div> -->
         </div>
@@ -186,18 +186,21 @@ export default {
         uu.data = [];
       });
       let { data } = await apiChargeDisCharge();
-          if (data) {
-        let parseData =data;
-        if (parseData.length) {
-          parseData.forEach(item => {
-            this.chartArgs.options.xAxis.data.push(
-              momentFormate(item.date, "MM-DD")
-            );
-            this.chartArgs.options.series.forEach(uu => {
-              uu.data = [...uu.data, item[uu.key]];
+      let xAxisList = [], chargeDataList = [], disChargeDataList = [];
+        if (data) {
+          let parseData =data;
+          if (parseData.length) {
+            parseData.forEach(item => {
+              xAxisList.push(momentFormate(item.date, "MM-DD"));
+              chargeDataList.push(item["charge"]);
+              disChargeDataList.push(item["disCharge"])
             });
-          });
-        }
+            setTimeout(()=>{
+              this.chartArgs.options.xAxis.data = xAxisList;
+              this.chartArgs.options.series[0].data = chargeDataList;
+              this.chartArgs.options.series[1].data = disChargeDataList;
+            }, 100)
+          }
       }
     }
 

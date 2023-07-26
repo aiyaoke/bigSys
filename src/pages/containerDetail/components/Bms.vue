@@ -147,12 +147,12 @@
     },
     mounted() {
         this.changeEvent();
-      this.timer = setInterval(() => {
-        // this.getTableData();
-        this.getContainer({
-          containerId: sessionStorage.getItem("containerId"),
-        })
-      }, 24000);
+        this.timer = setInterval(() => {
+          // this.getTableData();
+          this.getContainer({
+            containerId: sessionStorage.getItem("containerId"),
+          })
+        }, 24000);
     },
     components: {
       BatteryOverview: (_) => import("@/pages/EnergyManage/BatteryOverview"),

@@ -17,7 +17,7 @@ export default {
     name: "CategoryChart",
     data() {
         return {
-            baseOptions: {
+            options: {
                 legend: {
                     top: 4,
                     left: 4,
@@ -100,7 +100,6 @@ export default {
                 },
                 series: [],
             },
-            options: {},
         };
     },
     props: {
@@ -120,7 +119,7 @@ export default {
                     chartInstance.hideLoading();
                 }, 500);
             }
-            this.options = deepClone(this.baseOptions);
+            this.options = deepClone(this.options);
             let { colorIndex, options: aOptions } = this.args;
             Object.keys(aOptions).forEach((item) => {
                 if (item === "series") {
@@ -153,9 +152,9 @@ export default {
     watch: {
         args: {
             deep: true,
-            handler: function (new1) {
+            immediate: true,
+            handler: function (newValue) {
                 this.mergeOptions();
-                console.log(new1);
             },
         },
     },

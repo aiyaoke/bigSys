@@ -2,7 +2,7 @@
  <div>
     <div v-for="(item, index) in tableData" v-if="item.arr&&item.arr.length">
         <div v-if="item.title==type&&item.arr">
-           <Description :data="item.arr" />
+           <Description :data="item.arr" :unit="unit" />
         </div>
     </div>
  </div>
@@ -24,7 +24,15 @@
      Description: (_)=>import("@/components/Description")
    },
    computed: {
-    ...device_getters(["tableData"])
+    ...device_getters(["tableData"]),
+    unit(){
+      const unitEnum = {
+        BMS: "堆",
+        BMC: "簇",
+        PCS: "号"
+      }
+      return unitEnum[this.type]
+    }
    },
    methods: {
      ...device_mutations([]),

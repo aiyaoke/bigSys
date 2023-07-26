@@ -70,7 +70,7 @@ export default {
                 },
                 {
                     icon: "icon-lvyouchengshijianzhucity-treexiaoheshumur",
-                    text: "折合树木",
+                    text: "节省树木",
                     value: 0,
                 },
             ],

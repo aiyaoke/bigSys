@@ -77,13 +77,14 @@ export default {
     this.loading=true;
     this.getTableData();
     this.timer = setInterval(() => {
-    this.getTableData();
-    this.getContainer({
-      containerId: sessionStorage.getItem("containerId"),
-    }).then(()=>{
-      this.loading=false;
-    })
-  }, 24000);
+        this.getTableData();
+        this.getContainer({
+          containerId: sessionStorage.getItem("containerId"),
+        }).then(()=>{
+          this.loading=false;
+        })
+      }, 24000
+    );
   },
   components: {
     AllBattery: (_) => import("../AllBattery/Index.vue"),
