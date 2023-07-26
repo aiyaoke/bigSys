@@ -10,7 +10,13 @@
         <el-tab-pane :label="$translate(item.label)" :name="item.name"></el-tab-pane>
       </template>
     </el-tabs>
-    <component :is="isComponent" v-loading="loading" :containerId="defaultOption" type="PCS"  element-loading-background="rgba(0, 0, 0, 0.8)"></component>
+    <component 
+      :is="isComponent" 
+      v-loading="loading" 
+      :containerId="defaultOption" 
+      type="PCS"  
+      element-loading-background="rgba(0, 0, 0, 0.8)"
+    />
   </div>
 </template>
 

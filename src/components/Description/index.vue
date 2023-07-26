@@ -2,7 +2,7 @@
  <div class="description">
     <div class="data">
         <div v-for="(source, index) in data" v-if="data&&data.length>0" class="group">
-            <div class="group-title">{{$translate("第")}} {{index+1}} {{$translate("组")}}</div>
+            <div class="group-title">{{$translate("第")}} {{index+1}} {{$translate(unit)}}</div>
             <div class="group-source">
                 <div v-for="key in Object.keys(source)">
                     <div class="group-item">
@@ -33,6 +33,10 @@
      data: {
         type: Array,
         default: [],
+     },
+     unit: {
+        type: String,
+        default: "",
      }
    },
    watch: {
