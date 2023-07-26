@@ -3,7 +3,7 @@ import HttpRequest from "@/common/request";
 const axios = new HttpRequest();
 
 const apiGetDeviceCount = () =>
-  axios.request({ url: "/energy/getAllDtu", method: "get" });
+  axios.request({ url: "/energy/new/getContainerTotal", method: "get" });
 
 const apiGetAllDevices = params =>
   axios.request({ url: "/energy/getDtusOfPlant", method: "get", params });

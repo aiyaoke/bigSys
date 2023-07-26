@@ -35,7 +35,7 @@
       </el-form-item>
 
       <el-form-item :label="$translate('所属用户')" prop="userId">
-        <el-select v-model="formData.userId" default-first-option="">
+        <el-select v-model="formData.userId" default-first-option="" :disabled="dialogObj.plantId">
           <el-option
             v-for="item in commonUserList"
             :key="item.f0102_Id"
@@ -86,7 +86,7 @@
       </el-form-item>
 
       <el-form-item :label="$translate('电站状态')" prop="status">
-        <el-radio-group v-model="formData.status">
+        <el-radio-group v-model="formData.status" :disabled="dialogObj.plantId">
           <el-radio
             v-for="item in plantStatus"
             :label="item.value"
@@ -97,7 +97,7 @@
       </el-form-item>
 
       <el-form-item :label="$translate('电站类型')" prop="deviceTypeId">
-        <el-radio-group v-model="formData.deviceTypeId">
+        <el-radio-group v-model="formData.deviceTypeId" :disabled="dialogObj.plantId">
           <el-radio
             v-for="item in plantTypes"
             :label="item.value"

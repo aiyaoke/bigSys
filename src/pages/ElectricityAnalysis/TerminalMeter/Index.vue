@@ -1,7 +1,7 @@
 <template>
     <div class="terminalMeter">
         <div class="search-wrapper">
-            <el-button
+            <!-- <el-button
                 v-for="item in btns"
                 :key="item.value"
                 :type="item.value === type ? 'primary' : ''"
@@ -9,21 +9,19 @@
                 @click="changeType(item.value)"
             >
                 {{ $translate(item.label) }}
-            </el-button>
+            </el-button> -->
+            <DatePick
+                :defaultDate="date"
+                type="daterange"
+                :disabledDate="disabledDate"
+                @change="changeDate"
+            ></DatePick>
             <el-dropdown size="mini">
                 <el-button size="mini" type="warning" icon="el-icon-download"
                     >Excel
                 </el-button>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>
-                        <ExportExcel
-                            :header="getExcelParams.chargeDischarge.header"
-                            :title="getExcelParams.chargeDischarge.title"
-                            :fields="getExcelParams.chargeDischarge.fields"
-                            :data="chargeDischargeExcelData"
-                            :buttonText="$translate('充放电曲线')"
-                        /> </el-dropdown-item
-                    ><el-dropdown-item>
                         <ExportExcel
                             :header="getExcelParams.charge.header"
                             :title="getExcelParams.charge.title"
@@ -52,13 +50,22 @@
                     </el-dropdown-item>
                     <el-dropdown-item>
                         <ExportExcel
+                            :header="getExcelParams.chargeDischarge.header"
+                            :title="getExcelParams.chargeDischarge.title"
+                            :fields="getExcelParams.chargeDischarge.fields"
+                            :data="chargeDischargeExcelData"
+                            :buttonText="$translate('充放电效率')"
+                        /> 
+                    </el-dropdown-item>
+                    <!-- <el-dropdown-item>
+                        <ExportExcel
                         :header="getExcelParams.helpMeter.header"
                         :title="getExcelParams.helpMeter.title"
                         :fields="getExcelParams.helpMeter.fields"
                         :data="helpMeterExcelData"
                         :buttonText="$translate('辅源侧电表')"
                         />
-                    </el-dropdown-item>
+                    </el-dropdown-item> -->
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -66,7 +73,7 @@
        <div class="chart">
           <PlaneChart :args="chargeStatistics" :showInfoData="true"></PlaneChart>
           <PlaneChart :args="dischargeStatistics" :showInfoData="true"></PlaneChart>
-          <ElectricityChart :dateType="type" @changeDownloadExcelData="changeDownloadExcelData" />
+          <ElectricityChart :date="date" @changeDownloadExcelData="changeDownloadExcelData" />
           <PlaneChart :args="chargeDischargeCurve" :showInfoData="false"></PlaneChart>
        </div>
     </div>
@@ -80,9 +87,10 @@ import {
     apiDisChargeStatistics,
     apiEnergyEfficiency
 } from "@/api/device";
-import { getEchatsData, momentFormate } from "@/common/utils";
+import { getEchatsData, momentFormate, nowTime } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
 const { mapGetters: device_getters } = createNamespacedHelpers("device");
+import moment from "moment";
 export default {
     name: "TerminalMeter",
     data() {
@@ -93,6 +101,17 @@ export default {
                 { label: "近1月", value: "1month" },
                 { label: "近3月", value: "3month" },
             ],
+            date: [nowTime(-7, "YYYY-MM-DD"), nowTime(0, "YYYY-MM-DD")],
+            disabledDate: {
+                disabledDate(time) {
+                    const startDate = new Date();
+                    const endDate = new Date();
+                    const days = moment().diff(nowTime(-3, "YYYY-MM-DD", "month"), 'days');
+                    startDate.setTime(startDate.getTime()-3600 * 1000 * 24 * days);
+                    endDate.setTime(endDate.getTime());
+                    return time.getTime() < startDate || time.getTime()>endDate;
+                },
+            },
             elecTotalExcelData:[],
             helpMeterExcelData: [],
             energyEfficiency: {
@@ -100,6 +119,9 @@ export default {
                 ref: "chargeDischargeCurve",
                 colorIndex: 0,
                 options: {
+                    xAxis: {
+                        boundaryGap: false,
+                    },
                     yAxis: {
                         name: "",
                     },
@@ -112,6 +134,9 @@ export default {
                 ref: "chargeDischargeCurve",
                 colorIndex: 0,
                 options: {
+                    xAxis: {
+                        boundaryGap: false,
+                    },
                     yAxis: {
                         name: "",
                     },
@@ -134,7 +159,9 @@ export default {
                     yAxis: {
                         name: "kWh",
                     },
-                    series: [{ name: this.$translate("充电电量"), data: [] }],
+                    series: [
+                        { name: this.$translate("充电电量"), data: [], barMaxWidth: 60,}
+                    ],
                 },
                 mostValue: [
                     {
@@ -153,11 +180,12 @@ export default {
                 options: {
                     xAxis: {
                         data: [],
+                        barMaxWidth: 40
                     },
                     yAxis: {
                         name: "kWh",
                     },
-                    series: [{ name: this.$translate("放电电量"), data: [] }],
+                    series: [{ name: this.$translate("放电电量"), data: [], barMaxWidth: 60 }],
                 },
                 mostValue: [
                     {
@@ -180,7 +208,8 @@ export default {
     components: {
         PlaneChart: (_) => import("./components/PlaneChart"),
         ExportExcel: (_) => import("@/components/ExportExcel"),
-        ElectricityChart: (_) => import("./components/ElectricityChart")
+        ElectricityChart: (_) => import("./components/ElectricityChart"),
+        DatePick: (_) => import("@/components/DatePick"),
     },
     computed: {
         ...device_getters(["currentDevice","allDevices","version"]),
@@ -273,13 +302,25 @@ export default {
         getData() {
             let requestData = {
                 dtuId: this.version=='2'?this.allDevices[0].dtuId:this.currentDevice.id,
-                dateType: this.type,
+                startDate: this.date[0],
+                endDate: this.date[1],
             };
             this.getChargeDisChargeCurve(requestData);
             this.getChargeDisChargeMostValue(requestData);
             this.getChargeAmount(requestData);
             this.getDisChargeAmount(requestData);
             this.getEnergyEfficiency(requestData);
+        },
+        changeDate(value) {
+            if(moment(value[1]).diff(moment(value[0]), 'days') < 7){
+                this.$message({
+                    message: '日期范围最少选择7天！',
+                    type: 'warning'
+                });
+            }else{
+              this.date = value;
+              this.getData();
+            }
         },
         async getEnergyEfficiency(requestData){
             this.chargeDischargeCurve.options.series[0].data=[];
@@ -295,9 +336,6 @@ export default {
         async getChargeDisChargeCurve(requestData) {
             let { data } = await apiChargeDisChargeCurve(requestData);
             let prseData = JSON.parse(data || "[]");
-            console.log(getEchatsData(prseData),222222222);
-            // this.chargeDischargeCurve.options.series[0].data =
-            //     getEchatsData(prseData);
             this.chargeDischargeExcelData = prseData;
         },
         async getChargeDisChargeMostValue(requestData) {

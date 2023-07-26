@@ -4,7 +4,14 @@
         <div class="queryTitl">
             <el-date-picker v-model="date" type="date"  size="mini" @change="dateChange" value-format="yyyy-MM-dd">
             </el-date-picker>
-            <el-cascader :options="options" @change="queryData" size="mini" collapse-tags placeholder="选择设备"></el-cascader>
+            <el-cascader 
+                :options="options"
+                @change="queryData" 
+                size="mini" 
+                collapse-tags 
+                placeholder="选择设备"
+                v-model="selectedDevices"
+            />
             <ExportExcel :header="getExcelParams.header" :title="getExcelParams.title" :fields="getExcelParams.fields"
                 :data="excelData" />
         </div>
@@ -35,12 +42,14 @@ const {
     mapActions: device_actions,
 } = createNamespacedHelpers("device");
 import { lineColor, labelColor } from "@/assets/styles/echarts-dark.scss";
+import { deepClone } from "@/common/utils";
 
 export default {
     name: "IntervalData",
     data() {
 
         return {
+            selectedDevices: [],
             showXAxisList: [
                 "00:00:00",
                 "01:00:00",
@@ -258,6 +267,20 @@ export default {
                     children: PCS
                 }
             ];
+            // 默认请求第一个数据
+            let initQuery = [];
+            const deepOption = deepClone(this.options);
+            const getInitQuery = (option) => {
+                if(option[0]&&option[0].value){
+                    initQuery.push(option[0].value);
+                }
+                if(option[0].children&&Array.isArray(option[0].children)){
+                    getInitQuery(option[0].children)
+                }
+            }
+            this.selectedDevices = initQuery;
+            getInitQuery(deepOption)
+            this.queryData(deepClone(initQuery));
         },
       
         getTableData(data){

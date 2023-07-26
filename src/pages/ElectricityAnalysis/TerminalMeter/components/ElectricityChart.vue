@@ -32,7 +32,6 @@ export default {
   name: "ElectricityStatistics",
   data() {
     return {
-      date: [nowTime(-7, "YYYY-MM-DD"), nowTime(0, "YYYY-MM-DD")],
       cardData: [
         { name: "日充电效率", value: "-", unit: "%", key: "effect" },
         {
@@ -52,7 +51,8 @@ export default {
         ref: "electricityStatistics",
         options: {
           xAxis: {
-            data: []
+            data: [],
+            boundaryGap: false,
           },
           yAxis: {
             name: "kWh"
@@ -61,42 +61,50 @@ export default {
             {
               name: this.$translate("充电尖"),
               key: "charge1",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("充电峰"),
               key: "charge2",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("充电平"),
               key: "charge3",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("充电谷"),
               key: "charge4",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("放电尖"),
               key: "disCharge1",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("放电峰"),
               key: "disCharge2",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("放电平"),
               key: "disCharge3",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("放电谷"),
               key: "disCharge4",
-              data: []
+              data: [],
+              type: 'line'
             }
           ]
         }
@@ -218,8 +226,6 @@ export default {
         uu.data = [];
       });
       this.formatterElecTotalExcelData([]);
-      // 根据日期类型获取日期范围，比如1week就是获取一周之内的日期范围   
-      this.getDateByDateType()     
       let requestData = {
         dtuId:this.version=='2'? this.allDevices[0].dtuId:this.currentDevice.id,
         sDate: this.date[0],
@@ -262,20 +268,22 @@ export default {
         });
 
         this.helpMeterExcelData = data;
-        this.helpMaterOptions.options.xAxis.data = dataArr;
-        this.helpMaterOptions.options.series[0].data = valueArr;
+        setTimeout(()=>{
+         this.helpMaterOptions.options.xAxis.data = dataArr;
+         this.helpMaterOptions.options.series[0].data = valueArr;
+        }, 500)
         this.$emit("changeDownloadExcelData", this.elecTotalExcelData, this.helpMeterExcelData)
       }
     }
   },
   props: {
-    dateType: {
-        type: String,
-        default: '1week',
+    date: {
+        type: Array,
+        default: ()=>{},
     },
   },
   watch:{
-    "dateType": {
+    "date": {
       handler(val) {
         this.getChartsData();
       },
