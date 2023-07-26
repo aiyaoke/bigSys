@@ -738,6 +738,5 @@ export const zh = {
   sermatec_00747:"电池监测",
   sermatec_00748:"BMC数据",
   sermatec_00749:"充放电效率",
-  // sermatec_00750:"BMC数据",
-
+  sermatec_00750:"告警规则",
 };

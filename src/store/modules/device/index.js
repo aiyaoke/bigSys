@@ -90,8 +90,7 @@ const actions = {
   },
   async getDevicesCount({ commit }) {
     let { data } = await apiGetDeviceCount();
-    data = JSON.parse(data || "[]");
-    commit("setDevicesCount", data.length);
+    commit("setDevicesCount", data || 0);
   },
   async getDevicePermissions({ commit }, requestData) {
     if (requestData.type == 0) return commit("setDevicePermissions", {});

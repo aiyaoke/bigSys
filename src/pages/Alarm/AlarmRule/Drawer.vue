@@ -156,7 +156,7 @@ export default {
     async getMethods() {
       let { data } = await apiGetIndexKeywords({ code: "Z1" });
       if (data) {
-        this.methods = data.filter(item => item.value != "2");
+        this.methods = data;
       }
     },
     async getAllCommonUser() {

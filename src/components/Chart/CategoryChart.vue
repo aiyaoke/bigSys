@@ -20,6 +20,7 @@ export default {
             baseOptions: {
                 legend: {
                     top: 4,
+                    left: 4,
                     textStyle: {
                         fontSize: 12,
                         color: labelColor,
