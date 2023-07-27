@@ -98,12 +98,12 @@ export const deteleConfirm = (fn, requestData, callBack) => {
 };
 
 //拼接echarts时间轴数据格式
-export const getEchatsData = array => {
+export const getEchatsData = (array, timeFormat="YYYY-MM-DD HH:mm:ss") => {
   if (!Array.isArray(array)) return [];
   array.forEach(
     item =>
     (item.value = [
-      momentFormate(item.time, "YYYY-MM-DD HH:mm:ss"),
+      momentFormate(item.time, timeFormat),
       item.value && parseFloat(item.value)
     ])
   );

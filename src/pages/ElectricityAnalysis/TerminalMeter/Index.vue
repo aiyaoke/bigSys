@@ -331,7 +331,7 @@ export default {
                     time:item.time
                 })
             })
-            this.chargeDischargeCurve.options.series[0].data=getEchatsData(this.chargeDischargeCurve.options.series[0].data)
+            this.chargeDischargeCurve.options.series[0].data=getEchatsData(this.chargeDischargeCurve.options.series[0].data, "MM-DD");
         },
         async getChargeDisChargeCurve(requestData) {
             let { data } = await apiChargeDisChargeCurve(requestData);
