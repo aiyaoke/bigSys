@@ -739,4 +739,6 @@ export const zh = {
   sermatec_00748:"BMC数据",
   sermatec_00749:"充放电效率",
   sermatec_00750:"告警规则",
+  sermatec_00751:"平均收益",
+  sermatec_00752:"节省电费"
 };

@@ -117,7 +117,7 @@ export default {
         ...device_getters(["currentDevice","allDevices","version"]),
         getExcelParams() {
             return {
-                header: `${this.currentDevice.sn}-储能节省电费/元`,
+                header: `储能节省电费/元`,
                 title: "储能节省电费",
                 fields: {
                     [this.$translate("日期")]: "date",
