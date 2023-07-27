@@ -54,9 +54,13 @@
                         @click="handleEdit(scope.row)"
                         >{{ $translate("编辑") }}
                     </el-link>
-                    <el-link type="danger" @click="handleDelete(scope.row)">{{
-                        $translate("删除")
-                    }}</el-link>
+                    <el-link 
+                        type="danger" 
+                        v-if="userInfo.roleId>2"
+                        @click="handleDelete(scope.row)">{{
+                            $translate("删除")
+                        }}
+                    </el-link>
                 </template>
             </el-table-column>
         </el-table>
@@ -68,6 +72,8 @@ import { plantStatus, plantTypes } from "@/common/config";
 import { apiDeletePlant } from "@/api/plant";
 import { showMessage, getLabelById, momentFormate } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
+
+const { mapGetters: user_getters } = createNamespacedHelpers("user");
 
 export default {
     name: "List",
@@ -112,6 +118,7 @@ export default {
        
     },
     computed: {
+        ...user_getters(["userInfo"]),
         c_installDate() {
             return (installDate) =>
                 momentFormate(installDate, "YYYY-MM-DD HH:mm:ss");

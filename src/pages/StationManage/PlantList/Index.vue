@@ -5,7 +5,7 @@
             <template #title>
                 <div class="title-wrapper">
                     <span> {{ $translate("电站列表") }}</span>
-                    <i class="el-icon-plus add-icon" @click="handleAdd"></i>
+                    <i class="el-icon-plus add-icon" @click="handleAdd" v-if="userInfo.roleId>2"></i>
                 </div>
             </template>
             <template #content>
@@ -21,8 +21,8 @@
 <script>
 import { apiGetAllCommonUser } from "@/api/user";
 import { createNamespacedHelpers } from "vuex";
-const { mapGetters: plant_getters, mapActions: plant_actions } =
-    createNamespacedHelpers("plant");
+const { mapGetters: plant_getters, mapActions: plant_actions } = createNamespacedHelpers("plant");
+const { mapGetters: user_getters } = createNamespacedHelpers("user");
 export default {
     name: "PlantList",
     data() {
@@ -69,6 +69,7 @@ export default {
     },
     computed: {
         ...plant_getters(["allPlants"]),
+        ...user_getters(["userInfo"]),
         calculateTableData() {
             return this.allPlants.slice(
                 (this.currentPage - 1) * this.pageSize,
