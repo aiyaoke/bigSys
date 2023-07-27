@@ -216,8 +216,8 @@ export default {
         getExcelParams() {
             return {
                 chargeDischarge: {
-                    header: `${this.currentDevice.sn}-充放电曲线/kW`,
-                    title: "充放电曲线",
+                    header: `充放电效率/kW`,
+                    title: "充放电效率",
                     fields: {
                         [this.$translate("日期")]: {
                             field: "value",
@@ -230,7 +230,7 @@ export default {
                     },
                 },
                 charge: {
-                    header: `${this.currentDevice.sn}-充电统计/kWh`,
+                    header: `充电统计/kWh`,
                     title: "充电统计",
                     fields: {
                         [this.$translate("日期")]: {
@@ -244,7 +244,7 @@ export default {
                     },
                 },
                 discharge: {
-                    header: `${this.currentDevice.sn}-放电统计/kWh`,
+                    header: `放电统计/kWh`,
                     title: "放电统计",
                     fields: {
                         [this.$translate("日期")]: {
@@ -258,7 +258,7 @@ export default {
                     },
                 },
                 elecTotal: {
-                    header: `${this.currentDevice.sn}-电量统计/kWh`,
+                    header: `电量统计/kWh`,
                     title: "电量统计",
                     fields: {
                         [this.$translate("日期")]: "date",
@@ -273,7 +273,7 @@ export default {
                     }
                 },
                 helpMeter: {
-                    header: `${this.currentDevice.sn}-辅源侧电表/kWh`,
+                    header: `辅源侧电表/kWh`,
                     title: "辅源侧电表",
                     fields: {
                         [this.$translate("日期")]: {
@@ -331,7 +331,7 @@ export default {
                     time:item.time
                 })
             })
-            this.chargeDischargeCurve.options.series[0].data=getEchatsData(this.chargeDischargeCurve.options.series[0].data)
+            this.chargeDischargeCurve.options.series[0].data=getEchatsData(this.chargeDischargeCurve.options.series[0].data, "MM-DD");
         },
         async getChargeDisChargeCurve(requestData) {
             let { data } = await apiChargeDisChargeCurve(requestData);
