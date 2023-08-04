@@ -13,6 +13,7 @@ export default {
     return {
       baseOptions: {
         legend: {
+          top: 4,
           left: 4,
           orient: "vertical",
           textStyle: {
@@ -36,7 +37,7 @@ export default {
           show: true,
           right: 25,
           feature: {
-            magicType: { type: ["line", "bar"], title: "" },
+            magicType: { type: ["line", "bar"], title: "", default: "line" },
             dataZoom: {
               yAxisIndex: "none",
             },
@@ -44,7 +45,7 @@ export default {
           },
         },
         xAxis: {
-          type: "time",
+          type: "category",
           name: this.$translate("时间"),
           splitNumber: 12,
           axisPointer: {

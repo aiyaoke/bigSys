@@ -139,7 +139,7 @@ export default [{
                     path: "/containerIndex/alarm/rule",
                     code: "W",
                     meta: {
-                        name: "报警规则"
+                        name: "告警规则"
                     },
                     component: _ =>
                         import(
@@ -165,14 +165,14 @@ export default [{
                 },
                 component: _ => import("@/pages/StationManage/PlantList")
               },
-              {
-                path: "/containerIndex/stationManage/deviceList",
-                code: "P",
-                meta: {
-                  name: "设备列表"
-                },
-                component: _ => import("@/pages/StationManage/DeviceList")
-              },
+            //   {
+            //     path: "/containerIndex/stationManage/deviceList",
+            //     code: "P",
+            //     meta: {
+            //       name: "设备列表"
+            //     },
+            //     component: _ => import("@/pages/StationManage/DeviceList")
+            //   },
               {
                 path: "/containerIndex/energyManage/timePrice",
                 code: "R",

@@ -183,7 +183,10 @@ export const colorList = [
   "#ca8622",
   "#b06ceb",
   "#31e0f0",
-  "#749f83"
+  "#749f83",
+  '#5470c6', 
+  '#91cc75', 
+  '#fac858'
 ];
 export const basicInfo={
   title:"电站基础数据",
@@ -327,16 +330,16 @@ export const BMS=[
   label:"放电电量（kWh）",
   width:"25%",
 },
-// {
-//   key:"chargeNum",
-//   label:"充电次数",
-//   width:"25%",
-// },
-// {
-//   key:"dischargeNum",
-//   label:"放电次数",
-//   width:"25%",
-// },
+{
+  key:"chargeNum",
+  label:"充电次数",
+  width:"25%",
+},
+{
+  key:"dischargeNum",
+  label:"放电次数",
+  width:"25%",
+},
 {
   key:"efficiency",
   label:"充放电能量转换效率（%）",

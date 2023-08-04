@@ -1,6 +1,6 @@
 <template>
   <div class="profitStatistics">
-    <div class="card-wrapper">
+    <!-- <div class="card-wrapper">
       <div v-for="(item, index) in cardData" :key="index">
         <span class="name"> {{ $translate(item.name) }}：</span>
         <div>
@@ -8,7 +8,7 @@
           <span>{{ item.unit }}</span>
         </div>
       </div>
-    </div>
+    </div> -->
     <PlaneBox v-if="devicePermissions['N/A']||version=='2'">
       <span slot="title">{{ $translate("电量统计") }}</span>
       <CategoryChart :args="elecTotalOptions" slot="content" />
@@ -32,7 +32,6 @@ export default {
   name: "ElectricityStatistics",
   data() {
     return {
-      date: [nowTime(-7, "YYYY-MM-DD"), nowTime(0, "YYYY-MM-DD")],
       cardData: [
         { name: "日充电效率", value: "-", unit: "%", key: "effect" },
         {
@@ -51,8 +50,10 @@ export default {
       elecTotalOptions: {
         ref: "electricityStatistics",
         options: {
+          color: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'],
           xAxis: {
-            data: []
+            data: [],
+            boundaryGap: false,
           },
           yAxis: {
             name: "kWh"
@@ -61,42 +62,50 @@ export default {
             {
               name: this.$translate("充电尖"),
               key: "charge1",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("充电峰"),
               key: "charge2",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("充电平"),
               key: "charge3",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("充电谷"),
               key: "charge4",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("放电尖"),
               key: "disCharge1",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("放电峰"),
               key: "disCharge2",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("放电平"),
               key: "disCharge3",
-              data: []
+              data: [],
+              type: 'line'
             },
             {
               name: this.$translate("放电谷"),
               key: "disCharge4",
-              data: []
+              data: [],
+              type: 'line'
             }
           ]
         }
@@ -126,7 +135,7 @@ export default {
   },
   components: {
     DatePick: _ => import("@/components/DatePick"),
-    PlaneBox: _ => import("@/components/PlaneBox"),
+    PlaneBox: _ => import("@/components/NewPlaneBox"),
     CategoryChart: _ => import("@/components/Chart/CategoryChart"),
     ExportExcel: _ => import("@/components/ExportExcel")
   },
@@ -218,8 +227,6 @@ export default {
         uu.data = [];
       });
       this.formatterElecTotalExcelData([]);
-      // 根据日期类型获取日期范围，比如1week就是获取一周之内的日期范围   
-      this.getDateByDateType()     
       let requestData = {
         dtuId:this.version=='2'? this.allDevices[0].dtuId:this.currentDevice.id,
         sDate: this.date[0],
@@ -262,20 +269,22 @@ export default {
         });
 
         this.helpMeterExcelData = data;
-        this.helpMaterOptions.options.xAxis.data = dataArr;
-        this.helpMaterOptions.options.series[0].data = valueArr;
+        setTimeout(()=>{
+         this.helpMaterOptions.options.xAxis.data = dataArr;
+         this.helpMaterOptions.options.series[0].data = valueArr;
+        }, 500)
         this.$emit("changeDownloadExcelData", this.elecTotalExcelData, this.helpMeterExcelData)
       }
     }
   },
   props: {
-    dateType: {
-        type: String,
-        default: '1week',
+    date: {
+        type: Array,
+        default: ()=>{},
     },
   },
   watch:{
-    "dateType": {
+    "date": {
       handler(val) {
         this.getChartsData();
       },
@@ -294,6 +303,7 @@ export default {
   }
 }
 .profitStatistics {
+  height: 100%;
   .card-wrapper {
     height: 180px;
     display: grid;

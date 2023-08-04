@@ -48,6 +48,8 @@ export default {
                     },
                     yAxis: {
                         name: "V",
+                        min: 2.5,
+                        splitNumber: 10
                     },
                     series: [
                         { name: this.$translate("最大电压"), data: [] },
@@ -111,10 +113,10 @@ export default {
             params.forEach(({ seriesName, value, color }) => {
                 let bsu = seriesName === name ? maxBsu : minBsu;
                 text = text.concat(`
-              <div>
-              <span style="background:${color};width:10px;height:10px;border-radius:50%;display:inline-block"></span>
-              ${seriesName}：${value}  ${bsu} <br/>
-              </div>
+                    <div>
+                        <span style="background:${color};width:10px;height:10px;border-radius:50%;display:inline-block"></span>
+                        ${seriesName}：${value}  ${bsu} <br/>
+                    </div>
               `);
             });
             return text;
@@ -134,7 +136,14 @@ export default {
             let { data } = await (this.version=='2'?apiGetMaxMinValtage(requestData):apiGetRealCurve(requestData));
             if (data) {
                 let parseData = JSON.parse(data);
-                let [volxData, maxVol, minVol, tmpxData, maxTemp, minTemp] = [
+                let [
+                    volxData, 
+                    maxVol, 
+                    minVol, 
+                    tmpxData, 
+                    maxTemp, 
+                    minTemp,
+                ] = [
                     [],
                     [],
                     [],
@@ -145,7 +154,7 @@ export default {
                 parseData.forEach((item) => {
                     volxData.push(
                         `${this.$translate("第")}${item.group}${this.$translate(
-                            "组"
+                            "簇"
                         )}Pack${item.cluster}-${this.$translate("第")}${
                             item.maxValtageBsu
                         }${this.$translate("节")}-${this.$translate("第")}${
@@ -154,7 +163,7 @@ export default {
                     );
                     tmpxData.push(
                         `${this.$translate("第")}${item.group}${this.$translate(
-                            "组"
+                            "簇"
                         )}Pack${item.cluster}-${this.$translate("第")}${
                             item.maxTemprtBsu
                         }${this.$translate("节")}-${this.$translate("第")}${

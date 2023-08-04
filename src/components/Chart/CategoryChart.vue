@@ -4,6 +4,7 @@
         :options="options"
         :auto-resize="true"
         @finished="finished"
+        class="echarts"
     ></chart>
 </template>
 
@@ -16,9 +17,10 @@ export default {
     name: "CategoryChart",
     data() {
         return {
-            baseOptions: {
+            options: {
                 legend: {
                     top: 4,
+                    left: 4,
                     textStyle: {
                         fontSize: 12,
                         color: labelColor,
@@ -98,7 +100,6 @@ export default {
                 },
                 series: [],
             },
-            options: {},
         };
     },
     props: {
@@ -118,7 +119,7 @@ export default {
                     chartInstance.hideLoading();
                 }, 500);
             }
-            this.options = deepClone(this.baseOptions);
+            this.options = deepClone(this.options);
             let { colorIndex, options: aOptions } = this.args;
             Object.keys(aOptions).forEach((item) => {
                 if (item === "series") {
@@ -151,9 +152,9 @@ export default {
     watch: {
         args: {
             deep: true,
-            handler: function (new1) {
+            immediate: true,
+            handler: function (newValue) {
                 this.mergeOptions();
-                console.log(new1);
             },
         },
     },

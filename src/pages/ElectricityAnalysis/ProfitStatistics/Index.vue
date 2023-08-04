@@ -61,25 +61,25 @@ export default {
             },
             cardData: [
                 {
-                    name: "本月平均收益",
+                    name: "平均收益",
                     value: "0.0",
                     unit: "元",
                     key: "avgFee",
                 },
                 {
-                    name: "本月累计充电量",
+                    name: "累计充电量",
                     value: "0.0",
                     unit: "kWh",
                     key: "daysCharge",
                 },
                 {
-                    name: "本月累计放电量",
+                    name: "累计放电量",
                     value: "0.0",
                     unit: "kWh",
                     key: "daysDisCharge",
                 },
                 {
-                    name: "本月节省电费",
+                    name: "节省电费",
                     value: "0.0",
                     unit: "元",
                     key: "daysFee",
@@ -96,7 +96,7 @@ export default {
                         name: this.$translate("元"),
                     },
                     series: [
-                        { name: this.$translate("储能节省电费"), data: [] },
+                        { name: this.$translate("储能节省电费"), data: [], barMaxWidth: 60 },
                     ],
                 },
             },
@@ -117,7 +117,7 @@ export default {
         ...device_getters(["currentDevice","allDevices","version"]),
         getExcelParams() {
             return {
-                header: `${this.currentDevice.sn}-储能节省电费/元`,
+                header: `储能节省电费/元`,
                 title: "储能节省电费",
                 fields: {
                     [this.$translate("日期")]: "date",
