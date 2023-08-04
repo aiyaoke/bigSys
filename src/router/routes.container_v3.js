@@ -48,6 +48,16 @@ export default [{
                           /* webpackChunkName: "Overview" */ "@/pages/containerDetail/components/Bms"
                       ),
                   },
+                  {
+                    path: "/containerIndex/equipmentOverview/PcsAndBms",
+                    meta: {
+                        name: "混合舱",
+                    },
+                    component: _ =>
+                      import(
+                          /* webpackChunkName: "Overview" */ "@/pages/containerDetail/components/PcsAndBms"
+                      ),
+                  },
             ]
         },
         {
@@ -139,7 +149,7 @@ export default [{
                     path: "/containerIndex/alarm/rule",
                     code: "W",
                     meta: {
-                        name: "告警规则"
+                        name: "报警规则"
                     },
                     component: _ =>
                         import(
@@ -165,14 +175,14 @@ export default [{
                 },
                 component: _ => import("@/pages/StationManage/PlantList")
               },
-            //   {
-            //     path: "/containerIndex/stationManage/deviceList",
-            //     code: "P",
-            //     meta: {
-            //       name: "设备列表"
-            //     },
-            //     component: _ => import("@/pages/StationManage/DeviceList")
-            //   },
+              {
+                path: "/containerIndex/stationManage/deviceList",
+                code: "P",
+                meta: {
+                  name: "设备列表"
+                },
+                component: _ => import("@/pages/StationManage/DeviceList")
+              },
               {
                 path: "/containerIndex/energyManage/timePrice",
                 code: "R",

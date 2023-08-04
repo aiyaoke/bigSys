@@ -2,16 +2,16 @@
     <div class="detailsWrapper">
         <div class="packGroup">
             <Battery :BMC="BMC[0]" :deriction="0" />
-            <Battery :BMC="BMC[1]" :deriction="deriction" class="pack-bottom" ref="pack-bottom" />
+            <Battery v-if="BMC[1]" :BMC="BMC[1]" :deriction="deriction" class="pack-bottom" ref="pack-bottom" />
         </div>
         <div class="packData">
-            <div class="pack1Data">
+            <div class="pack1Data" ref="pcsSvg">
                 <IconBox class="icon" :isActive="true" iconClassName="icon-bingxiang" color="#3af3a7" />
                 <div class="path">
                     <AnimatePath :path="pcsAnimatePath" :options=options />
                 </div>
             </div>
-            <div class="pack1Data" ref="pcsSvg">
+            <div class="pack1Data"  v-if="PCS[1]" ref="pcsSvg">
                 <IconBox class="icon" :isActive="true" iconClassName="icon-bingxiang" color="#3af3a7" />
                 <div class="path">
                     <AnimatePath :path="pcsAnimatePath" :options=options />
@@ -46,14 +46,13 @@ export default {
     },
     watch: {},
     computed: {
-        ...device_getters(["allDevices", "version", "BMS", "BMC"]),
+        ...device_getters(["allDevices", "version", "BMS", "BMC","PCS"]),
 
     },
     methods: {
         initPcsAnimatePath() {
             let width = this.$refs.pcsSvg.offsetWidth;
             this.pcsAnimatePath = `M 0 10 H ${width}`
-
         }
     },
     created() { },
