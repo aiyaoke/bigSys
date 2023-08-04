@@ -20,9 +20,11 @@ import { showMessage, setToken, redirectPath } from "@/common/utils";
 
 const {
     mapGetters: device_getters,
-    mapMutations: device_mutations,
     mapActions: device_actions,
 } = createNamespacedHelpers("device");
+const {
+    mapGetters: plant_getters,
+} = createNamespacedHelpers("plant");
 let _this = {};
 export default {
     name: "TubeMap",
@@ -34,12 +36,27 @@ export default {
             sceneMain,
             sceneChartMain,
             bmsId: [],
-            pcsId: []
+            pcsId: [],
+            idData:[
+                {
+                    plantId:1558,
+                    PageId:"3302116777302949892",
+                    name:"bsf"
+                },
+                {
+                    plantId:1590,
+                    PageId:"3352942610741198850",
+                    name:"tuv"
+                },
+            ],
+            currentId:''
         }
 
     },
     computed: {
         ...device_getters(["allDevices", "version", "PCS", "BMS", "allDevDetails"]),
+        ...plant_getters(["currentPlant", ]),
+
     },
     created() {
         _this = this;
@@ -50,6 +67,14 @@ export default {
     methods: {
         ...device_actions(["getContainer"]),
         function() {
+            this.idData.forEach(item=>{
+                if (item.plantId==this.currentPlant.plantId) {
+                    this.currentId=item.PageId;
+                    console.log(  this.currentId);
+                }else{
+                    this.currentId="3302116777302949892";
+                }
+            })
             this.sceneMain = new Sovit3DPaser.SceneMain({
                 /**
                  * 说明：apiurl用来定义后端接口地址。当部署方式不一样时接口地址的写法不一样。
@@ -66,7 +91,7 @@ export default {
                 apiurl: 'https://admin.sovitjs.com/restapi',
                 publishType: 1 //1为在线引用组件 
             });
-            this.initScene('3302116777302949892');
+            this.initScene(this.currentId);
         },
         initScene(id) {
             //清除上一个场景的页面数据
@@ -115,8 +140,12 @@ export default {
             this.sceneChartMain.initChart("sovit3d_1", {
                 appType: 'sovit3d', //注意，当Sovit2D中使用了chart，这里使用SovitChart的API时必须加上这个参数
                 pageId: id, //图表的ID，发布图表的地方可以找到
+                params:{
+                    plantId:_this.plantId
+			}
             }, function (comId, eventType, reData) {
             });
+
         }
 
     },
