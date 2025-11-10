@@ -11,7 +11,7 @@
     </div>
 
     <div class="end-wrapper">
-      <div class="count">
+      <!-- <div class="count">
         <div>
           <div class="value" :style="{ color: colorful.colorful_2 }">
             {{ allPlants.length }}
@@ -24,15 +24,15 @@
           </div>
           <div class="name">{{ $translate("设备总数") }}</div>
         </div>
-      </div>
-      <el-badge v-if="this.$route.path!=='/containerIndex'" :value="activeAlarmCount" :max="99">
+      </div> -->
+      <!-- <el-badge v-if="this.$route.path!=='/containerIndex'" :value="activeAlarmCount" :max="99">
         <i class="iconfont icon-lingdang" :style="{
             color: activeAlarmCount ? '#F56C6C' : '',
           }" @click="alarmTo"></i>
-      </el-badge>
-      <el-tooltip effect="dark" :content="$translate('切换主题')" placement="bottom">
+      </el-badge> -->
+      <!-- <el-tooltip effect="dark" :content="$translate('切换主题')" placement="bottom">
         <i class="iconfont icon-zhuti theme" @click="changeTheme"></i>
-      </el-tooltip>
+      </el-tooltip> -->
       <el-tooltip effect="dark" :content="$translate('退出登录')" placement="bottom">
         <i class="iconfont icon-tuichudenglu signOut" @click="signOut"></i>
       </el-tooltip>
@@ -140,7 +140,6 @@ export default {
   mounted() {
     this.getDevicesCount();
     this.initRoutes();
-   console.log();
   },
   watch: {},
 };

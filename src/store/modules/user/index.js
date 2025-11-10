@@ -19,7 +19,7 @@ const state = {
 
 const mutations = {
   setUserInfo(state, value) {
-    state.userInfo = value;
+    state.userInfo = value;  
   },
   setAllUsers(state, value) {
     state.allUsers = value;
@@ -38,7 +38,7 @@ const getters = {
 const actions = {
   async login({ commit, dispatch }, requestData) {
     let { code, data } = await apiLogin(requestData);
-    console.log(data);
+    // console.log(data);
     if (code === "407") {
       return code;
     }

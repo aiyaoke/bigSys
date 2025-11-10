@@ -718,5 +718,10 @@ export const en = {
   sermatec_00722:"Accumulated stack discharge capacity",
   sermatec_00723:"Business",
 
+
+
+
+  sermatec_00753:"There are at least two types",
+
 };
 

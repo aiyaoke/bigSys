@@ -47,6 +47,7 @@
               <div
                 :style="{
                   color: '#fff',
+               
                   // vol === 0
                   //   ? '#fff'
                   //   : Math.min(...item.vols) === vol
@@ -280,7 +281,7 @@ export default {
       if (this.version=='2') {
         tmptId= Math.ceil(cellId/4)
       }else{
-        if (cellId <= 4) {
+        if (cellId <= 4) { 
         tmptId = 15;
       } else if (cellId >= 5 && cellId <= 8) {
         tmptId = 16;
@@ -355,7 +356,7 @@ export default {
         }
       let { data } = await apiGetContainerAllCell(postData);
       this.batteryCluster = data ? data : [];
-      console.log(1111,this.batteryCluster);
+      // console.log(1111,this.batteryCluster);
       return;
       }
       let httpData = {
@@ -425,6 +426,7 @@ export default {
   display: grid;
   grid-template-columns: auto auto auto;
   grid-gap: 20px;
+  padding-bottom: 58px;
   .single-cluster {
     padding: 10px;
     padding-left: 0;
@@ -495,6 +497,7 @@ export default {
           cursor: pointer;
           position: relative;
           box-shadow: 2px 0 6px #3af3a7;
+          max-height: 30px;
           &:hover {
             .arrow {
               right: 2px;

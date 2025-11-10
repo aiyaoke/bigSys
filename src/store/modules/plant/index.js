@@ -29,8 +29,11 @@ const actions = {
   async getAllPlants({ commit }) {
     let { data } = await apiGetAllPlants()
     data = JSON.parse(data || '[]')
-    commit('setAllPlants', data)
-    commit('setCurrentPlant', data.length ? data[0] : {})
+    commit('setAllPlants', data);
+    console.log(state.currentPlant.plantId,121212);
+    if (state.currentPlant.plantId) {
+      commit('setCurrentPlant', data.length ? data[0] : {})
+    }
   },
 };
 

@@ -164,7 +164,7 @@
             containerId: sessionStorage.getItem("containerId"),
           })
         }, 24000);
-        console.log(this.allDevices,this.PCS,111111111);
+        // console.log(this.allDevices,this.PCS,111111111);
     },
     components: {
       BatteryOverview: (_) => import("@/pages/EnergyManage/BatteryOverview"),

@@ -105,7 +105,9 @@ $offLine: #c4d8d9;
   min-height: 36px;
   @include dis-flex(flex-end, center);
 }
-
+.el-input-group__append {
+  width: 100px !important;
+}
 .search-wrapper {
   @include dis-flex(center, center);
   color: $text-color;

@@ -78,7 +78,7 @@ export default {
             }
         },
         handleUpLoadError(err) {
-            console.log(err);
+            // console.log(err);
             showMessage("error", this.$translate("提交失败"));
         },
         handleFileListChange(file, upLoadfileList) {

@@ -30,6 +30,26 @@ module.exports = {
     }
   },
   module: {
+    loaders: [
+      {
+        loader: "postcss-loader",
+         options: {
+           postcssOptions: {
+             plugins: [
+               [
+                 "postcss-plugin-px2rem",
+                 // 配置参数
+                 {
+                   // 假设设计稿是1200px, px->rem的比例是：100
+                   // 1200 / 100 = 12
+                   rootValue: 19.2,
+                 },
+               ],
+             ],
+           },
+         },
+       },
+    ],
     rules: [
       {
         test: /\.vue$/,

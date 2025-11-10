@@ -2,7 +2,7 @@ const domain = ".sermatec-cloud.com";
 
 export const serve = 1; // 1 国内 0 国外
 
-// export const baseUrl = 'http://192.168.6.9/api' //联想
+// export const baseUrl = 'http://192.168.1.42/api' //联想
 // export const socketUrl = 'http://192.168.6.9'
 
 export const baseUrl = `https://${serve ? "api" : "api1"}${domain}`;
@@ -12,7 +12,7 @@ export const uploadLogoUrl = `${baseUrl}/zuul/user/uploadHead/`;
 
 export const storageUrl = `${baseUrl}/sermatec-minsys/dtuExcelBatchImport`;
 
-export const downLoadStorageTemplateUrl = `${baseUrl}/minsys/download/dtuBatchImportSheetTemplet`;
+export const downLoadStorageTlemplateUrl = `${baseUrl}/minsys/download/dtuBatchImportSheetTemplet`;
 
 export const codeImgUrl = `${baseUrl}/user/getKaptchaImage`;
 
@@ -261,14 +261,14 @@ export const runInfo={
     name: "充放电能量转换效率",
       value: '',
   },
-  TPi:{
-    name: "充电次数",
-      value: '',
-  },
-  TPo:{
-    name: "放电次数",
-      value: '',
-  },
+  // TPi:{
+  //   name: "充电次数",
+  //     value: '',
+  // },
+  // TPo:{
+  //   name: "放电次数",
+  //     value: '',
+  // },
   charge:{
     name: "充电电量",
       value: '',
@@ -293,7 +293,7 @@ export const PCS=[
   width:"25%",
   formatter:function(r,c) {
     return `${r.no}#PCS`
-  }
+  } 
 },
 {
   key:"charge",
@@ -303,7 +303,7 @@ export const PCS=[
 {
   key:"disCharge",
   label:"放电电量（kWh）",
-  width:"25%",
+  width:"25%",  
 },
 {
   key:"efficiency",
@@ -330,16 +330,16 @@ export const BMS=[
   label:"放电电量（kWh）",
   width:"25%",
 },
-{
-  key:"chargeNum",
-  label:"充电次数",
-  width:"25%",
-},
-{
-  key:"dischargeNum",
-  label:"放电次数",
-  width:"25%",
-},
+// {
+//   key:"chargeNum",
+//   label:"充电次数",
+//   width:"25%",
+// },
+// {
+//   key:"dischargeNum",
+//   label:"放电次数",
+//   width:"25%",
+// },
 {
   key:"efficiency",
   label:"充放电能量转换效率（%）",

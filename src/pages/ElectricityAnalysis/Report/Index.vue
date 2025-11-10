@@ -18,7 +18,7 @@
                 <span class="report-name">{{ $translate(currentData.title) }}</span>
             </div>
             <div class="search">
-                <el-date-picker v-if="currentData.time != false" v-model="date" align="right" :type="currentData.time"
+                <el-date-picker v-if="currentData.time != false" v-model="date" align="right" :clearable="false" :type="currentData.time"
                     placeholder="选择日期" :picker-options="pickerOptions" size="mini" @change="dateChange">
                 </el-date-picker>
 
@@ -213,6 +213,10 @@ export default {
           
         },
         dateChange() {
+            // console.log(this.date,11111111);
+            if (this.date==null) {
+                this.date= momentFormate(Date.now(), 'YYYY-MM-DD')
+            }
             this.getDate(this.dateType);
             this.getTableData(this.currentType);
         },

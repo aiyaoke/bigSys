@@ -42,7 +42,7 @@ export default {
         };
     },
     mounted() {
-        console.log(navigator.language);
+        // console.log(navigator.language);
         this.defalutLocale = this.locale;
     },
     computed: {

@@ -126,7 +126,7 @@ export default {
                 date: this.date,
             };
             let { data } = await apiGetBatteryCure(requestData);
-            console.log(data,'------')
+            // console.log(data,'------')
             if (data) {
                 Object.values(data).forEach((item, index) => {
                     this.chartArgs.options.series.push({

@@ -109,6 +109,10 @@ export default {
                 }
             });
         },
+      
+    },
+    mounted(){
+        // this.handleEdit()
     },
     computed: {
         c_accountSatus() {

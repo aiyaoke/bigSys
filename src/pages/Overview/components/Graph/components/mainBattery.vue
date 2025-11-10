@@ -110,7 +110,7 @@ export default {
             this.batteryAnimatePath = `M 10 ${
                 ((height / 15) * 0.7) / 2
                 } H ${width-280}`;
-            console.log(this.batteryAnimatePath);
+            // console.log(this.batteryAnimatePath);
         },
     },
     created() { },

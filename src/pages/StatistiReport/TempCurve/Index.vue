@@ -72,7 +72,7 @@ export default {
                     field: "dtuId",
                     callback: (value) => this.currentDevice.sn,
                 },
-                压差: "nowDiff",
+                温差: "nowDiff",
                 最高温度: "nowMax",
                 最高温度单体: "nowMaxCell",
                 最低温度: "nowMin",

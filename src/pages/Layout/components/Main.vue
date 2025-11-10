@@ -18,7 +18,8 @@ export default {
 <style scoped lang="scss">
 .main {
     min-height: 100vh;
-    margin-bottom: 20px;
+    // margin-bottom: 20px;
+    overflow-y: scroll;
     > div {
         width: 90%;
         min-width: 1100px;

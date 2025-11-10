@@ -71,7 +71,7 @@ export default {
         clearInterval(this.timer);
       }
       this.time = `${this.m}分钟${this.s}秒`;
-      console.log(this.m + "分钟" + this.s + "秒");
+      // console.log(this.m + "分钟" + this.s + "秒");
     },
   },
   created() {

@@ -42,7 +42,7 @@ export default [{
                     code: "T",
                     meta: {
                         name: "BMS舱",
-                    },
+                    }, 
                     component: _ =>
                       import(
                           /* webpackChunkName: "Overview" */ "@/pages/containerDetail/components/Bms"

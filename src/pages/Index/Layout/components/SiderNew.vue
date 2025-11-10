@@ -110,7 +110,7 @@ export default {
       if (c === false) {
         this.routes[1].children.splice(this.routes[1].children.findIndex(it => it.meta.name === "混合舱"), 1)
       }
-      console.log(this.routes[1].children.findIndex(it => it.meta.name === "混合舱"));
+      // console.log(this.routes[1].children.findIndex(it => it.meta.name === "混合舱"));
 
     },
     handleSelect(key) {
@@ -131,12 +131,14 @@ export default {
   .el-menu-item,
   .el-submenu {
     text-align: left;
-
-    span {
-      display: inline-block;
-      width: 56px;
-      margin-left: 6px;
-    }
+  font-size: 18px;
+  //   span {
+  //     height: 60px;
+  // line-height: 60px;
+  //     // display: inline-block;
+  //     width: 90%;
+  //     margin-left: 6px;
+  //   }
 
   }
 
@@ -155,6 +157,8 @@ export default {
 
 .iconfont {
   font-size: 26px;
+    @include font-color("1");
+
 }
 
 .logoTitle {

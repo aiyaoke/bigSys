@@ -140,7 +140,7 @@ export default {
     this.deviceTypeId = deviceTypeId;
     let { subUrl, topic } = socketSubUrlTopic.controlStrategy;
     SubSocket(subUrl, topic, getToken(), controlStrategyArr, res => {
-      console.log(res);
+      // console.log(res);
       let { code, msg } = res;
       this.$notify({
         title: this.$translate("执行结果"),
@@ -148,7 +148,7 @@ export default {
         position: "bottom-right"
       });
       if (code === "ok" && res.data) {
-        console.log(JSON.parse(res.data));
+        // console.log(JSON.parse(res.data));
         this.result = JSON.parse(res.data);
       }
     });

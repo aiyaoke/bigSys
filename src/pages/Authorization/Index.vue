@@ -7,11 +7,10 @@
       v-on:changeForm="changeForm"
     ></Register>
     <span class="auth"
-      >{{ $translate("上海采日能源科技有限公司 - 沪ICP备") }}
-      <a
-        href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=17053140"
+      >{{$translate("上海采日能源科技有限公司 - 沪ICP备")}}<a
+        href="https://beian.miit.gov.cn/"
         target="_blank"
-        >17053140 {{ $translate("号") }}</a
+        >17053140{{$translate("号")}}</a
       >
     </span>
     <div class="go">

@@ -1,62 +1,29 @@
 <template>
     <div class="table-wrapper">
         <el-table :data="tableData" size="medium" :max-height="tableHeight">
-            <el-table-column
-                prop="name"
-                min-width="150"
-                :label="$translate('电站名称')"
-                show-overflow-tooltip
-            >
+            <el-table-column prop="name" min-width="150" :label="$translate('电站名称')" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column
-                prop="createUserName"
-                :label="$translate('所属用户')"
-                show-overflow-tooltip
-            >
+            <el-table-column prop="createUserName" :label="$translate('所属用户')" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column
-                prop="timeZone"
-                :label="$translate('时区')"
-                show-overflow-tooltip
-            >
+            <el-table-column prop="timeZone" :label="$translate('时区')" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column
-                prop="longitude"
-                :label="$translate('经度')"
-                show-overflow-tooltip
-            >
+            <el-table-column prop="longitude" :label="$translate('经度')" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column
-                prop="latitude"
-                :label="$translate('纬度')"
-                show-overflow-tooltip
-            >
+            <el-table-column prop="latitude" :label="$translate('纬度')" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column
-                prop="installDate"
-                :label="$translate('安装日期')"
-                show-overflow-tooltip
-            >
+            <el-table-column prop="installDate" :label="$translate('安装日期')" show-overflow-tooltip>
                 <template slot-scope="scope">
                     {{ c_installDate(scope.row.installDate) }}
                 </template>
             </el-table-column>
-            <el-table-column
-                :label="$translate('操作')"
-                align="center"
-                width="180"
-            >
+            <el-table-column :label="$translate('操作')" align="center" width="180">
                 <template slot-scope="scope">
-                    <el-link
-                        style="margin-right: 5px"
-                        type="primary"
-                        size="mini"
-                        @click="handleEdit(scope.row)"
-                        >{{ $translate("编辑") }}
+                    <el-link style="margin-right: 5px" type="primary" size="mini" @click="handleEdit(scope.row)">{{
+            $translate("编辑") }}
                     </el-link>
                     <el-link type="danger" @click="handleDelete(scope.row)">{{
-                        $translate("删除")
-                    }}</el-link>
+            $translate("删除")
+                        }}</el-link>
                 </template>
             </el-table-column>
         </el-table>
@@ -90,6 +57,7 @@ export default {
     methods: {
         handleEdit(row) {
             this.$emit("e_edit", row);
+            // console.log(row,12121212);
         },
         handleDelete({ plantId }) {
             this.$confirm(
@@ -100,7 +68,7 @@ export default {
                     cancelButtonText: this.$translate("取消"),
                     type: "warning",
                 }
-                
+
             ).then(async (_) => {
                 let { code } = await apiDeletePlant({ plantId });
                 if (code === "ok") {
@@ -109,7 +77,8 @@ export default {
                 }
             });
         },
-       
+
+
     },
     computed: {
         c_installDate() {
@@ -120,8 +89,8 @@ export default {
             return (id, arr) => this.$translate(getLabelById(id, arr));
         },
     },
-    mounted(){
-        
+    mounted() {
+
     }
 };
 </script>

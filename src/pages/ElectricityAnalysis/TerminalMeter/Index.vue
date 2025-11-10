@@ -10,52 +10,31 @@
             >
                 {{ $translate(item.label) }}
             </el-button> -->
-            <DatePick
-                :defaultDate="date"
-                type="daterange"
-                :disabledDate="disabledDate"
-                @change="changeDate"
-            ></DatePick>
+            <DatePick :defaultDate="date" type="daterange" :disabledDate="disabledDate" @change="changeDate"></DatePick>
             <el-dropdown size="mini">
-                <el-button size="mini" type="warning" icon="el-icon-download"
-                    >Excel
+                <el-button size="mini" type="warning" icon="el-icon-download">Excel
                 </el-button>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>
-                        <ExportExcel
-                            :header="getExcelParams.charge.header"
-                            :title="getExcelParams.charge.title"
-                            :fields="getExcelParams.charge.fields"
-                            :data="chargeExcelData"
-                            :buttonText="$translate('充电统计')"
-                        />
+                        <ExportExcel :header="getExcelParams.charge.header" :title="getExcelParams.charge.title"
+                            :fields="getExcelParams.charge.fields" :data="chargeExcelData"
+                            :buttonText="$translate('充电统计')" />
                     </el-dropdown-item>
                     <el-dropdown-item>
-                        <ExportExcel
-                            :header="getExcelParams.discharge.header"
-                            :title="getExcelParams.discharge.title"
-                            :fields="getExcelParams.discharge.fields"
-                            :data="dischargeExcelData"
-                            :buttonText="$translate('放电统计')"
-                        />
+                        <ExportExcel :header="getExcelParams.discharge.header" :title="getExcelParams.discharge.title"
+                            :fields="getExcelParams.discharge.fields" :data="dischargeExcelData"
+                            :buttonText="$translate('放电统计')" />
                     </el-dropdown-item>
                     <el-dropdown-item>
-                        <ExportExcel
-                            :header="getExcelParams.elecTotal.header"
-                            :title="getExcelParams.elecTotal.title"
-                            :fields="getExcelParams.elecTotal.fields"
-                            :data="elecTotalExcelData"
-                            :buttonText="$translate('电量统计')"
-                        />
+                        <ExportExcel :header="getExcelParams.elecTotal.header" :title="getExcelParams.elecTotal.title"
+                            :fields="getExcelParams.elecTotal.fields" :data="elecTotalExcelData"
+                            :buttonText="$translate('电量统计')" />
                     </el-dropdown-item>
                     <el-dropdown-item>
-                        <ExportExcel
-                            :header="getExcelParams.chargeDischarge.header"
+                        <ExportExcel :header="getExcelParams.chargeDischarge.header"
                             :title="getExcelParams.chargeDischarge.title"
-                            :fields="getExcelParams.chargeDischarge.fields"
-                            :data="chargeDischargeExcelData"
-                            :buttonText="$translate('充放电效率')"
-                        /> 
+                            :fields="getExcelParams.chargeDischarge.fields" :data="chargeDischargeExcelData"
+                            :buttonText="$translate('充放电效率')" />
                     </el-dropdown-item>
                     <!-- <el-dropdown-item>
                         <ExportExcel
@@ -69,13 +48,18 @@
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
-
-       <div class="chart">
-          <PlaneChart :args="chargeStatistics" :showInfoData="true"></PlaneChart>
-          <PlaneChart :args="dischargeStatistics" :showInfoData="true"></PlaneChart>
-          <ElectricityChart :date="date" @changeDownloadExcelData="changeDownloadExcelData" />
-          <PlaneChart :args="chargeDischargeCurve" :showInfoData="false"></PlaneChart>
-       </div>
+        <div class="chart1" v-if="version==2">
+            <PlaneChart  :args="chargeStatistics" :showInfoData="true"></PlaneChart>
+            <PlaneChart  :args="dischargeStatistics" :showInfoData="true"></PlaneChart>
+            <ElectricityChart  :date="date" @changeDownloadExcelData="changeDownloadExcelData" />
+            <PlaneChart  :args="chargeDischargeCurve" :showInfoData="false"></PlaneChart>
+        </div>
+        <div class="chart" v-else>
+            <PlaneChart class="A" :args="chargeStatistics" :showInfoData="true"></PlaneChart>
+            <PlaneChart class="B" :args="dischargeStatistics" :showInfoData="true"></PlaneChart>
+            <ElectricityChart class="C" :date="date" @changeDownloadExcelData="changeDownloadExcelData" />
+            <PlaneChart class="D" :args="chargeDischargeCurve" :showInfoData="false"></PlaneChart>
+        </div>
     </div>
 </template>
 
@@ -107,12 +91,12 @@ export default {
                     const startDate = new Date();
                     const endDate = new Date();
                     const days = moment().diff(nowTime(-3, "YYYY-MM-DD", "month"), 'days');
-                    startDate.setTime(startDate.getTime()-3600 * 1000 * 24 * days);
+                    startDate.setTime(startDate.getTime() - 3600 * 1000 * 24 * days);
                     endDate.setTime(endDate.getTime());
-                    return time.getTime() < startDate || time.getTime()>endDate;
+                    return time.getTime() < startDate || time.getTime() > endDate;
                 },
             },
-            elecTotalExcelData:[],
+            elecTotalExcelData: [],
             helpMeterExcelData: [],
             energyEfficiency: {
                 title: "充放电效率",
@@ -125,9 +109,11 @@ export default {
                     yAxis: {
                         name: "",
                     },
-                    series: [{ name: this.$translate("充放电效率"), data: [] }],
+                    series: [{
+                        name: this.$translate("充放电效率"), data: []
+                    }],
                 },
-               
+
             },
             chargeDischargeCurve: {
                 title: "充放电效率",
@@ -135,12 +121,19 @@ export default {
                 colorIndex: 0,
                 options: {
                     xAxis: {
-                        boundaryGap: false,
+                        boundaryGap: true,
                     },
                     yAxis: {
                         name: "",
                     },
-                    series: [{ name: this.$translate("充放电效率"), data: [] }],
+                    series: [{
+                        name: this.$translate("充放电效率"),
+                        type: 'bar',
+                        // barWidth: 60, // 设置柱子粗细
+                        data: [],
+                        barMaxWidth: 60
+
+                    }],
                 },
                 mostValue: [
                     { title: "实时充电功率", value: "", time: "", unit: "kW" },
@@ -160,7 +153,7 @@ export default {
                         name: "kWh",
                     },
                     series: [
-                        { name: this.$translate("充电电量"), data: [], barMaxWidth: 60,}
+                        { name: this.$translate("充电电量"), data: [], barMaxWidth: 60, }
                     ],
                 },
                 mostValue: [
@@ -212,7 +205,7 @@ export default {
         DatePick: (_) => import("@/components/DatePick"),
     },
     computed: {
-        ...device_getters(["currentDevice","allDevices","version"]),
+        ...device_getters(["currentDevice", "allDevices", "version"]),
         getExcelParams() {
             return {
                 chargeDischarge: {
@@ -277,12 +270,12 @@ export default {
                     title: "辅源侧电表",
                     fields: {
                         [this.$translate("日期")]: {
-                        field: "time",
-                        callback: time => momentFormate(time, "MM-DD")
+                            field: "time",
+                            callback: time => momentFormate(time, "MM-DD")
                         },
                         [this.$translate("用电量")]: {
-                        field: "value",
-                        callback: value => value
+                            field: "value",
+                            callback: value => value
                         }
                     }
                 },
@@ -291,7 +284,7 @@ export default {
         },
     },
     methods: {
-        changeDownloadExcelData(elecTotalExcelData, helpMeterExcelData){
+        changeDownloadExcelData(elecTotalExcelData, helpMeterExcelData) {
             this.elecTotalExcelData = elecTotalExcelData;
             this.helpMeterExcelData = helpMeterExcelData;
         },
@@ -301,7 +294,7 @@ export default {
         },
         getData() {
             let requestData = {
-                dtuId: this.version=='2'?this.allDevices[0].dtuId:this.currentDevice.id,
+                dtuId: this.version == '2' ? this.allDevices[0].dtuId : this.currentDevice.id,
                 startDate: this.date[0],
                 endDate: this.date[1],
             };
@@ -312,26 +305,26 @@ export default {
             this.getEnergyEfficiency(requestData);
         },
         changeDate(value) {
-            if(moment(value[1]).diff(moment(value[0]), 'days') < 7){
+            if (moment(value[1]).diff(moment(value[0]), 'days') < 7) {
                 this.$message({
                     message: '日期范围最少选择7天！',
                     type: 'warning'
                 });
-            }else{
-              this.date = value;
-              this.getData();
+            } else {
+                this.date = value;
+                this.getData();
             }
         },
-        async getEnergyEfficiency(requestData){
-            this.chargeDischargeCurve.options.series[0].data=[];
-            let {data}= await apiEnergyEfficiency(requestData);
-            data.map(item=>{
+        async getEnergyEfficiency(requestData) {
+            this.chargeDischargeCurve.options.series[0].data = [];
+            let { data } = await apiEnergyEfficiency(requestData);
+            data.map(item => {
                 this.chargeDischargeCurve.options.series[0].data.push({
-                    value:item.efficiency,
-                    time:item.time
+                    value: item.efficiency,
+                    time: item.time
                 })
             })
-            this.chargeDischargeCurve.options.series[0].data=getEchatsData(this.chargeDischargeCurve.options.series[0].data, "MM-DD");
+            this.chargeDischargeCurve.options.series[0].data = getEchatsData(this.chargeDischargeCurve.options.series[0].data, "MM-DD");
         },
         async getChargeDisChargeCurve(requestData) {
             let { data } = await apiChargeDisChargeCurve(requestData);
@@ -409,16 +402,47 @@ export default {
 <style lang="scss" scoped>
 .el-dropdown-menu--mini .el-dropdown-menu__item {
     padding: 3px;
+
     /deep/ .el-button {
         width: 100%;
         text-align: center;
     }
 }
-.chart{
+
+.chart {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 20px;
+    grid-auto-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 8px 8px;
+    grid-template-areas:
+        "A B"
+        "C C"
+        "D .";
     height: calc(100vh - 180px);
+
+    .A {
+        grid-area: A;
+    }
+
+    .B {
+        grid-area: B;
+    }
+
+    .C {
+        grid-area: C;
+    }
+
+    .D {
+        grid-area: D;
+    }
+}
+.chart1{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr ;
+    gap: 8px 8px;
+    height: calc(100vh - 180px);
+
 }
 </style>

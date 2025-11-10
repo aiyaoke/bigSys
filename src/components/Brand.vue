@@ -32,7 +32,7 @@ export default {
 .brand {
     @include dis-flex(center, center);
     img {
-        width: 120px;
+        width: 180px;
         margin-right: 20px;
         margin-left: 20px;
 

@@ -44,7 +44,6 @@ class HttpRequest {
           };
         }
         if (response.config.responseType === "arraybuffer") {
-          console.log(response);
           return response
         }
         return data;

@@ -4,7 +4,6 @@ import router from "./router";
 
 import "animate.css";
 import "@/assets/styles/reset.scss";
-
 // iconfont
 import "@/assets/icon/iconfont.css";
 import "@/assets/icon/iconfont.js";

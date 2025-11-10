@@ -189,7 +189,6 @@
   .Pcs {
     width: 100%;
     height: 100%;
-  
     >>>.el-tabs {
       .el-tabs__nav-wrap::after {
         width: 100%;

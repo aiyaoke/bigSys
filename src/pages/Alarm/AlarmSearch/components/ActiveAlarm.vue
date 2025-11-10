@@ -122,7 +122,7 @@ export default {
                     containerId: sessionStorage.getItem("containerId"),
                 }));
                 this.allData = data;
-                console.log(this.allData);
+                // console.log(this.allData);
 
             } else {
                 let { data } = await apiGetAppNowAlarmsWithPage(requestData);

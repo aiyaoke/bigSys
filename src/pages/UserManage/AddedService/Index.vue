@@ -46,7 +46,7 @@ export default {
   mounted() {
     let { subUrl, topic } = socketSubUrlTopic.payResult;
     SubSocket(subUrl, topic, getToken(), "", res => {
-      console.log(res);
+      // console.log(res);
       if (res.code) {
         this.visible = false;
         showMessage("success", "支付成功");

@@ -3,7 +3,6 @@ import that from '@/main'
 import { zh } from "@/i18n/locales/zh";
 
 let zh_arrys = Object.entries(zh)
-
 export default {
   install(Vue) {
     (Vue.prototype.$translate = text => {

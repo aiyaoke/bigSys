@@ -164,7 +164,7 @@ export default {
             this.formatterExcelData();
         },
         formatterExcelData() {
-            console.log( this.tableData);
+            // console.log( this.tableData);
             this.excelData = [];
             let arr = [];
             this.tableData.forEach((item) => {

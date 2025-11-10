@@ -1,7 +1,7 @@
 // 路由守卫 路由改变就会触发
 import router from "./routes";
 import store from "@/store/index";
-import { getToken, removeToken, clearStore, showMessage } from "@/common/utils";
+import { getToken, removeToken, clearStore, showMessage, setToken } from "@/common/utils";
 import { DisSocket } from "../lib/socket/socketTools";
 
 // 白名单
@@ -12,6 +12,10 @@ router.beforeEach((to, from, next) => {
   let { path } = to;
   let redictPath;
   if (path === "/workOrder") return next();
+  if (to.query.token) {
+    setToken(to.query.token);
+   return next("/containerIndex");
+  }
   if (getToken()) {
     if (path == "/authorization") {
       // 退出登录 清除token 和vuex
@@ -27,7 +31,9 @@ router.beforeEach((to, from, next) => {
     redictPath ? next(redictPath) : next();
   } else {
     if (whiteRouter.indexOf(path) !== -1) {
-    console.log(whiteRouter);
+      // console.log(from, to, 111111);
+     
+      // console.log(whiteRouter);
       next(); // 必须要用 否则不会往下执行代码
       // 不带参数默认跳转到to.path 不会触发beforeEach
     } else {

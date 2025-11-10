@@ -62,10 +62,15 @@ export default {
                         message: this.$translate("请输入新密码"),
                         trigger: "blur",
                     },
+                    // {
+                    //     message: this.$translate("密码格式有误"),
+                    //     trigger: "blur",
+                    //     pattern: /^(a-z|A-Z|0-9|)[a-zA-Z0-9~._]{6,16}$/,
+                    // },
                     {
-                        message: this.$translate("密码格式有误"),
+                        message: this.$translate("至少包含两种类型"),
                         trigger: "blur",
-                        pattern: /^(a-z|A-Z|0-9|)[a-zA-Z0-9~!@&%#_]{1,16}$/,
+                        pattern:  /^(?![\d]+$)(?![a-z]+$)(?![A-Z]+$)(?![._]+$)[\da-zA-z._]{6,16}$/,
                     },
                 ],
                 confirmPassword: [

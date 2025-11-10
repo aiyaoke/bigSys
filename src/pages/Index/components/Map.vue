@@ -10,7 +10,7 @@ import { showMessage, redirectPath, deepClone } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
 import point from "@/assets/images/point.png";
 import routes_container from "@/router/routes.container";
-const { mapGetters: plant_getters, mapMutations: plant_mutations } =
+const { mapGetters: plant_getters, mapMutations: plant_mutations, mapActions: plant_actions } =
   createNamespacedHelpers("plant");
 const {
   mapGetters: device_getters,
@@ -20,6 +20,7 @@ const {
 const { mapGetters: app_getters } = createNamespacedHelpers("app");
 export default {
   name: "Map",
+  props:["currentPlantId"],
   data() {
     return {
       flag: false,
@@ -35,6 +36,11 @@ export default {
   },
   mounted() {
     this.initMap();
+    this.getAllPlants().then(()=>{
+    //  let a= this.allPlants.find(it=>it.plantId==this.currentPlantId);
+    //  console.log(a,'current');
+      // this.addInfoWindow([a]);
+    })
   },
   components: {
     DeviceContent: (_) => import("./DeviceContent"),
@@ -48,6 +54,7 @@ export default {
     ...device_mutations(["setAllDevices", "setCurrentDevice"]),
     ...device_actions(["getAllDevices", "getDevicePermissions","getSummary"]),
     ...plant_mutations(["setCurrentPlant"]),
+    ...plant_actions(["getAllPlants"]),
     initMap() {
       this.addStyle();
       this.mapObj = new AMap.Map("__map", this.mapStyle);
@@ -110,6 +117,7 @@ export default {
       return infoWindow;
     },
     addInfoWindow(plants) {
+      // console.log(plants,11111111);
       plants.forEach((item) => {
         this.addMarker(
           item,
@@ -136,11 +144,16 @@ export default {
   },
   watch: {
     allPlants(newVal) {
-      this.addInfoWindow(newVal);
+      // this.addInfoWindow(newVal);
     },
     systemTheme(newVal) {
       this.initMap();
       this.addInfoWindow(this.allPlants);
+    },
+    currentPlantId(newVal){
+      this.initMap();
+      let a= this.allPlants.find(it=>it.plantId==newVal);
+      this.addInfoWindow([a]);
     },
     version(newVal) {
       if (newVal === 2) {

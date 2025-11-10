@@ -1,5 +1,5 @@
 <template>
-    <chart :class="echarts" :ref="args.ref" :options="options" :auto-resize="true" @finished="finished"></chart>
+    <chart class="echarts" :ref="args.ref" :options="options" :auto-resize="true" @finished="finished"></chart>
 </template>
 
 <script>

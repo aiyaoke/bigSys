@@ -35,7 +35,7 @@ export default {
   watch: {
     PCS:{
       handler(newD,oldD){
-        console.log(newD);
+        // console.log(newD);
       },
       immediate:true,
       deep:true
@@ -60,19 +60,20 @@ export default {
 </script>
 <style lang="scss" scoped>
 .all_pcsWrap {
-  width: 100%;
-  height: 80vh;
+  width: calc(100% - 3.125rem);
+  // height: calc(100vh - 9.7917rem);
   @include bg-color("2");
-  padding: 30px 30px;
+  padding: 1.5625rem 1.5625rem;
   display: grid;
   justify-content: center;
   align-items: center;
   grid-template-columns: repeat(2, 1fr);
+  gap: 2.0833rem;
   .all_pcs {
     width: 80%;
     height: 70%;
-    border: 2px dashed #909399;
-    border-radius: 10px;
+    border: .1042rem dashed #909399;
+    border-radius: .5208rem;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;

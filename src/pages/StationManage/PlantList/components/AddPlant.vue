@@ -1,91 +1,61 @@
 <template>
-  <el-dialog
-    :title="dialogObj.plantId ? $translate('编辑电站') : $translate('添加电站')"
-    :visible.sync="visible"
-    width="30%"
-    :before-close="handleCancle"
-    :append-to-body="true"
-  >
-    <el-form
-      :model="formData"
-      size="medium"
-      :rules="rules"
-      ref="ruleForm"
-      label-width="100px"
-      class="demo-ruleForm"
-    >
+  <el-dialog :title="dialogObj.plantId ? $translate('编辑电站') : $translate('添加电站')" :visible.sync="visible" width="30%"
+    :before-close="handleCancle" :append-to-body="true">
+    <el-form :model="formData" size="medium" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item :label="$translate('名称')" prop="name">
-        <el-input
-          type="text"
-          v-model="formData.name"
-          autocomplete="off"
-          maxlength="15"
-          show-word-limit
-        >
+        <el-input type="text" v-model="formData.name" autocomplete="off" maxlength="15" show-word-limit>
         </el-input>
       </el-form-item>
 
-      <el-form-item :label="$translate('功率')" prop="designPower">
-        <el-input
-          type="text"
-          v-model="formData.designPower"
-          autocomplete="off"
-          
-        ></el-input>
+      <el-form-item :label="'项目规模'" prop="scale">
+        <el-input style="width: 49%;" type="text" v-model="formData.scalePrefix" autocomplete="off" class="input-with-select">
+          <el-select v-model="unit1" slot="append" placeholder="请选择">
+            <el-option label="kW" value="kW"></el-option>
+            <el-option label="MW" value="MW"></el-option>
+            <el-option label="GW" value="GW"></el-option>
+          </el-select>
+        </el-input>/
+        <el-input style="width: 49%;" type="text" v-model="formData.scaleSuffix" autocomplete="off" class="input-with-select">
+          <el-select v-model="unit2" slot="append" placeholder="请选择">
+            <el-option label="kWh" value="kWh"></el-option>
+            <el-option label="MWh" value="MWh"></el-option>
+            <el-option label="GWH" value="GWH"></el-option>
+          </el-select>
+        </el-input>
       </el-form-item>
 
-      <el-form-item :label="$translate('所属用户')" prop="userId">
-        <el-select v-model="formData.userId" default-first-option="" :disabled="dialogObj.plantId">
-          <el-option
-            v-for="item in commonUserList"
-            :key="item.f0102_Id"
-            :label="item.name"
-            :value="item.f0102_Id"
-          >
+      <el-form-item :label="$translate('所属用户')" prop="createUserId">
+        <el-select v-model="formData.createUserId" :disabled="dialogObj.plantId">
+          <el-option v-for="item in commonUserList" :key="item.f0102_Id" :label="item.name" :value="item.f0102_Id">
           </el-option>
         </el-select>
       </el-form-item>
 
       <el-form-item :label="$translate('地址')" prop="position">
-        <el-input
-          type="text"
-          v-model="formData.position"
-          autocomplete="off"
-          maxlength="65"
-          show-word-limit
-        >
+        <el-input type="text" v-model="formData.position" autocomplete="off" maxlength="65" show-word-limit>
         </el-input>
       </el-form-item>
 
       <el-form-item :label="$translate('经度')" prop="longitude">
-        <el-input
-          type="text"
-          v-model="formData.longitude"
-          autocomplete="off"
-        ></el-input>
+        <el-input type="text" v-model="formData.longitude" autocomplete="off"></el-input>
       </el-form-item>
 
       <el-form-item :label="$translate('纬度')" prop="latitude">
-        <el-input
-          type="text"
-          v-model="formData.latitude"
-          autocomplete="off"
-        ></el-input>
+        <el-input type="text" v-model="formData.latitude" autocomplete="off"></el-input>
       </el-form-item>
 
       <el-form-item :label="$translate('时区')" prop="timeZone">
         <el-select v-model="formData.timeZone">
-          <el-option
-            v-for="item in timeZone"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
+          <el-option v-for="item in timeZone" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </el-form-item>
-
-      <el-form-item :label="$translate('电站状态')" prop="status">
+      <el-form-item :label="$translate('建站日期')" prop="installDate">
+        <el-date-picker :default-value="formData.installDate" v-model="formData.installDate" type="date"
+          placeholder="选择日期">
+        </el-date-picker>
+      </el-form-item>
+      <!-- <el-form-item :label="$translate('电站状态')" prop="status">
         <el-radio-group v-model="formData.status" :disabled="dialogObj.plantId">
           <el-radio
             v-for="item in plantStatus"
@@ -105,15 +75,15 @@
             >{{ $translate(item.label) }}
           </el-radio>
         </el-radio-group>
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item>
         <el-button type="primary" size="small" @click="handleSure">{{
-          $translate("确定")
-        }}</el-button>
+    $translate("确定")
+  }}</el-button>
         <el-button size="small" @click="handleCancle">{{
-          $translate("取消")
-        }}</el-button>
+    $translate("取消")
+          }}</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
@@ -124,6 +94,8 @@ import { plantStatus, plantTypes, timeZone } from "@/common/config";
 import { apiUpdatePlant } from "@/api/plant";
 import { showMessage } from "@/common/utils";
 import { createNamespacedHelpers } from "vuex";
+import moment from "moment";
+
 const { mapGetters: user_getters } = createNamespacedHelpers("user");
 export default {
   name: "AddUser",
@@ -142,7 +114,12 @@ export default {
         longitude: "",
         timeZone: "",
         status: "",
-        deviceTypeId: "",
+        deviceTypeId: 6,
+        createUserId: '',
+        installDate: '',
+        designDegrees:'',
+        scalePrefix:"",
+        scaleSuffix:''
       },
       rules: {
         name: [
@@ -159,8 +136,8 @@ export default {
             trigger: "blur",
           },
           {
-            pattern:/^\d{1,9}$/,
-            message:this.$translate("请输入正确电站功率"),
+            pattern: /^\d{1,9}$/,
+            message: this.$translate("请输入正确电站功率"),
           }
         ],
         position: [
@@ -222,6 +199,8 @@ export default {
           },
         ],
       },
+      unit1: 'kW',
+      unit2: 'kWh',
     };
   },
   props: {
@@ -231,7 +210,7 @@ export default {
     },
     dialogObj: {
       type: Object,
-      default: (_) => {},
+      default: (_) => { },
     },
   },
   methods: {
@@ -240,16 +219,22 @@ export default {
       this.$refs.ruleForm.resetFields();
     },
     async handleSure() {
+      // console.log(this.commonUserList, 1212);
       this.$refs.ruleForm.validate(async (valid) => {
         if (!valid) return;
-        let { userId } = this.formData;
+        let { createUserId, installDate } = this.formData;
         let { plantId } = this.dialogObj;
         let requestData = {
           ...this.formData,
+          deviceTypeId:6,
+          scale: `${this.formData.scalePrefix}-${this.unit1}/${this.formData.scaleSuffix}-${this.unit2}`        ,
           plantId: plantId || 0,
-          userId: [userId],
-          installDate: plantId ? null:Date.parse(new Date()),
+          userId: [createUserId],
+          installDate: plantId ? moment(
+            installDate).format("YYYY-MM-DD HH:mm:ss") : Date.parse(new Date()),
         };
+        // console.log(requestData, this.unit,this.formData);
+        // return;
         let { data } = await apiUpdatePlant(requestData);
         if (data) {
           showMessage(
@@ -262,6 +247,8 @@ export default {
       });
     },
   },
+  mounted: {
+  },
   watch: {
     dialogObj(obj) {
       this.visible = obj.flag;
@@ -270,6 +257,13 @@ export default {
           this.formData[key] =
             key === this.userId ? obj["f0102_Ids"][0] : obj[key];
         });
+        let pre=this.formData.scalePrefix.split('-');
+        let suf=this.formData.scaleSuffix.split('-');
+        this.formData.scalePrefix=pre[0];
+        this.unit1=pre[1];
+        this.formData.scaleSuffix=suf[0];
+        this.unit2=suf[1];
+        // console.log( this.formData,'asd',obj);
       } else {
         Object.keys(this.formData).forEach((key) => {
           this.formData[key] = "";

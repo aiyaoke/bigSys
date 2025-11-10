@@ -72,7 +72,7 @@ export default {
   @include bg-color("1");
   padding: 20px;
   padding-top: 0;
-  padding-bottom: 120px;
+  // padding-bottom: 120px;
   box-sizing: border-box;
   > div {
     margin: 0 auto;

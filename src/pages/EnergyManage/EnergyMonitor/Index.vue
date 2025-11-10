@@ -172,7 +172,7 @@ export default {
             data = JSON.parse(data || "[]");
             let { nowDatas, compareDatas, nowMaxMinAvg, compareMaxMinAvg } =
                 data;
-            console.log(nowMaxMinAvg,compareMaxMinAvg);
+            // console.log(nowMaxMinAvg,compareMaxMinAvg);
             this.chartArgs.options.series[0].data = getEchatsData(
                 compareDatas || []
             );
@@ -204,7 +204,7 @@ export default {
         },
         initTable(nowMaxMinAvg, compareMaxMinAvg) {
             this.tableData = [];
-            console.log(nowMaxMinAvg,compareMaxMinAvg);
+            // console.log(nowMaxMinAvg,compareMaxMinAvg);
             if (nowMaxMinAvg) {
                 this.tableData.push({
                     time: nowMaxMinAvg.max.time,
@@ -224,7 +224,7 @@ export default {
                     MinValueTime: compareMaxMinAvg.min.time,
                     AvgValue: compareMaxMinAvg.avg,
                 });
-            console.log(this.tableData);
+            // console.log(this.tableData);
             }
         },
         async getSelectData(){

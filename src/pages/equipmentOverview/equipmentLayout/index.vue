@@ -1,20 +1,16 @@
 <template>
-  <div class="equipmentWrapper" >
+  <div class="equipmentWrapper">
     <!-- <BoxDevices :all="all" class="BoxDevices" /> -->
     <iframe class="Td" src="	https://admin.sovitjs.com/publish_2d/3250638613561475073" frameborder="0"
       v-if="value === 0"></iframe>
-    <tDBox id="content"  v-if="value === 1" />
+    <tDBox id="content" v-else-if="value === 1" />
     <div class="tapBtn">
-      <el-switch v-model="value" class="isShow" :active-value=1 :inactive-value=0 active-text="3D" inactive-text="2D"
+      <el-switch v-model="value" v-show="currentPlant.plantId==1558" class="isShow" :active-value=1 :inactive-value=0 active-text="3D" inactive-text="2D"
         active-color="#13ce66" inactive-color="#ff4949" @change="switchAb">
       </el-switch>
-      <!-- <span  style="color:#918F8F" @click="clickFun">
-	    {{isFullFlag?'退出全屏':'全屏'}}
-        </span> -->
-
     </div>
-  
-  </div>  
+
+  </div>
 </template>
 
 <script>
@@ -24,6 +20,9 @@ const {
   mapMutations: device_mutations,
   mapActions: device_actions,
 } = createNamespacedHelpers("device");
+const {
+    mapGetters: plant_getters,
+} = createNamespacedHelpers("plant");
 export default {
   props: {},
   data() {
@@ -55,37 +54,40 @@ export default {
           name: "8#",
         },
       ],
-			isFullFlag:false
+      isFullFlag: false
     };
   },
   watch: {},
-  computed: {},
+  computed: {
+    ...plant_getters(["currentPlant",]),
+
+  },
   methods: {
     ...device_actions(["getContainer"]),
     switchAb(val) {
       // console.log(val);
     },
-    clickFun(){
-			this.isFullFlag =!this.isFullFlag
-			const element = document.getElementById('content');//指定全屏区域元素
-			if(this.isFullFlag){
-				// screenfull.request(element);
-				element.requestFullscreen()
-			}else{
-				document.exitFullscreen();
-			}
-		}
+    clickFun() {
+      this.isFullFlag = !this.isFullFlag
+      const element = document.getElementById('content');//指定全屏区域元素
+      if (this.isFullFlag) {
+        // screenfull.request(element);
+        element.requestFullscreen()
+      } else {
+        document.exitFullscreen();
+      }
+    }
   },
   created() { },
-  mounted() { 
+  mounted() {
 
-    window.addEventListener("fullscreenchange", (e)=> {
-		  if(screenfull.isFullscreen){
-			this.isFullFlag = true
-		  }else{
-			this.isFullFlag = false
-		  }
-		})
+    window.addEventListener("fullscreenchange", (e) => {
+      if (screenfull.isFullscreen) {
+        this.isFullFlag = true
+      } else {
+        this.isFullFlag = false
+      }
+    })
   },
   components: {
     BoxDevices: () => import("./Container.vue"),
@@ -106,6 +108,7 @@ export default {
   display: flex;
   flex-direction: column;
   position: relative;
+
   .tapBtn {
     width: 100%;
     display: flex;
@@ -114,6 +117,7 @@ export default {
     position: absolute;
     /*打开时文字位置设置*/
     top: 0px;
+
     // z-index: 10;
     .isShow .el-switch__label--right {
       z-index: 11;
@@ -146,13 +150,14 @@ export default {
     display: none;
     color: #fff;
   }
-  .el-switch{
+
+  .el-switch {
     z-index: 999 !important;
   }
+
   .Td {
     width: 100%;
     height: 100%;
   }
 
-}
-</style>
+}</style>

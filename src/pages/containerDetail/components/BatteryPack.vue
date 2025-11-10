@@ -63,7 +63,7 @@ export default {
       this.width = this.$refs.wrap0[0].offsetWidth;
       this.height = this.$refs.wrap0[0].offsetHeight;
       this.batteryAnimatePath = `M ${this.width/2} 0 v ${this.height*0.4}`;
-      console.log( this.batteryAnimatePath ,2222222);
+      // console.log( this.batteryAnimatePath ,2222222);
 
     },
     // toCellDetails() {

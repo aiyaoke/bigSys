@@ -204,7 +204,6 @@ export default {
                 dtuId: this.version=='2'?this.allDevices[0].dtuId:this.currentDevice.id,
                 dateType: this.type,
             };
-            console.log(requestData.dtuId);
             this.getChargeDisChargeCurve(requestData);
             this.getChargeDisChargeMostValue(requestData);
             this.getChargeAmount(requestData);

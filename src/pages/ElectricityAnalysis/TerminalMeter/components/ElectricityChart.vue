@@ -9,11 +9,11 @@
         </div>
       </div>
     </div> -->
-    <PlaneBox v-if="devicePermissions['N/A']||version=='2'">
+    <PlaneBox  :style="{width:width}" v-if="devicePermissions['N/A']||version=='2'">
       <span slot="title">{{ $translate("电量统计") }}</span>
       <CategoryChart :args="elecTotalOptions" slot="content" />
     </PlaneBox>
-    <PlaneBox v-if="devicePermissions['N/B']">
+    <PlaneBox :style="{width:width}"  v-if="devicePermissions['N/B']&&version!='2'">
       <span slot="title">{{ $translate("辅源侧电表") }}</span>
       <CategoryChart :args="helpMaterOptions" slot="content" />
     </PlaneBox>
@@ -53,7 +53,7 @@ export default {
           color: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'],
           xAxis: {
             data: [],
-            boundaryGap: false,
+            boundaryGap: true,
           },
           yAxis: {
             name: "kWh"
@@ -62,50 +62,49 @@ export default {
             {
               name: this.$translate("充电尖"),
               key: "charge1",
-              data: [],
-              type: 'line'
+              type: 'bar'
             },
             {
               name: this.$translate("充电峰"),
               key: "charge2",
               data: [],
-              type: 'line'
+              type: 'bar',
             },
             {
               name: this.$translate("充电平"),
               key: "charge3",
               data: [],
-              type: 'line'
+              type: 'bar'
             },
             {
               name: this.$translate("充电谷"),
               key: "charge4",
               data: [],
-              type: 'line'
+              type: 'bar'
             },
             {
               name: this.$translate("放电尖"),
               key: "disCharge1",
               data: [],
-              type: 'line'
+              type: 'bar'
             },
             {
               name: this.$translate("放电峰"),
               key: "disCharge2",
               data: [],
-              type: 'line'
+              type: 'bar'
             },
             {
               name: this.$translate("放电平"),
               key: "disCharge3",
               data: [],
-              type: 'line'
+              type: 'bar'
             },
             {
               name: this.$translate("放电谷"),
               key: "disCharge4",
               data: [],
-              type: 'line'
+              type: 'bar'
             }
           ]
         }
@@ -122,22 +121,26 @@ export default {
           series: [
             {
               name: this.$translate("用电量"),
-              key: "charge1",
+              key: "charge1", 
+              barCategoryGap:'50%',
               data: []
             }
           ]
         }
       },
-      helpMeterExcelData: []
+      helpMeterExcelData: [],
+      width:'100%'
     };
   },
   mounted() {
+    this.width=this.version=='2'?'100%':'50%';
   },
   components: {
     DatePick: _ => import("@/components/DatePick"),
     PlaneBox: _ => import("@/components/NewPlaneBox"),
     CategoryChart: _ => import("@/components/Chart/CategoryChart"),
-    ExportExcel: _ => import("@/components/ExportExcel")
+    ExportExcel: _ => import("@/components/ExportExcel"),
+    
   },
   computed: {
     ...device_getters(["currentDevice", "devicePermissions","version","allDevices"]),
@@ -289,7 +292,8 @@ export default {
         this.getChartsData();
       },
       immediate: true, // 初次监听即执行  
-    }
+    },
+  
   }
 };
 </script>
@@ -303,7 +307,9 @@ export default {
   }
 }
 .profitStatistics {
-  height: 100%;
+  // height: 100%;
+  display: flex;
+  flex-direction: row;
   .card-wrapper {
     height: 180px;
     display: grid;

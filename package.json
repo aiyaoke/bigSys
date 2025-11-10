@@ -24,7 +24,6 @@
     "node-sass": "^4.14.1",
     "postcss-loader": "^2.1.6",
     "qrcodejs2": "^0.0.2",
-    "realm": "^2.1.0",
     "sass-loader": "^7.3.1",
     "sass-resources-loader": "^2.1.1",
     "screenfull": "^5.0.2",

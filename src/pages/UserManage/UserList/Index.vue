@@ -49,6 +49,16 @@ export default {
             pageSize: 20,
             total: 0,
             adminUserList: [],
+            tad:[
+                {
+                    name:"adnsmt",
+                    roleName:'112',
+                    phone:'1232',
+                    mail:'12321213',
+                    active:'21312',
+                    desc:''
+                }
+            ]
         };
     },
     mounted() {
@@ -73,7 +83,7 @@ export default {
             let { data } = await apiUserList();
             this.tableData = data ? JSON.parse(data) : [];
             this.total = this.tableData.length;
-            console.log(this.tableData);
+            console.log(this.tableData,1111111111111);
         },
         async getAllAdminUser() {
             let { data } = await apiGetAllAdminUser();

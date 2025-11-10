@@ -133,27 +133,27 @@ export default {
 </script>
 <style lang="scss" scoped>
 .Pcs_wrap {
-  width: 93%;
-  height: 90%;
+  width: 100%;
+  height:20.8333rem;
  @include bg-color('1');
   // background-color: rgba( 27,37,53,0.6);
-  border-radius: 20px;
+  border-radius: 1.0417rem;
   display: inline-block;
-  margin-bottom: 1%;
+  // margin-bottom: 1%;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 655px;
-  box-shadow:5px 5px 10px gray;
+  // min-width: 655px;
+  box-shadow:.2604rem .2604rem .5208rem gray;
   .icon {
-    width: 100px;
-    height: 100px;
+    width: 5.2083rem;
+    height: 5.2083rem;
   }
 
   .pcsData {
     width: 39%;
     height: 90%;
-    padding-top: 20px;
+    padding-top: 1.0417rem;
 
     .center {
       width: 100%;
@@ -164,7 +164,7 @@ export default {
     
 
       .num {
-        font-size: 60px;
+        font-size: 3.125rem;
         align-self: center;
         height: 100%;
         padding-top: 23%;
@@ -172,7 +172,7 @@ export default {
         
 
         .unit {
-          font-size: 20px;
+          font-size: 1.0417rem;
         }
       }
     }
@@ -182,16 +182,16 @@ export default {
       flex-direction: row;
       justify-content: space-around;
       .num {
-        margin: 10px 8px;
+        margin: .5208rem .4167rem;
         @include font-color("1");
-        font-size: 20px;
+        font-size: 1.0417rem;
         font-weight: bold;
       }
     }
   }
 .unit{
   @include font-color("1");
-  font-size: 16px;
+  font-size: .8333rem;
   font-weight: 400;
 
 }
@@ -201,16 +201,16 @@ export default {
     justify-content: space-around;
     .data {
       height: 30%;
-    padding-left: 50px;
+    padding-left: 2.6042rem;
 
       .num{
         text-align: center;
         @include font-color("1");
-        margin-top: 25px;
-        font-size: 20px;
+        margin-top: 1.3021rem;
+        font-size: 1.0417rem;
         font-weight: bold;
         .unit{
-          font-size: 16px;
+          font-size: .8333rem;
         font-weight: 400;
 
         }
@@ -224,7 +224,7 @@ export default {
   
   }
   .title {
-        font-size: 16px;
+        font-size: .8333rem;
       }
 }
 </style>

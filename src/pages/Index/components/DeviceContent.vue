@@ -95,7 +95,7 @@ export default {
   padding: 10px;
   box-sizing: border-box;
   @include bg-color("1");
-
+z-index: 1;
   .device-item {
     font-size: 12px;
     font-weight: bold;

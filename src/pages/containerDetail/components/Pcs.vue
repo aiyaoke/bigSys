@@ -91,7 +91,7 @@ export default {
       });
       this.defaultOption = this.options[0].value;
       this.getContainer({
-        containerId: sessionStorage.getItem("containerId")
+        containerId: this.defaultOption
       }).then(() => {
         this.loading = false;
       })
@@ -152,6 +152,7 @@ export default {
 .Pcs {
   width: 100%;
   height: 100%;
+  overflow-y: scroll;
 
   >>>.el-tabs {
     .el-tabs__nav-wrap::after {
